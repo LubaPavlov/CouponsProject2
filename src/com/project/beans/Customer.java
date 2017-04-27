@@ -8,8 +8,17 @@ public class Customer {
 	private String custName;
 	private String password;
 	private Collection<Coupon> coupons;
+	
 	public Customer() {
 	}
+	
+	public Customer(long cust_id, String custName, String password) {
+		this.cust_id = cust_id;
+		this.custName = custName;
+		this.password = password;
+	}
+
+
 	public long getCust_id() {
 		return cust_id;
 	}

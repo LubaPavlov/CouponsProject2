@@ -3,24 +3,25 @@ package com.project.dao;
 import java.util.Collection;
 
 import com.project.beans.*;
+import com.project.exceptions.DAOException;
 
 public interface CustomerDAO {
 
-	public void createCustomer(Customer customer);
+	public void createCustomer(Customer customer) throws DAOException;
 
-	public void removeCustomer(Customer customer);
+	public void removeCustomer(Customer customer) throws DAOException;
 
-	public void updateCustomer(Customer customer);
+	public void updateCustomer(Customer customer) throws DAOException;
 
-	public Customer getCustomer(long cust_id);
+	public Customer getCustomer(long cust_id) throws DAOException;
 
-	public Collection<Customer> getAllCustomers();
+	public Collection<Customer> getAllCustomers() throws DAOException;
 
-	public Collection<Coupon> getCoupons(Customer customer);
+	public Collection<Coupon> getCoupons(Customer customer) throws DAOException;
 
-	boolean login(String custName, String password);
+	boolean login(String custName, String password) throws DAOException;
 
-	public long getCustomerId(String custName);
-	
-	public void addCouponToCustomer(Coupon coupon, Customer customer);
+	public long getCustomerId(String custName) throws DAOException;
+
+	public void addCouponToCustomer(Coupon coupon, Customer customer) throws DAOException;
 }
