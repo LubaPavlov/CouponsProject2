@@ -13,12 +13,11 @@ public class MyTestJDBC {
 
 	public static void main(String[] args) throws DAOException {
 
-//      CustomerDAO cDao = new CustomerDBDAO();
-//		
-//		Customer customer = new Customer(1, "Moshe", "1111");
-//		
-//		cDao.createCustomer(customer);
-
+      CustomerDAO cDao = new CustomerDBDAO();
+      Customer customer = new Customer(7, "test", "123456");
+      cDao.getCustomer(2);
+      //cDao.createCustomer(customer);
+      cDao.updateCustomer(cDao.getCustomer(2));
 //      CompanyDAO compDao = new CompanyDBDAO();
 //		
 //		Company company = new Company(1, "Next", "123456","next@gmail.com");

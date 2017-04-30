@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import com.project.beans.Coupon;
 import com.project.beans.Customer;
+import com.project.exceptions.DAOException;
 
 public class CustomerDBDAO implements CustomerDAO {
 
@@ -15,7 +16,7 @@ public class CustomerDBDAO implements CustomerDAO {
 	private String dbName = "coupon";
 
 	@Override
-	public void createCustomer(Customer customer) {
+	public void createCustomer(Customer customer) throws DAOException{
 		/// 1. get a connection (from pool)
 		try {
 			con = getConnection();
@@ -48,8 +49,31 @@ public class CustomerDBDAO implements CustomerDAO {
 	}
 
 	@Override
-	public void updateCustomer(Customer customer) {
-		// TODO Auto-generated method stub
+	public void updateCustomer(Customer customer)throws DAOException {
+		/// 1. get a connection (from pool)
+				try {
+					con = getConnection();
+
+					// 2. create sql insert
+					PreparedStatement stat = con.prepareStatement("UPDATE INTO " + 
+					TABLE_NAME + " SET VALUES (?, ?) where CustName (?)");
+					stat.setString(1, customer.getCustName());
+					stat.setString(2, customer.getPassword());
+					stat.setString(3, customer.getCustName());
+
+					System.out.println("Executing: " + stat.toString());
+					stat.executeUpdate();
+
+				} catch (SQLException e) {
+					// TODO: deal with exception
+					e.printStackTrace();
+				}
+
+				finally {
+					// 3. release connection
+					releaseConnection(con);
+				}
+
 
 	}
 

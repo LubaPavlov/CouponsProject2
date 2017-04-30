@@ -1,9 +1,14 @@
 package com.project.beans;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Coupon {
+public class Coupon implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long coupon_id;
 	private String title;
 	private Date startDate;

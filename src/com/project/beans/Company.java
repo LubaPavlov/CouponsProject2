@@ -1,9 +1,14 @@
 package com.project.beans;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public class Company {
+public class Company implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long comp_id;
 	private String compName;
 	private String password;
