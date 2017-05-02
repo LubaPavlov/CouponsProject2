@@ -9,7 +9,7 @@ public class Coupon implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private long coupon_id;
+	private long couponId;
 	private String title;
 	private Date startDate;
 	private Date endDate;
@@ -23,11 +23,11 @@ public class Coupon implements Serializable{
 	}
 
 	public long getCoupon_id() {
-		return coupon_id;
+		return couponId;
 	}
 
-	public void setCoupon_id(long coupon_id) {
-		this.coupon_id = coupon_id;
+	public void setCoupon_id(long couponId) {
+		this.couponId = couponId;
 	}
 
 	public String getTitle() {
@@ -96,7 +96,7 @@ public class Coupon implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Coupon [coupon_id=" + coupon_id + ", title=" + title + ", startDate=" + startDate + ", endDate="
+		return "Coupon [couponId=" + couponId + ", title=" + title + ", startDate=" + startDate + ", endDate="
 				+ endDate + ", amount=" + amount + ", type=" + type + ", message=" + message + ", price=" + price
 				+ ", image=" + image + "]";
 	}

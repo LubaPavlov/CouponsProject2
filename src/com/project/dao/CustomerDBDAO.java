@@ -3,10 +3,10 @@ package com.project.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
-import com.project.beans.Coupon;
-import com.project.beans.Customer;
+import com.project.beans.*;
 import com.project.exceptions.DAOException;
 
 public class CustomerDBDAO implements CustomerDAO {
@@ -16,23 +16,30 @@ public class CustomerDBDAO implements CustomerDAO {
 	private String dbName = "coupon";
 
 	@Override
-	public void createCustomer(Customer customer) throws DAOException{
+	public void createCustomer(Customer customer) throws DAOException {
 		/// 1. get a connection (from pool)
 		try {
 			con = getConnection();
+			if (con != null) {
+				System.out.println("Connected");
+				// 2. create sql insert
+				PreparedStatement stat = con.prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?, ?, ?)");
+				stat.setLong(1, customer.getCustId());
+				stat.setString(2, customer.getCustName());
+				stat.setString(3, customer.getPassword());
 
-			// 2. create sql insert
-			PreparedStatement stat = con.prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?, ?, ?)");
-			stat.setLong(1, customer.getCust_id());
-			stat.setString(2, customer.getCustName());
-			stat.setString(3, customer.getPassword());
+				System.out.println("Executing: " + stat.toString());
+				// stat.executeUpdate();
+				int rowsInserted = stat.executeUpdate();
 
-			System.out.println("Executing: " + stat.toString());
-			stat.executeUpdate();
-
+				if (rowsInserted > 0) {
+					System.out.println("A new customer has been created successfully");
+				} else
+					System.out.println("An Error Has Occurred. Check if entered data is correct.");
+			}
 		} catch (SQLException e) {
 			// TODO: deal with exception
-			e.printStackTrace();
+			System.out.println("SQL statement is not executed!");
 		}
 
 		finally {
@@ -44,43 +51,103 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	@Override
 	public void removeCustomer(Customer customer) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void updateCustomer(Customer customer)throws DAOException {
 		/// 1. get a connection (from pool)
-				try {
-					con = getConnection();
+		try {
+			con = getConnection();
+			if (con != null) {
+				System.out.println("Connected");
+				// 2. create sql insert
+				PreparedStatement stat = con
+						// .prepareStatement("DELETE FROM " + TABLE_NAME + "
+						// WHERE Cust_id=?; DELETE FROM Customer_Coupon WHERE
+						// Cust_id=?");
+						.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE custId=?");
+				stat.setLong(1, customer.getCustId());
+				// stat.setLong(2, customer.getCustId());
 
-					// 2. create sql insert
-					PreparedStatement stat = con.prepareStatement("UPDATE INTO " + 
-					TABLE_NAME + " SET VALUES (?, ?) where CustName (?)");
-					stat.setString(1, customer.getCustName());
-					stat.setString(2, customer.getPassword());
-					stat.setString(3, customer.getCustName());
+				System.out.println("Executing: " + stat.toString());
+				// stat.executeUpdate();
+				int rowsDeleted = stat.executeUpdate();
 
-					System.out.println("Executing: " + stat.toString());
-					stat.executeUpdate();
+				if (rowsDeleted > 0) {
+					System.out.println("A customer has been deleted successfully");
+				} else
+					System.out.println("An Error Has Occurred.");
+			}
+		} catch (SQLException e) {
+			// TODO: deal with exception
+			System.out.println("SQL statement is not executed!");
+		}
 
-				} catch (SQLException e) {
-					// TODO: deal with exception
-					e.printStackTrace();
-				}
-
-				finally {
-					// 3. release connection
-					releaseConnection(con);
-				}
-
+		finally {
+			// 3. release connection
+			releaseConnection(con);
+		}
 
 	}
 
 	@Override
-	public Customer getCustomer(long cust_id) {
-		// TODO Auto-generated method stub
-		return null;
+	public void updateCustomer(Customer customer) throws DAOException {
+		/// 1. get a connection (from pool)
+		try {
+			con = getConnection();
+			// 2. create sql insert
+			PreparedStatement stat = con
+					.prepareStatement("UPDATE " + TABLE_NAME + " SET custName=?, password=? WHERE custName=?");
+			stat.setString(1, customer.getCustName());
+			stat.setString(2, customer.getPassword());
+			stat.setString(3, customer.getCustName());
+
+			System.out.println("Executing: " + stat.toString());
+			// stat.executeUpdate();
+			int rowsUpdated = stat.executeUpdate();
+			if (rowsUpdated > 0) {
+				System.out.println(customer + " has been updated successfully");
+			} else
+				System.out.println("An Error Has Occurred. Check if entered data is correct.");
+		} catch (SQLException e) {
+			// TODO: deal with exception
+			System.out.println("cannot update customer : " + customer.getCustName() + ". " + e.getMessage());
+			// System.out.println("SQL statement is not executed!");
+		}
+
+		finally {
+			// 3. release connection
+			releaseConnection(con);
+		}
+
+	}
+
+	@Override
+	public Customer getCustomer(long custId) throws DAOException {
+		Customer customer = new Customer();
+		/// 1. get a connection (from pool)
+		try {
+			con = getConnection();
+			if (con != null) {
+				System.out.println("Connected");
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE custID=? ");
+				stat.setLong(1, custId);
+				System.out.println("Executing: " + stat.toString());
+				ResultSet rows = stat.executeQuery();
+				while (rows.next()) {
+					customer.setCustId(rows.getLong("custId"));
+					customer.setCustName(rows.getString("custName"));
+					customer.setPassword(rows.getString("password"));
+				}
+				
+			}
+		} catch (SQLException e) {
+
+			System.out.println("SQL statement is not executed!");
+			// e.printStackTrace();
+		}
+
+		finally {
+			// 3. release connection
+			releaseConnection(con);
+		}
+		return customer;
 	}
 
 	@Override
@@ -118,7 +185,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		// and close the program. It is too severe
 		// String url = "jdbc:mysql://localhost:3306/coupon", "root",
 		// "password";
-		return DriverManager.getConnection("jdbc:mysql://localhost/coupon", "root", "123123");
+		return DriverManager.getConnection("jdbc:mysql://localhost/" + dbName, "root", "123123");
 	}
 
 	private void releaseConnection(Connection con) {
@@ -128,7 +195,6 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 			con.close();
 		} catch (SQLException e) {
-			// We don't care
 			e.printStackTrace();
 		}
 	}

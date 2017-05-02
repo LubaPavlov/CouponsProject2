@@ -2,16 +2,13 @@ package com.project.beans;
 
 import java.io.Serializable;
 import java.util.Collection;
-
-import javax.sql.rowset.spi.TransactionalWriter;
-
 public class Customer implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private long cust_id;
+	private long custId;
 	private String custName;
 	private String password;
 	private Collection<Coupon> coupons;
@@ -19,20 +16,26 @@ public class Customer implements Serializable {
 	public Customer() {
 	}
 
-	public Customer(long cust_id, String custName, String password) {
+	public Customer(long custId, String custName, String password) {
 
-		this.cust_id = cust_id;
+		this.custId = custId;
 		this.custName = custName;
 		this.password = password;
 	}
+	public Customer(long custId, String custName) {
 
-	public long getCust_id() {
-		return cust_id;
+		this.custId = custId;
+		this.custName = custName;
+
 	}
 
-	public void setCust_id(long cust_id) {
-		checkCust_id(cust_id);
-		this.cust_id = cust_id;
+	public long getCustId() {
+		return custId;
+	}
+
+	public void setCustId(long custId) {
+		checkCustId(custId);
+		this.custId = custId;
 	}
 
 	public String getCustName() {
@@ -64,18 +67,18 @@ public class Customer implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Customer [cust_id=" + cust_id + ", custName=" + custName + ", password=" + password + ", coupons="
+		return "Customer [custId=" + custId + ", custName=" + custName + ", password=" + password + ", coupons="
 				+ coupons + "]";
 	}
 
-	private void checkCust_id(long cust_id) {
-		if (cust_id == 0){
+	private void checkCustId(long custId) {
+		if (custId == 0){
 			throw new IllegalArgumentException("ID can't be zero");
 		}
 	}
 
 	private void checkCustName(String custName) {
-		if (custName == null || custName.isEmpty()) {
+		if (custName == null) {
 			throw new NullPointerException("Name can't be null");
 		}
 	}

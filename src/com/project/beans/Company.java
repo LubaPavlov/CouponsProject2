@@ -9,7 +9,7 @@ public class Company implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private long comp_id;
+	private long compId;
 	private String compName;
 	private String password;
 	private String email;
@@ -19,19 +19,19 @@ public class Company implements Serializable{
 	}
 	
 	
-	public Company(long comp_id, String compName, String password, String email) {
-		this.comp_id = comp_id;
+	public Company(long compId, String compName, String password, String email) {
+		this.compId = compId;
 		this.compName = compName;
 		this.password = password;
 		this.email = email;
 	}
 
 
-	public long getComp_id() {
-		return comp_id;
+	public long getCompId() {
+		return compId;
 	}
-	public void setComp_id(long comp_id) {
-		this.comp_id = comp_id;
+	public void setCompId(long compId) {
+		this.compId = compId;
 	}
 	public String getCompName() {
 		return compName;
@@ -59,7 +59,7 @@ public class Company implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "Company [comp_id=" + comp_id + ", compName=" + compName + ", password=" + password + ", email=" + email
+		return "Company [comp_id=" + compId + ", compName=" + compName + ", password=" + password + ", email=" + email
 				+ ", coupons=" + coupons + "]";
 	}
 

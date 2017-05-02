@@ -1,7 +1,6 @@
 package com.project.dao;
 
 import java.util.Collection;
-
 import com.project.beans.*;
 import com.project.exceptions.DAOException;
 
