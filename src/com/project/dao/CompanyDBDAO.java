@@ -9,12 +9,11 @@ import java.util.Collection;
 
 import com.project.beans.Company;
 import com.project.beans.Coupon;
-import com.project.beans.Customer;
 import com.project.exceptions.DAOException;
 
 //
 //CompanyDBDAO class implements CompanyDAO interface.
-//Provide's methods to insert and retrieve data from and to the DB.
+//Providing methods to insert, update and select data from and to the DB.
 //
 
 public class CompanyDBDAO implements CompanyDAO {
@@ -25,7 +24,6 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	@Override
 	public void createCompany(Company company) throws DAOException {
-
 		// 1. get a connection (from pool)
 		try {
 			con = getConnection();
@@ -39,12 +37,14 @@ public class CompanyDBDAO implements CompanyDAO {
 			// stat.executeUpdate();
 			int rowsInserted = stat.executeUpdate();
 			if (rowsInserted > 0) {
-				System.out.println("A new company has been created successfully");
+				System.out.println("A new company " + company.getCompName() + " has been created successfully");
 			} else
 				System.out.println("An Error Has Occurred. Check if entered data is correct.");
+			
 		} catch (SQLException e) {
 			// TODO: deal with exception
-			System.out.println("SQL statement is not executed!");
+			System.out.println("Cannot create company : " + company.getCompName() + ". " + e.getMessage());
+			
 		} finally {
 			// 3. release connection
 			releaseConnection(con);
@@ -72,20 +72,18 @@ public class CompanyDBDAO implements CompanyDAO {
 				int rowsDeleted = stat.executeUpdate();
 
 				if (rowsDeleted > 0) {
-					System.out.println("A company has been deleted successfully");
+					System.out.println("A company " + company.getCompName() + " has been deleted successfully");
 				} else
 					System.out.println("An Error Has Occurred.");
 			}
 		} catch (SQLException e) {
 			// TODO: deal with exception
-			System.out.println("SQL statement is not executed!");
+			System.out.println("Cannot remove company : " + company.getCompName() + ". " + e.getMessage());
 		}
-
 		finally {
 			// 3. release connection
 			releaseConnection(con);
 		}
-
 	}
 
 	@Override
@@ -95,7 +93,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			con = getConnection();
 			// 2. create sql insert
 			PreparedStatement stat = con
-					.prepareStatement("UPDATE " + TABLE_NAME + " SET cmpName=?, password=? WHERE compName=?");
+					.prepareStatement("UPDATE " + TABLE_NAME + " SET compName=?, password=? WHERE compName=?");
 			stat.setString(1, company.getCompName());
 			stat.setString(2, company.getPassword());
 			stat.setString(3, company.getCompName());
@@ -107,23 +105,21 @@ public class CompanyDBDAO implements CompanyDAO {
 				System.out.println(company + " has been updated successfully");
 			} else
 				System.out.println("An Error Has Occurred. Check if entered data is correct.");
+			
 		} catch (SQLException e) {
-			// TODO: deal with exception
-			System.out.println("cannot update customer : " + company.getCompName() + ". " + e.getMessage());
-			// System.out.println("SQL statement is not executed!");
-		}
 
-		finally {
+			System.out.println("Cannot update company : " + company.getCompName() + ". " + e.getMessage());
+			
+		} finally {
 			// 3. release connection
 			releaseConnection(con);
 		}
-
 	}
 
 	@Override
 	public Company getCompany(long compId) {
 		Company company = new Company();
-		/// 1. get a connection (from pool)
+		// 1. get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
@@ -137,14 +133,12 @@ public class CompanyDBDAO implements CompanyDAO {
 					company.setCompName(rows.getString("compName"));
 					company.setPassword(rows.getString("password"));
 				}
-
 			}
 		} catch (SQLException e) {
 
-			System.out.println("SQL statement is not executed!");
-			// e.printStackTrace();
+			System.out.println("Cannot found a company : " + compId + ". " + e.getMessage());
+			
 		}
-
 		finally {
 			// 3. release connection
 			releaseConnection(con);
@@ -155,7 +149,6 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public Collection<Company> getAllCompanies() {
 		return null;
-		// TODO Auto-generated method stub
 
 	}
 

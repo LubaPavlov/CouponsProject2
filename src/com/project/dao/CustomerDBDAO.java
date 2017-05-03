@@ -8,7 +8,10 @@ import java.sql.SQLException;
 import java.util.Collection;
 import com.project.beans.*;
 import com.project.exceptions.DAOException;
-
+//
+//CustomerDBDAO class implements CustomerDAO interface.
+//Providing methods to insert, update and select data from and to the DB.
+//
 public class CustomerDBDAO implements CustomerDAO {
 
 	private static final String TABLE_NAME = "customer";
@@ -33,20 +36,18 @@ public class CustomerDBDAO implements CustomerDAO {
 				int rowsInserted = stat.executeUpdate();
 
 				if (rowsInserted > 0) {
-					System.out.println("A new customer has been created successfully");
+					System.out.println("A new customer " + customer.getCustName() + " has been created successfully");
 				} else
 					System.out.println("An Error Has Occurred. Check if entered data is correct.");
 			}
 		} catch (SQLException e) {
 			// TODO: deal with exception
-			System.out.println("SQL statement is not executed!");
-		}
-
-		finally {
+			System.out.println("Cannot create customer : " + customer.getCustName() + ". " + e.getMessage());
+			
+		} finally {
 			// 3. release connection
 			releaseConnection(con);
 		}
-
 	}
 
 	@Override
@@ -59,8 +60,7 @@ public class CustomerDBDAO implements CustomerDAO {
 				// 2. create sql insert
 				PreparedStatement stat = con
 						// .prepareStatement("DELETE FROM " + TABLE_NAME + "
-						// WHERE Cust_id=?; DELETE FROM Customer_Coupon WHERE
-						// Cust_id=?");
+						// WHERE Cust_id=?; DELETE FROM Customer_Coupon WHERE Cust_id=?");
 						.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE custId=?");
 				stat.setLong(1, customer.getCustId());
 				// stat.setLong(2, customer.getCustId());
@@ -70,20 +70,18 @@ public class CustomerDBDAO implements CustomerDAO {
 				int rowsDeleted = stat.executeUpdate();
 
 				if (rowsDeleted > 0) {
-					System.out.println("A customer has been deleted successfully");
+					System.out.println("A customer " + customer.getCustName() + " has been deleted successfully");
 				} else
 					System.out.println("An Error Has Occurred.");
 			}
 		} catch (SQLException e) {
-			// TODO: deal with exception
-			System.out.println("SQL statement is not executed!");
-		}
 
-		finally {
+			System.out.println("Cannot remove customer : " + customer.getCustName() + ". " + e.getMessage());
+			
+		} finally {
 			// 3. release connection
 			releaseConnection(con);
 		}
-
 	}
 
 	@Override
@@ -105,17 +103,15 @@ public class CustomerDBDAO implements CustomerDAO {
 				System.out.println(customer + " has been updated successfully");
 			} else
 				System.out.println("An Error Has Occurred. Check if entered data is correct.");
+			
 		} catch (SQLException e) {
-			// TODO: deal with exception
-			System.out.println("cannot update customer : " + customer.getCustName() + ". " + e.getMessage());
-			// System.out.println("SQL statement is not executed!");
-		}
 
-		finally {
+			System.out.println("Cannot update customer : " + customer.getCustName() + ". " + e.getMessage());
+			
+		} finally {
 			// 3. release connection
 			releaseConnection(con);
 		}
-
 	}
 
 	@Override
@@ -139,11 +135,9 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			System.out.println("SQL statement is not executed!");
-			// e.printStackTrace();
-		}
-
-		finally {
+			System.out.println("Cannot found customer with ID " + custId + ". " + e.getMessage());
+			
+		} finally {
 			// 3. release connection
 			releaseConnection(con);
 		}

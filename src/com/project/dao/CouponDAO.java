@@ -19,4 +19,6 @@ public interface CouponDAO {
 	public Coupon getCouponByType(CouponType couponType);
 
 	public Collection<Coupon> getOldCoupons();
+	
+	public void setCompanyId();
 }

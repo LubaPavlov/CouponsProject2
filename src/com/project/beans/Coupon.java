@@ -1,9 +1,9 @@
 package com.project.beans;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
-public class Coupon implements Serializable{
+public class Coupon implements Serializable {
 
 	/**
 	 * 
@@ -18,15 +18,25 @@ public class Coupon implements Serializable{
 	private String message;
 	private double price;
 	private String image;
+	private long compId;
 
 	public Coupon() {
 	}
 
-	public long getCoupon_id() {
+	public Coupon(String title, Date startDate, Date endDate, int amount, CouponType type, double price) {
+		this.title = title;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.amount = amount;
+		this.type = type;
+		this.price = price;
+	}
+
+	public long getCouponId() {
 		return couponId;
 	}
 
-	public void setCoupon_id(long couponId) {
+	public void setCouponId(long couponId) {
 		this.couponId = couponId;
 	}
 
@@ -94,13 +104,19 @@ public class Coupon implements Serializable{
 		this.image = image;
 	}
 
+	public void setCompId(long compId) {
+		this.compId = compId;
+	}
+
+	public long getCompId() {
+		return compId;
+	}
+
 	@Override
 	public String toString() {
-		return "Coupon [couponId=" + couponId + ", title=" + title + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", amount=" + amount + ", type=" + type + ", message=" + message + ", price=" + price
-				+ ", image=" + image + "]";
+		return "Coupon [couponId=" + couponId + ", title=" + title + ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", amount=" + amount + ", type=" + type + ", message=" + message + ", price=" + price + ", image="
+				+ image + "]";
 	}
-	
-	
 
 }
