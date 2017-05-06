@@ -24,8 +24,8 @@ public class CouponDBDAO implements CouponDAO{
 					if (con != null) {
 						System.out.println("Connected");
 						// 2. create sql insert
-						PreparedStatement stat = con.prepareStatement("INSERT INTO " + TABLE_NAME + "(title, startDate, endDate, amount, type, message, price, image, compId) "
-								+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+						PreparedStatement stat = con.prepareStatement("INSERT INTO " + TABLE_NAME + "(title, startDate, endDate, amount, type, message, price, image) "
+								+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 						
 						stat.setString (1, coupon.getTitle());
 						stat.setDate (2, coupon.getStartDate());
@@ -35,7 +35,6 @@ public class CouponDBDAO implements CouponDAO{
 						stat.setString (6, coupon.getMessage());
 						stat.setDouble (7, coupon.getPrice());
 						stat.setString (8, coupon.getImage());
-						stat.setLong(9, coupon.getCompId());
 
 						System.out.println("Executing: " + stat.toString());
 						// stat.executeUpdate();
@@ -44,25 +43,7 @@ public class CouponDBDAO implements CouponDAO{
 							System.out.println("A new coupon " + coupon.getTitle() + " has been created successfully");
 						} else
 							System.out.println("An Error Has Occurred. Check if entered data is correct.");
-						
-						long id = 0;
-						stat = con.prepareStatement("SELECT couponId FROM coupon WHERE title=?");
 
-						stat.setString(1, coupon.getTitle());
-						ResultSet rows = stat.executeQuery();
-						while (rows.next()) {
-							id = rows.getLong("couponId");
-						}
-						// add an entry into company_coupon table
-						stat = con.prepareStatement("INSERT INTO company_coupon (compId,couponId) VALUES(?, ?)");
-						stat.setLong(1, coupon.getCompId());
-						stat.setLong(2, id);
-						System.out.println("Executing: " + stat.toString());
-						rowsInserted = stat.executeUpdate();
-						if (rowsInserted > 0) {
-							System.out.println("A new row added to company_coupon table");
-						} else
-							System.out.println("An Error Has Occurred.");
 					}
 				} catch (SQLException e) {
 					// TODO: deal with exception

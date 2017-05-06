@@ -16,9 +16,8 @@ public class Customer implements Serializable {
 	public Customer() {
 	}
 
-	public Customer(long custId, String custName, String password) {
+	public Customer(String custName, String password) {
 
-		this.custId = custId;
 		this.custName = custName;
 		this.password = password;
 	}

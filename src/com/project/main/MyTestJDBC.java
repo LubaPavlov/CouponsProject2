@@ -3,27 +3,34 @@ package com.project.main;
 import com.project.beans.Company;
 import com.project.beans.Coupon;
 import com.project.beans.CouponType;
+import com.project.beans.Customer;
 import com.project.dao.CompanyDAO;
 import com.project.dao.CompanyDBDAO;
 import com.project.dao.CouponDAO;
 import com.project.dao.CouponDBDAO;
+import com.project.dao.CustomerDAO;
+import com.project.dao.CustomerDBDAO;
 import com.project.exceptions.DAOException;
 
 public class MyTestJDBC {
 
 	public static void main(String[] args) throws DAOException{
 
-		//CustomerDAO cDao = new CustomerDBDAO();
-		//Customer customer = new Customer();
-		//cDao.getCustomer(10);
-		//System.out.println(cDao.getCustomer(10));
-		//cDao.removeCustomer(customer);
-		// cDao.createCustomer(customer);
-		// cDao.updateCustomer(customer1);
+		CustomerDAO cDao = new CustomerDBDAO();
+//		Customer customer = new Customer("Leo","123123");
+//		cDao.createCustomer(customer);
+//		Customer customer2 = new Customer("Lilah","123456");
+//		cDao.createCustomer(customer2);
+//  	Customer customer3 = new Customer("Idan","123456789");
+		//cDao.createCustomer(customer3);
+		//cDao.getCustomer(2);
+		System.out.println(cDao.getCustomer(1));
+		//cDao.removeCustomer(cDao.getCustomer(4));
+		//cDao.updateCustomer(customer3);
 
-		CompanyDAO compDao = new CompanyDBDAO();
-		Company company = new Company(2, "Nike", "123123","nike@gmail.com");
-		compDao.createCompany(company);
+//		CompanyDAO compDao = new CompanyDBDAO();
+//		Company company = new Company("Fox", "123456","fox@gmail.com");
+//		compDao.createCompany(company);
 
 //		CouponDAO couponDao = new CouponDBDAO();
 //		Coupon coupon4 = new Coupon();
@@ -33,8 +40,8 @@ public class MyTestJDBC {
 //		coupon4.setAmount(20);
 //		coupon4.setType(CouponType.SPORTS);
 //		coupon4.setPrice(33);
-//		coupon4.setCompId(1);
 //		couponDao.createCoupon(coupon4);
+		
 	}
 
 }

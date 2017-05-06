@@ -19,8 +19,7 @@ public class Company implements Serializable{
 	}
 	
 	
-	public Company(long compId, String compName, String password, String email) {
-		this.compId = compId;
+	public Company(String compName, String password, String email) {
 		this.compName = compName;
 		this.password = password;
 		this.email = email;

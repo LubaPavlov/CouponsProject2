@@ -18,7 +18,6 @@ public class Coupon implements Serializable {
 	private String message;
 	private double price;
 	private String image;
-	private long compId;
 
 	public Coupon() {
 	}
@@ -102,14 +101,6 @@ public class Coupon implements Serializable {
 
 	public void setImage(String image) {
 		this.image = image;
-	}
-
-	public void setCompId(long compId) {
-		this.compId = compId;
-	}
-
-	public long getCompId() {
-		return compId;
 	}
 
 	@Override

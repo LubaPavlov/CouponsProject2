@@ -28,11 +28,10 @@ public class CompanyDBDAO implements CompanyDAO {
 		try {
 			con = getConnection();
 			// 2. create sql insert
-			PreparedStatement stat = con.prepareStatement("INSERT INTO " + TABLE_NAME + " VALUES (?, ?, ?, ?)");
-			stat.setLong(1, company.getCompId());
-			stat.setString(2, company.getCompName());
-			stat.setString(3, company.getPassword());
-			stat.setString(4, company.getEmail());
+			PreparedStatement stat = con.prepareStatement("INSERT INTO " + TABLE_NAME + "(compName, password, email)" + " VALUES (?, ?, ?)");
+			stat.setString(1, company.getCompName());
+			stat.setString(2, company.getPassword());
+			stat.setString(3, company.getEmail());
 			System.out.println("Executing: " + stat.toString());
 			// stat.executeUpdate();
 			int rowsInserted = stat.executeUpdate();
