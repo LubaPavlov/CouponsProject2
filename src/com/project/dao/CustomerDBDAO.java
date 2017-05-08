@@ -11,7 +11,7 @@ import com.project.exceptions.DAOException;
 
 //
 //CustomerDBDAO class implements CustomerDAO interface.
-//Providing methods to insert, update and select data from and to the DB.
+//Providing methods to insert, update and select data from and to the Data Base.
 //
 public class CustomerDBDAO implements CustomerDAO {
 
@@ -21,19 +21,19 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	@Override
 	public void createCustomer(Customer customer) throws DAOException {
-		/// 1. get a connection (from pool)
+		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
 				System.out.println("Connected");
-				// 2. create sql insert
+				// 2. create SQL INSER
 				PreparedStatement stat = con
 						.prepareStatement("INSERT INTO " + TABLE_NAME + "(custName, password)" + " VALUES (?, ?)");
 				stat.setString(1, customer.getCustName());
 				stat.setString(2, customer.getPassword());
 
 				System.out.println("Executing: " + stat.toString());
-				// stat.executeUpdate();
+
 				int rowsInserted = stat.executeUpdate();
 
 				if (rowsInserted > 0) {
@@ -42,33 +42,30 @@ public class CustomerDBDAO implements CustomerDAO {
 					System.out.println("An Error Has Occurred. Check if entered data is correct.");
 			}
 		} catch (SQLException e) {
-			// TODO: deal with exception
+
 			System.out.println("Cannot create customer : " + customer.getCustName() + ". " + e.getMessage());
 
 		} finally {
-			// 3. release connection
+			// 3. Release connection
 			releaseConnection(con);
 		}
 	}
 
 	@Override
 	public void removeCustomer(Customer customer) {
-		/// 1. get a connection (from pool)
+		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
 				System.out.println("Connected");
-				// 2. create sql insert
-				PreparedStatement stat = con
-						// .prepareStatement("DELETE FROM " + TABLE_NAME + "
-						// WHERE Cust_id=?; DELETE FROM Customer_Coupon WHERE
-						// Cust_id=?");
-						.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE custId=?");
+				// 2. create SQL DELETE
+				PreparedStatement stat = con.prepareStatement(
+						"DELETE FROM " + TABLE_NAME + "WHERE Cust_id=?; DELETE FROM Customer_Coupon WHERE Cust_id=?");
 				stat.setLong(1, customer.getCustId());
-				// stat.setLong(2, customer.getCustId());
+				stat.setLong(2, customer.getCustId());
 
 				System.out.println("Executing: " + stat.toString());
-				// stat.executeUpdate();
+
 				int rowsDeleted = stat.executeUpdate();
 
 				if (rowsDeleted > 0) {
@@ -81,17 +78,17 @@ public class CustomerDBDAO implements CustomerDAO {
 			System.out.println("Cannot remove customer : " + customer.getCustName() + ". " + e.getMessage());
 
 		} finally {
-			// 3. release connection
+			// 3. Release connection
 			releaseConnection(con);
 		}
 	}
 
 	@Override
 	public void updateCustomer(Customer customer) throws DAOException {
-		/// 1. get a connection (from pool)
+		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
-			// 2. create sql insert
+			// 2. Create SQL UPDATE
 			PreparedStatement stat = con.prepareStatement("UPDATE " + TABLE_NAME + " SET password=? WHERE custName=?");
 			stat.setString(1, customer.getPassword());
 			stat.setString(2, customer.getCustName());
@@ -109,7 +106,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			System.out.println("Cannot update customer : " + customer.getCustName() + ". " + e.getMessage());
 
 		} finally {
-			// 3. release connection
+			// 3. Release connection
 			releaseConnection(con);
 		}
 	}
@@ -117,7 +114,7 @@ public class CustomerDBDAO implements CustomerDAO {
 	@Override
 	public Customer getCustomer(long custId) throws DAOException {
 		Customer customer = new Customer();
-		/// 1. get a connection (from pool)
+		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
@@ -128,12 +125,9 @@ public class CustomerDBDAO implements CustomerDAO {
 				ResultSet rows = stat.executeQuery();
 
 				while (rows.next()) {
-
 					customer.setCustId(rows.getLong("custId"));
 					customer.setCustName(rows.getString("custName"));
 					customer.setPassword(rows.getString("password"));
-
-					// System.out.println(customer);
 				}
 			}
 
@@ -142,7 +136,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			System.out.println("Cannot found customer with ID " + custId + ". " + e.getMessage());
 
 		} finally {
-			// 3. release connection
+			// 3. Release connection
 			releaseConnection(con);
 		}
 		return customer;
@@ -162,37 +156,42 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	@Override
 	public boolean login(String custName, String password) {
+		boolean succeeded = false;
 		try {
 			con = getConnection();
-			if (con != null) {
-				System.out.println("Connected");
-				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE custName=? ");
-				stat.setString(1, custName);
-				System.out.println("Executing: " + stat.toString());
-				ResultSet rows = stat.executeQuery();
+			// 2. Create SQL insert
+			PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE custName=?");
+			stat.setString(1, custName);
 
-				String checkUser = rows.getString("custName");
-				String checkPass = rows.getString("password");
+			ResultSet rows = stat.executeQuery();
+			while (rows.next()) {
+				String myName = rows.getString("custName");
+				String myPassword = rows.getString("password");
 
-				if (checkUser.equals(custName) && checkPass.equals(password)) {
-					return true;
+				if (myName.equals(custName) && myPassword.equals(password)) {
+					System.out.println("Success!");
+					return succeeded = true;
+				} else {
+					System.out.println("Failure!");
+					return succeeded = false;
 				}
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 
-			System.out.println("An error occurd " + e.getMessage());
+			System.out.println("An error occured" + e.getMessage());
 
 		} finally {
-			// 3. release connection
+			// 3. Release connection
 			releaseConnection(con);
 		}
-		return false;
+
+		return succeeded;
 	}
 
 	@Override
 	public long getCustomerId(String custName) {
 		long custId = 0;
-		/// 1. get a connection (from pool)
+		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
@@ -212,7 +211,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			System.out.println("Cannot found customer with ID " + custName + ". " + e.getMessage());
 
 		} finally {
-			// 3. release connection
+			// 3. Release connection
 			releaseConnection(con);
 		}
 		return custId;
@@ -225,17 +224,12 @@ public class CustomerDBDAO implements CustomerDAO {
 	}
 
 	private Connection getConnection() throws SQLException {
-		// TODO: maybe we should catch the exception here
-		// and close the program. It is too severe
-		// String url = "jdbc:mysql://localhost:3306/coupon", "root",
-		// "password";
+
 		return DriverManager.getConnection("jdbc:mysql://localhost/" + dbName, "root", "123123");
 	}
 
 	private void releaseConnection(Connection con) {
-		// We currently are closing the connections. Later we
-		// will move to a better solution using a connection pool
-		// that Assaf will provide
+
 		try {
 			con.close();
 		} catch (SQLException e) {

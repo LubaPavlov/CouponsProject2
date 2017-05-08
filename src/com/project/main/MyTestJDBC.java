@@ -16,7 +16,8 @@ public class MyTestJDBC {
 
 	public static void main(String[] args) throws DAOException{
 
-		CustomerDAO cDao = new CustomerDBDAO();
+//		CustomerDAO cDao = new CustomerDBDAO();
+//		cDao.login("Leo", "123123");
 //		Customer customer = new Customer("Leo","123123");
 //		cDao.createCustomer(customer);
 //		Customer customer2 = new Customer("Lilah","123456");
@@ -24,15 +25,20 @@ public class MyTestJDBC {
 //  	Customer customer3 = new Customer("Idan","123456789");
 		//cDao.createCustomer(customer3);
 		//cDao.getCustomer(2);
-		System.out.println(cDao.getCustomer(1));
-		//cDao.removeCustomer(cDao.getCustomer(4));
+//		System.out.println(cDao.getCustomer(1));
+//		cDao.login("Fox","123456");
 		//cDao.updateCustomer(customer3);
 
 //		CompanyDAO compDao = new CompanyDBDAO();
+//		compDao.login("Fox", "123456");
 //		Company company = new Company("Fox", "123456","fox@gmail.com");
 //		compDao.createCompany(company);
 
-//		CouponDAO couponDao = new CouponDBDAO();
+		CouponDAO couponDao = new CouponDBDAO();
+		Coupon couponnew = new Coupon();
+		couponDao.createCoupon(couponnew);
+		couponnew.setTitle("dddddd");
+		couponDao.updateCoupon(couponnew);
 //		Coupon coupon4 = new Coupon();
 //		coupon4.setTitle("10% Off");
 //		coupon4.setStartDate(java.sql.Date.valueOf("2018-02-04"));
@@ -41,6 +47,8 @@ public class MyTestJDBC {
 //		coupon4.setType(CouponType.SPORTS);
 //		coupon4.setPrice(33);
 //		couponDao.createCoupon(coupon4);
+		
+		
 		
 	}
 

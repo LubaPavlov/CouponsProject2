@@ -62,4 +62,34 @@ public class Company implements Serializable{
 				+ ", coupons=" + coupons + "]";
 	}
 
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (compId ^ (compId >>> 32));
+		result = prime * result + ((compName == null) ? 0 : compName.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Company other = (Company) obj;
+		if (compId != other.compId)
+			return false;
+		if (compName == null) {
+			if (other.compName != null)
+				return false;
+		} else if (!compName.equals(other.compName))
+			return false;
+		return true;
+	}
+
 }

@@ -13,7 +13,7 @@ import com.project.exceptions.DAOException;
 
 //
 //CompanyDBDAO class implements CompanyDAO interface.
-//Providing methods to insert, update and select data from and to the DB.
+//Providing methods to insert, update and select data from and to the Data Base.
 //
 
 public class CompanyDBDAO implements CompanyDAO {
@@ -24,50 +24,48 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	@Override
 	public void createCompany(Company company) throws DAOException {
-		// 1. get a connection (from pool)
+		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
-			// 2. create sql insert
-			PreparedStatement stat = con.prepareStatement("INSERT INTO " + TABLE_NAME + "(compName, password, email)" + " VALUES (?, ?, ?)");
+			// 2. Create SQL INSERT
+			PreparedStatement stat = con.prepareStatement(
+					"INSERT INTO " + TABLE_NAME + "(compName, password, email)" + " VALUES (?, ?, ?)");
 			stat.setString(1, company.getCompName());
 			stat.setString(2, company.getPassword());
 			stat.setString(3, company.getEmail());
+			
 			System.out.println("Executing: " + stat.toString());
-			// stat.executeUpdate();
+			
 			int rowsInserted = stat.executeUpdate();
 			if (rowsInserted > 0) {
 				System.out.println("A new company " + company.getCompName() + " has been created successfully");
 			} else
 				System.out.println("An Error Has Occurred. Check if entered data is correct.");
-			
+
 		} catch (SQLException e) {
-			// TODO: deal with exception
+
 			System.out.println("Cannot create company : " + company.getCompName() + ". " + e.getMessage());
-			
+
 		} finally {
-			// 3. release connection
+			// 3. Release connection
 			releaseConnection(con);
 		}
 	}
 
 	@Override
 	public void removeCompany(Company company) {
-		/// 1. get a connection (from pool)
+		/// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
 				System.out.println("Connected");
-				// 2. create sql insert
-				PreparedStatement stat = con
-						// .prepareStatement("DELETE FROM " + TABLE_NAME + "
-						// WHERE compId=?; DELETE FROM Company_Coupon WHERE
-						// compId=?");
-						.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE compId=?");
+				PreparedStatement stat = con.prepareStatement(
+						"DELETE FROM " + TABLE_NAME + "WHERE compId=?; DELETE FROM Company_Coupon WHERE compId=?");
 				stat.setLong(1, company.getCompId());
-				// stat.setLong(2, company.getCompId());
+				stat.setLong(2, company.getCompId());
 
 				System.out.println("Executing: " + stat.toString());
-				// stat.executeUpdate();
+
 				int rowsDeleted = stat.executeUpdate();
 
 				if (rowsDeleted > 0) {
@@ -76,21 +74,19 @@ public class CompanyDBDAO implements CompanyDAO {
 					System.out.println("An Error Has Occurred.");
 			}
 		} catch (SQLException e) {
-			// TODO: deal with exception
+
 			System.out.println("Cannot remove company : " + company.getCompName() + ". " + e.getMessage());
-		}
-		finally {
-			// 3. release connection
+
+		} finally {
+			// 3. Release connection
 			releaseConnection(con);
 		}
 	}
 
 	@Override
 	public void updateCompany(Company company) {
-		/// 1. get a connection (from pool)
 		try {
 			con = getConnection();
-			// 2. create sql insert
 			PreparedStatement stat = con
 					.prepareStatement("UPDATE " + TABLE_NAME + " SET compName=?, password=? WHERE compName=?");
 			stat.setString(1, company.getCompName());
@@ -98,19 +94,19 @@ public class CompanyDBDAO implements CompanyDAO {
 			stat.setString(3, company.getCompName());
 
 			System.out.println("Executing: " + stat.toString());
-			// stat.executeUpdate();
+			
 			int rowsUpdated = stat.executeUpdate();
 			if (rowsUpdated > 0) {
 				System.out.println(company + " has been updated successfully");
 			} else
 				System.out.println("An Error Has Occurred. Check if entered data is correct.");
-			
+
 		} catch (SQLException e) {
 
 			System.out.println("Cannot update company : " + company.getCompName() + ". " + e.getMessage());
-			
+
 		} finally {
-			// 3. release connection
+			// 3. Release connection
 			releaseConnection(con);
 		}
 	}
@@ -118,7 +114,7 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public Company getCompany(long compId) {
 		Company company = new Company();
-		// 1. get a connection (from pool)
+		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
@@ -136,10 +132,9 @@ public class CompanyDBDAO implements CompanyDAO {
 		} catch (SQLException e) {
 
 			System.out.println("Cannot found a company : " + compId + ". " + e.getMessage());
-			
-		}
-		finally {
-			// 3. release connection
+
+		} finally {
+			// 3. Release connection
 			releaseConnection(con);
 		}
 		return company;
@@ -160,24 +155,48 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	@Override
 	public boolean login(String compName, String password) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean succeeded = false;
+		try {
+			con = getConnection();
+			PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE compName=?");
+			stat.setString(1, compName);
+
+			ResultSet rows = stat.executeQuery();
+			while (rows.next()) {
+				String myName = rows.getString("compName");
+				String myPassword = rows.getString("password");
+
+				if (myName.equals(compName) && myPassword.equals(password)) {
+					System.out.println("Success!");
+					return succeeded = true;
+				} else {
+					System.out.println("Failure!");
+					return succeeded = false;
+				}
+			}
+		} catch (SQLException e) {
+
+			System.out.println("An error occured" + e.getMessage());
+
+		} finally {
+			// 3. Release connection
+			releaseConnection(con);
+		}
+
+		return succeeded;
 	}
 
 	private Connection getConnection() throws SQLException {
-		// TODO: maybe we should catch the exception here
-		// and close the program. It is too severe
+
 		return DriverManager.getConnection("jdbc:mysql://localhost/" + dbName, "root", "123123");
 	}
 
 	private void releaseConnection(Connection con) {
-		// We currently are closing the connections. Later we
-		// will move to a better solution using a connection pool
-		// that Assaf will provide
+
 		try {
 			con.close();
 		} catch (SQLException e) {
-			// We don't care
+
 			e.printStackTrace();
 		}
 	}

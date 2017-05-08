@@ -20,5 +20,4 @@ public interface CouponDAO {
 
 	public Collection<Coupon> getOldCoupons();
 	
-	public void setCompanyId();
 }
