@@ -35,10 +35,11 @@ public class MyTestJDBC {
 //		compDao.createCompany(company);
 
 		CouponDAO couponDao = new CouponDBDAO();
-		Coupon couponnew = new Coupon();
-		couponDao.createCoupon(couponnew);
-		couponnew.setTitle("dddddd");
-		couponDao.updateCoupon(couponnew);
+//    	Coupon coupon1 = new Coupon();
+////		couponDao.createCoupon(couponnew);
+//		couponnew.setTitle("dddddd");
+//		couponDao.updateCoupon(couponnew);
+		couponDao.removeCoupon(couponDao.getCoupon(4));
 //		Coupon coupon4 = new Coupon();
 //		coupon4.setTitle("10% Off");
 //		coupon4.setStartDate(java.sql.Date.valueOf("2018-02-04"));

@@ -57,7 +57,38 @@ public class CouponDBDAO implements CouponDAO {
 
 	@Override
 	public void removeCoupon(Coupon coupon) {
-		// TODO Auto-generated method stub
+		// 1. Get a connection (from pool)
+				try {
+					con = getConnection();
+					if (con != null) {
+						System.out.println("Connected");
+						// 2. Create SQL UPDATE
+						PreparedStatement stat = con.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE couponId=?; "
+								+ "DELETE FROM company_coupon WHERE couponId=?; "
+								+ "DELETE FROM customer_coupon WHERE couponId=?;");
+
+						stat.setLong(1, coupon.getCouponId());
+						stat.setLong(2, coupon.getCouponId());
+						stat.setLong(3, coupon.getCouponId());
+						
+						System.out.println("Executing: " + stat.toString());
+
+						int rowsDeleted = stat.executeUpdate();
+						
+						if (rowsDeleted > 0) {
+							System.out.println(coupon + " has been deteled successfully");
+						} else
+							System.out.println("An Error Has Occurred.");
+					}
+				} catch (SQLException e) {
+
+					System.out.println("Cannot delete coupon : " + coupon.getTitle() + ". " + e.getMessage());
+
+				} finally {
+					// 3. Release connection
+					releaseConnection(con);
+				}
+
 
 	}
 
@@ -103,8 +134,36 @@ public class CouponDBDAO implements CouponDAO {
 
 	@Override
 	public Coupon getCoupon(long couponId) {
-		// TODO Auto-generated method stub
-		return null;
+		Coupon coupon = new Coupon();
+		try {
+			con = getConnection();
+			if (con != null) {
+				System.out.println("Connected");
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE couponId=? ");
+				stat.setLong(1, couponId);
+				System.out.println("Executing: " + stat.toString());
+				ResultSet rows = stat.executeQuery();
+				while (rows.next()) {
+					coupon.setCouponId(rows.getLong("couponId"));
+					coupon.setTitle(rows.getString("title"));
+//					coupon.setDate(rows.getStartDate("startDate"));
+//					coupon.setDate(rows.getEndDate("endDate"));
+//					coupon.setInt(rows.getAmount("amount"));
+//					coupon.setString(rows.getType().toString());
+//					coupon.setString(rows.getMessage("message"));
+//					coupon.setDouble(rows.getPrice("price"));
+//					coupon.setString(rows.getImage("image"));
+				}
+			}
+		} catch (SQLException e) {
+
+			System.out.println("Cannot found a coupon : " + couponId + ". " + e.getMessage());
+
+		} finally {
+			// 3. Release connection
+			releaseConnection(con);
+		}
+		return coupon;
 	}
 
 	@Override
