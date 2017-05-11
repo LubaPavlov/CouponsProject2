@@ -142,7 +142,32 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	@Override
 	public Collection<Company> getAllCompanies() {
-		return null;
+		List companies = new ArrayList <Company>();
+		// 1. Get a connection (from pool)
+		try {
+			con = getConnection();
+			if (con != null) {
+				System.out.println("Connected");
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME");
+				System.out.println("Executing: " + stat.toString());
+				ResultSet rows = stat.executeQuery();
+				while (rows.next()) {
+					Company company = new Company();
+					company.setCompId(rows.getLong("compId"));
+					company.setCompName(rows.getString("compName"));
+					company.setPassword(rows.getString("password"));
+					companies.add(company);
+				}
+			}
+		} catch (SQLException e) {
+
+			System.out.println("SQL Error" + ". " + e.getMessage());
+
+		} finally {
+			// 3. Release connection
+			releaseConnection(con);
+		}
+		return company;
 
 	}
 
