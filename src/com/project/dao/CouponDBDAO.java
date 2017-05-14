@@ -5,8 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 
+import com.project.beans.Company;
 import com.project.beans.Coupon;
 import com.project.beans.CouponType;
 
@@ -146,13 +148,7 @@ public class CouponDBDAO implements CouponDAO {
 				while (rows.next()) {
 					coupon.setCouponId(rows.getLong("couponId"));
 					coupon.setTitle(rows.getString("title"));
-//					coupon.setDate(rows.getStartDate("startDate"));
-//					coupon.setDate(rows.getEndDate("endDate"));
-//					coupon.setInt(rows.getAmount("amount"));
-//					coupon.setString(rows.getType().toString());
-//					coupon.setString(rows.getMessage("message"));
-//					coupon.setDouble(rows.getPrice("price"));
-//					coupon.setString(rows.getImage("image"));
+
 				}
 			}
 		} catch (SQLException e) {
@@ -168,8 +164,39 @@ public class CouponDBDAO implements CouponDAO {
 
 	@Override
 	public Collection<Coupon> getAllCoupons() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Coupon> coupons = new ArrayList <Coupon>();
+		// 1. Get a connection (from pool)
+		try {
+			con = getConnection();
+			if (con != null) {
+				System.out.println("Connected");
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME);
+				System.out.println("Executing: " + stat.toString());
+				ResultSet rows = stat.executeQuery();
+				while (rows.next()) {
+					Coupon coupon = new Coupon();
+					coupon.setCouponId(rows.getLong("couponId"));
+					coupon.setTitle(rows.getString("title"));
+					coupon.setStartDate(rows.getDate("startDate"));
+					coupon.setEndDate(rows.getDate("endDate"));
+					coupon.setAmount(rows.getInt("amount"));
+//					coupon.setType(rows.getCouponType());
+					coupon.setMessage(rows.getString("message"));
+					coupon.setPrice(rows.getDouble("price"));
+					coupon.setImage(rows.getString("image"));
+					coupons.add(coupon);
+				}
+			}
+		} catch (SQLException e) {
+
+			System.out.println("SQL Error" + ". " + e.getMessage());
+
+		} finally {
+			// 3. Release connection
+			releaseConnection(con);
+		}
+		return coupons;
+
 	}
 
 	@Override

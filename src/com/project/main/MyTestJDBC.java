@@ -29,17 +29,18 @@ public class MyTestJDBC {
 //		cDao.login("Fox","123456");
 		//cDao.updateCustomer(customer3);
 
-//		CompanyDAO compDao = new CompanyDBDAO();
+		CompanyDAO compDao = new CompanyDBDAO();
+		System.out.println(compDao.getAllCompanies());
 //		compDao.login("Fox", "123456");
 //		Company company = new Company("Fox", "123456","fox@gmail.com");
 //		compDao.createCompany(company);
 
-		CouponDAO couponDao = new CouponDBDAO();
+//		CouponDAO couponDao = new CouponDBDAO();
 //    	Coupon coupon1 = new Coupon();
 ////		couponDao.createCoupon(couponnew);
 //		couponnew.setTitle("dddddd");
 //		couponDao.updateCoupon(couponnew);
-		couponDao.removeCoupon(couponDao.getCoupon(4));
+//		couponDao.removeCoupon(couponDao.getCoupon(4));
 //		Coupon coupon4 = new Coupon();
 //		coupon4.setTitle("10% Off");
 //		coupon4.setStartDate(java.sql.Date.valueOf("2018-02-04"));

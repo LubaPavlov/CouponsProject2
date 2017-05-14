@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import com.project.beans.*;
 import com.project.exceptions.DAOException;
@@ -144,8 +145,32 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	@Override
 	public Collection<Customer> getAllCustomers() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Customer> customers = new ArrayList <Customer>();
+		// 1. Get a connection (from pool)
+		try {
+			con = getConnection();
+			if (con != null) {
+				System.out.println("Connected");
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME);
+				System.out.println("Executing: " + stat.toString());
+				ResultSet rows = stat.executeQuery();
+				while (rows.next()) {
+					Customer customer = new Customer();
+					customer.setCustId(rows.getLong("custId"));
+					customer.setCustName(rows.getString("custName"));
+					customer.setPassword(rows.getString("password"));
+					customers.add(customer);
+				}
+			}
+		} catch (SQLException e) {
+
+			System.out.println("SQL Error" + ". " + e.getMessage());
+
+		} finally {
+			// 3. Release connection
+			releaseConnection(con);
+		}
+		return customers;
 	}
 
 	@Override

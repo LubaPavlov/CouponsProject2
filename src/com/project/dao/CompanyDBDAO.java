@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.project.beans.Company;
 import com.project.beans.Coupon;
@@ -33,9 +35,9 @@ public class CompanyDBDAO implements CompanyDAO {
 			stat.setString(1, company.getCompName());
 			stat.setString(2, company.getPassword());
 			stat.setString(3, company.getEmail());
-			
+
 			System.out.println("Executing: " + stat.toString());
-			
+
 			int rowsInserted = stat.executeUpdate();
 			if (rowsInserted > 0) {
 				System.out.println("A new company " + company.getCompName() + " has been created successfully");
@@ -94,7 +96,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			stat.setString(3, company.getCompName());
 
 			System.out.println("Executing: " + stat.toString());
-			
+
 			int rowsUpdated = stat.executeUpdate();
 			if (rowsUpdated > 0) {
 				System.out.println(company + " has been updated successfully");
@@ -142,13 +144,13 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	@Override
 	public Collection<Company> getAllCompanies() {
-		List companies = new ArrayList <Company>();
+		ArrayList<Company> companies = new ArrayList<Company>();
 		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
 				System.out.println("Connected");
-				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME");
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME);
 				System.out.println("Executing: " + stat.toString());
 				ResultSet rows = stat.executeQuery();
 				while (rows.next()) {
@@ -167,7 +169,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			// 3. Release connection
 			releaseConnection(con);
 		}
-		return company;
+		return companies;
 
 	}
 
@@ -209,6 +211,36 @@ public class CompanyDBDAO implements CompanyDAO {
 		}
 
 		return succeeded;
+	}
+	
+	@Override
+	public long getCompanyId(String compName) throws DAOException{	
+		
+		long compId = 0;
+		// 1. Get a connection (from pool)
+		try {
+			con = getConnection();
+			if (con != null) {
+				System.out.println("Connected");
+				PreparedStatement stat = con
+						.prepareStatement("SELECT compId FROM " + TABLE_NAME + " WHERE compName=? ");
+				stat.setString(1, compName);
+				System.out.println("Executing: " + stat.toString());
+				ResultSet rows = stat.executeQuery();
+
+				compId = rows.getLong("compId");
+				System.out.println("Company id is " + compId);
+
+			}
+		} catch (SQLException e) {
+
+			System.out.println("Cannot found company with ID " + compName + ". " + e.getMessage());
+
+		} finally {
+			// 3. Release connection
+			releaseConnection(con);
+		}
+		return compId;
 	}
 
 	private Connection getConnection() throws SQLException {
