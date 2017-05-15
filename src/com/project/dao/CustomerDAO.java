@@ -22,5 +22,5 @@ public interface CustomerDAO {
 
 	public long getCustomerId(String custName) throws DAOException;
 
-	public void addCouponToCustomer(Coupon coupon, Customer customer) throws DAOException;
+	//public void addCouponToCustomer(Coupon coupon, Customer customer) throws DAOException;
 }
