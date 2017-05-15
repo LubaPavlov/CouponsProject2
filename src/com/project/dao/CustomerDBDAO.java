@@ -273,7 +273,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		return custId;
 	}
 
-	@Override
+	/*@Override
 	public void addCouponToCustomer(Coupon coupon, Customer customer) {
 		// 1. Get a connection (from pool)
 				try {
@@ -304,7 +304,7 @@ public class CustomerDBDAO implements CustomerDAO {
 					releaseConnection(con);
 				}
 
-	}
+	}*/
 
 	private Connection getConnection() throws SQLException {
 
