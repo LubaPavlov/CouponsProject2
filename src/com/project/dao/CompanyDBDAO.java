@@ -199,7 +199,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			// 3. Release connection
 			releaseConnection(con);
 		}
-		return companies;
+		return coupons;
 
 	}
 
