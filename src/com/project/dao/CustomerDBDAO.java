@@ -175,8 +175,39 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	@Override
 	public Collection<Coupon> getCoupons(Customer customer) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Coupon> coupons = new ArrayList <Coupon>();
+		// 1. Get a connection (from pool)
+		try {
+			con = getConnection();
+			if (con != null) {
+				System.out.println("Connected");
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM coupon_customer ");
+				System.out.println("Executing: " + stat.toString());
+				ResultSet rows = stat.executeQuery();
+				while (rows.next()) {
+					Coupon coupon = new Coupon();
+					coupon.setCouponId(rows.getLong("couponId"));
+					coupon.setTitle(rows.getString("title"));
+					coupon.setStartDate(rows.getDate("startDate"));
+					coupon.setEndDate(rows.getDate("endDate"));
+					coupon.setAmount(rows.getInt("amount"));
+                                        coupon.setType(CouponType.valueOf(rows.getString("CouponType")));
+					coupon.setMessage(rows.getString("message"));
+					coupon.setPrice(rows.getDouble("price"));
+					coupon.setImage(rows.getString("image"));
+					coupons.add(coupon);
+				}
+			}
+		} catch (SQLException e) {
+
+			System.out.println("SQL Error" + ". " + e.getMessage());
+
+		} finally {
+			// 3. Release connection
+			releaseConnection(con);
+		}
+		return coupons;
+
 	}
 
 	@Override
