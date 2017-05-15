@@ -175,8 +175,31 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	@Override
 	public Collection<Coupon> getCoupons() {
-		return null;
-		// TODO Auto-generated method stub
+		ArrayList<Coupon> coupons = new ArrayList<Coupon>();
+		// 1. Get a connection (from pool)
+		try {
+			con = getConnection();
+			if (con != null) {
+				System.out.println("Connected");
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME);
+				System.out.println("Executing: " + stat.toString());
+				ResultSet rows = stat.executeQuery();
+				while (rows.next()) {
+					Coupon coupon = new Coupon();
+					coupon.setCouponId(rows.getLong("couponId"));
+					coupon.setTitle(rows.getString("title"));
+					coupons.add(coupon);
+				}
+			}
+		} catch (SQLException e) {
+
+			System.out.println("SQL Error" + ". " + e.getMessage());
+
+		} finally {
+			// 3. Release connection
+			releaseConnection(con);
+		}
+		return companies;
 
 	}
 
