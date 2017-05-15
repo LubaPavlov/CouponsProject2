@@ -1,4 +1,4 @@
-package com.coupon.system;
+package com.project.main;
 
 import java.sql.SQLException;
 
