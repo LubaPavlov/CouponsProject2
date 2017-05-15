@@ -308,16 +308,18 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	private Connection getConnection() throws SQLException {
 
-		return DriverManager.getConnection("jdbc:mysql://localhost/" + dbName, "root", "123123");
+		//return DriverManager.getConnection("jdbc:mysql://localhost/" + dbName, "root", "123123");
+		return CouponSystem.getConnectionPool().getConnection();
 	}
 
 	private void releaseConnection(Connection con) {
 
-		try {
+		/*try {
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}*/
+		CopuonSystem.getConnectionPool().free(con);
 	}
 
 }
