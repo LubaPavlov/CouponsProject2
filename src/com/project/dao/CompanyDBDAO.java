@@ -60,20 +60,8 @@ public class CompanyDBDAO implements CompanyDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
-				
-				//get all coupons of the company 
-				
-				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE compId=? ");
-				stat.setLong(1, company.getCompId());
-				ResultSet rs = stat.executeQuery();
-				List<Long> couponIds = new ArrayList<Long>();
-				while (rs.next()) {
-					Long couponId = rs.getLong("couponId");
-					couponIds.add(rs.getLong("couponId"));
-				}
-							
-				stat = con.prepareStatement(
+				System.out.println("Connected");				
+				PreparedStatement stat = con.prepareStatement(
 						"DELETE FROM " + TABLE_NAME + "WHERE compId=?; DELETE FROM Company_Coupon WHERE compId=?");
 				stat.setLong(1, company.getCompId());
 				stat.setLong(2, company.getCompId());
