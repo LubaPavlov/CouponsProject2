@@ -28,9 +28,11 @@ public class MyTestJDBC {
 //		System.out.println(cDao.getCustomer(1));
 //		cDao.login("Fox","123456");
 		//cDao.updateCustomer(customer3);
-
-		CompanyDAO compDao = new CompanyDBDAO();
-		System.out.println(compDao.getAllCompanies());
+//
+//		CompanyDAO compDao = new CompanyDBDAO();
+//		Company company1 = new Company("Fox", "123456","fox@gmail.com");
+//		compDao.createCompany(company1);
+//		System.out.println(compDao.getAllCompanies());
 //		compDao.login("Fox", "123456");
 //		Company company = new Company("Fox", "123456","fox@gmail.com");
 //		compDao.createCompany(company);
