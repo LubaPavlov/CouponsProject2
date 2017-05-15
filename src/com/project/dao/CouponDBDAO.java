@@ -11,6 +11,7 @@ import java.util.Collection;
 import com.project.beans.Company;
 import com.project.beans.Coupon;
 import com.project.beans.CouponType;
+import com.project.main.CouponSystem;
 
 public class CouponDBDAO implements CouponDAO {
 
@@ -224,7 +225,7 @@ public class CouponDBDAO implements CouponDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}*/
-		CopuonSystem.getConnectionPool().free(con);
+		CouponSystem.getConnectionPool().free(con);
 	}
 
 }

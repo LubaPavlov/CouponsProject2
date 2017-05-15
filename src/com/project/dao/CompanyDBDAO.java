@@ -12,6 +12,7 @@ import java.util.List;
 import com.project.beans.Company;
 import com.project.beans.Coupon;
 import com.project.exceptions.DAOException;
+import com.project.main.CouponSystem;
 
 //
 //CompanyDBDAO class implements CompanyDAO interface.
@@ -280,6 +281,6 @@ public class CompanyDBDAO implements CompanyDAO {
 
 			e.printStackTrace();
 		}*/
-		CopuonSystem.getConnectionPool().free(con);
+		CouponSystem.getConnectionPool().free(con);
 	}
 }

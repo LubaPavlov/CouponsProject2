@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import com.project.beans.*;
 import com.project.exceptions.DAOException;
+import com.project.main.CouponSystem;
 
 //
 //CustomerDBDAO class implements CustomerDAO interface.
@@ -319,7 +320,7 @@ public class CustomerDBDAO implements CustomerDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}*/
-		CopuonSystem.getConnectionPool().free(con);
+		CouponSystem.getConnectionPool().free(con);
 	}
 
 }
