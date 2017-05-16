@@ -1,6 +1,7 @@
 package com.project.main;
 
 import java.awt.EventQueue;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 
@@ -22,8 +23,15 @@ public class MyTestJDBC{
 	public static void main(String[] args) throws DAOException {
 	
 		
-		CouponSystem newsys = CouponSystem.getInstance();
-		newsys.login("Leo", "123123", ClientType.CUSTOMER);
+		CouponSystem newsys2 = CouponSystem.getInstance();
+		
+		Scanner input = new Scanner(System.in);
+	    System.out.println("Enter Username : ");
+	    String name = input.next();
+	    System.out.println("Enter Password : ");
+	    String password = input.next();
+		
+		newsys2.login(name, password, ClientType.CUSTOMER);
 			
 	}
 
