@@ -29,47 +29,23 @@ public class CouponSystem {
 	}
 
 	public CouponClientFacade login(String name, String password, ClientType clientType) throws DAOException {
-
-		if (clientType == ClientType.ADMIN) {
-			AdminFacade adminFacade = new AdminFacade(customerDAO, companyDAO, couponDAO);
-			return adminFacade;
-		}
-		/*
-		 * if (clientType == ClientType.COMPANY){ Long compId =
-		 * companyDao.login(name, password); if(compId != null && compId != 0){
-		 * Company company = new Company(); company.setCompId(compId);
-		 * company.setCompName(name); company.setPassword(password);
-		 * CompanyFacade companyFacade = new CompanyFacade(company); return
-		 * companyFacade; } }
-		 */
-		if (clientType == ClientType.CUSTOMER) {
-			Long custId = customerDAO.getCustomerId(name);
-			
-			if (custId != null && custId != 0) {
-				Customer customer = new Customer();
-				customer.setCustId(custId);
-				customer.setCustName(name);
-				customer.setPassword(password);
-				CustomerFacade customerFacade = new CustomerFacade();
-				return customerFacade;
-			}
-		}
 		return null;
+	
 	}
 
 	// returns DAO
 	public CustomerDAO getCustomerDao() {
-		return this.customerDao;
+		return this.customerDAO;
 	}
 
 	// returns DAO
 	public CompanyDAO getCompanyDao() {
-		return this.companyDao;
+		return this.companyDAO;
 	}
 
 	// returns DAO
 	public CouponDAO getCouponDao() {
-		return this.couponDao;
+		return this.couponDAO;
 	}
 
 	static {
