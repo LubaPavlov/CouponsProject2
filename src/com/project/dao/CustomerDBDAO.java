@@ -265,6 +265,40 @@ public class CustomerDBDAO implements CustomerDAO {
 		}
 		return custId;
 	}
+	@Override
+	
+	public void addCouponToCustomer(Coupon coupon, Customer customer) {
+		// 1. Get a connection (from pool)
+				try {
+					con = getConnection();
+					if (con != null) {
+						System.out.println("Connected");
+						// 2. create SQL INSER
+						PreparedStatement stat = con
+								.prepareStatement("INSERT INTO customer_coupon " + "(custId, couponId)" + " VALUES (?, ?)");
+						stat.setLong(1, customer.getCustId());
+						stat.setLong(2, coupon.getCouponId());
+
+						System.out.println("Executing: " + stat.toString());
+
+						int rowsInserted = stat.executeUpdate();
+
+						if (rowsInserted > 0) {
+							System.out.println("A new coupon " + coupon.getTitle() + " has been added successfully");
+						} else
+							System.out.println("An Error Has Occurred.");
+					}
+				} catch (SQLException e) {
+
+					System.out.println("Cannot ad coupon : " + coupon.getTitle() + ". " + e.getMessage());
+
+				} finally {
+					// 3. Release connection
+					releaseConnection(con);
+				}
+
+	}
+
 
 	private Connection getConnection() throws SQLException {
 

@@ -33,9 +33,9 @@ public class MyTestJDBC{
 //		
 //		newsys2.login(name, password, ClientType.ADMIN);
 		
-		newsys2.getCustomerDao();
-		AdminFacade adminFacade = new AdminFacade();
-		System.out.println(adminFacade.getAllCompanies());
+//		newsys2.getCustomerDao();
+//		AdminFacade adminFacade = new AdminFacade();
+//		System.out.println(adminFacade.getAllCompanies());
 		
 			
 	}}

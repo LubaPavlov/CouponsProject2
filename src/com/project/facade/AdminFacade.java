@@ -60,7 +60,6 @@ public class AdminFacade implements CouponClientFacade {
 				for (Coupon couponToRemove : coupons) {
 					couponDAO.removeCoupon(couponToRemove);
 				}
-
 				companyDAO.removeCompany(company);
 			} else {
 				throw new DAOException();
@@ -95,7 +94,7 @@ public class AdminFacade implements CouponClientFacade {
 	public void createCustomer(Customer customer) throws DAOException {
 
 		boolean customerExist = false;
-		// Create new List of all existing companies
+		// Create new List of all existing customers
 		Collection<Customer> customers = getAllCustomers();
 
 		for (Customer existingCustomer : customers) {
@@ -113,13 +112,13 @@ public class AdminFacade implements CouponClientFacade {
 	}
 
 	public void removeCustomer(Customer customer) throws DAOException {
-		// Create new List of all existing companies
+		// Create new List of all existing customers
 		Collection<Customer> customers = getAllCustomers();
 		for (Customer existingCustomer : customers) {
 			if (existingCustomer.getCustName() == customer.getCustName()) {
 				customerDAO.removeCustomer(customer);
 			} else {
-				System.out.println("Cannot found customer");
+				System.out.println("Cannot found customer " + customer.getCustName());
 			}
 		}
 	}
@@ -132,7 +131,7 @@ public class AdminFacade implements CouponClientFacade {
 			if (existingCustomer.getCustName() == customer.getCustName()) {
 				customerDAO.updateCustomer(customer);
 			} else {
-				System.out.println("Cannot found customer");
+				System.out.println("Cannot found customer" + customer.getCustName());
 			}
 		}
 	}
