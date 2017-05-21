@@ -17,7 +17,6 @@ public class CouponDBDAO implements CouponDAO {
 
 	private static final String TABLE_NAME = "coupon";
 	private Connection con = null;
-	private String dbName = "coupon";
 
 	@Override
 	public void createCoupon(Coupon coupon) {
@@ -25,7 +24,6 @@ public class CouponDBDAO implements CouponDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				// 2. Create SQL insert
 				PreparedStatement stat = con.prepareStatement("INSERT INTO " + TABLE_NAME
 						+ "(title, startDate, endDate, amount, type, message, price, image) "
@@ -64,7 +62,6 @@ public class CouponDBDAO implements CouponDAO {
 				try {
 					con = getConnection();
 					if (con != null) {
-						System.out.println("Connected");
 						// 2. Create SQL UPDATE
 						PreparedStatement stat = con.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE couponId=?; "
 								+ "DELETE FROM company_coupon WHERE couponId=?; "
@@ -91,8 +88,6 @@ public class CouponDBDAO implements CouponDAO {
 					// 3. Release connection
 					releaseConnection(con);
 				}
-
-
 	}
 
 	@Override
@@ -101,7 +96,6 @@ public class CouponDBDAO implements CouponDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				// 2. Create SQL UPDATE
 				PreparedStatement stat = con.prepareStatement("UPDATE " + TABLE_NAME + " SET"
 						+ "(title, startDate, endDate, amount, type, message, price, image) "
@@ -141,7 +135,6 @@ public class CouponDBDAO implements CouponDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE couponId=? ");
 				stat.setLong(1, couponId);
 				System.out.println("Executing: " + stat.toString());
@@ -149,7 +142,13 @@ public class CouponDBDAO implements CouponDAO {
 				while (rows.next()) {
 					coupon.setCouponId(rows.getLong("couponId"));
 					coupon.setTitle(rows.getString("title"));
-
+					coupon.setStartDate(rows.getDate("startDate"));
+					coupon.setEndDate(rows.getDate("endDate"));
+					coupon.setAmount(rows.getInt("amount"));
+                    coupon.setType(CouponType.valueOf(rows.getString("type")));
+					coupon.setMessage(rows.getString("message"));
+					coupon.setPrice(rows.getDouble("price"));
+					coupon.setImage(rows.getString("image"));
 				}
 			}
 		} catch (SQLException e) {
@@ -181,7 +180,7 @@ public class CouponDBDAO implements CouponDAO {
 					coupon.setStartDate(rows.getDate("startDate"));
 					coupon.setEndDate(rows.getDate("endDate"));
 					coupon.setAmount(rows.getInt("amount"));
-                                        coupon.setType(CouponType.valueOf(rows.getString("CouponType")));
+                    coupon.setType(CouponType.valueOf(rows.getString("type")));
 					coupon.setMessage(rows.getString("message"));
 					coupon.setPrice(rows.getDouble("price"));
 					coupon.setImage(rows.getString("image"));
@@ -202,14 +201,35 @@ public class CouponDBDAO implements CouponDAO {
 
 	@Override
 	public Coupon getCouponByType(CouponType couponType) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		Coupon coupon = new Coupon();
+		try {
+			con = getConnection();
+			if (con != null) {
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE type=? ");
+				stat.setString(1, couponType.toString());
+				System.out.println("Executing: " + stat.toString());
+				ResultSet rows = stat.executeQuery();
+				while (rows.next()) {
+					coupon.setCouponId(rows.getLong("couponId"));
+					coupon.setTitle(rows.getString("title"));
+					coupon.setStartDate(rows.getDate("startDate"));
+					coupon.setEndDate(rows.getDate("endDate"));
+					coupon.setAmount(rows.getInt("amount"));
+                    coupon.setType(CouponType.valueOf(rows.getString("type")));
+					coupon.setMessage(rows.getString("message"));
+					coupon.setPrice(rows.getDouble("price"));
+					coupon.setImage(rows.getString("image"));
+				}
+			}
+		} catch (SQLException e) {
 
-	@Override
-	public Collection<Coupon> getOldCoupons() {
-		// TODO Auto-generated method stub
-		return null;
+			System.out.println("Cannot found a coupon : " + couponType + ". " + e.getMessage());
+
+		} finally {
+			// 3. Release connection
+			releaseConnection(con);
+		}
+		return coupon;
 	}
 
 	private Connection getConnection() throws SQLException {

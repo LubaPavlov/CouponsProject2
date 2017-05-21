@@ -19,7 +19,6 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	private static final String TABLE_NAME = "customer";
 	private Connection con = null;
-	private String dbName = "coupon";
 
 	@Override
 	public void createCustomer(Customer customer) throws DAOException {
@@ -27,15 +26,13 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
-				// 2. create SQL INSER
+				// 2. create SQL INSERT
 				PreparedStatement stat = con
 						.prepareStatement("INSERT INTO " + TABLE_NAME + "(custName, password)" + " VALUES (?, ?)");
 				stat.setString(1, customer.getCustName());
 				stat.setString(2, customer.getPassword());
 
 				System.out.println("Executing: " + stat.toString());
-
 				int rowsInserted = stat.executeUpdate();
 
 				if (rowsInserted > 0) {
@@ -59,7 +56,6 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				// 2. create SQL DELETE
 				PreparedStatement stat = con.prepareStatement(
 						"DELETE FROM " + TABLE_NAME + "WHERE Cust_id=?; DELETE FROM Customer_Coupon WHERE Cust_id=?");
@@ -120,7 +116,6 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE custID=? ");
 				stat.setLong(1, custId);
 				System.out.println("Executing: " + stat.toString());
@@ -146,12 +141,11 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	@Override
 	public Collection<Customer> getAllCustomers() {
-		ArrayList<Customer> customers = new ArrayList <Customer>();
+		ArrayList<Customer> customers = new ArrayList<Customer>();
 		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME);
 				System.out.println("Executing: " + stat.toString());
 				ResultSet rows = stat.executeQuery();
@@ -176,13 +170,14 @@ public class CustomerDBDAO implements CustomerDAO {
 
 	@Override
 	public Collection<Coupon> getCoupons(Customer customer) {
-		ArrayList<Coupon> coupons = new ArrayList <Coupon>();
+		ArrayList<Coupon> coupons = new ArrayList<Coupon>();
 		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
-				PreparedStatement stat = con.prepareStatement("SELECT * FROM coupon_customer ");
+				PreparedStatement stat = con
+						.prepareStatement("SELECT * FROM " + "customer_coupon where custId= " + customer.getCustId());
+
 				System.out.println("Executing: " + stat.toString());
 				ResultSet rows = stat.executeQuery();
 				while (rows.next()) {
@@ -192,7 +187,7 @@ public class CustomerDBDAO implements CustomerDAO {
 					coupon.setStartDate(rows.getDate("startDate"));
 					coupon.setEndDate(rows.getDate("endDate"));
 					coupon.setAmount(rows.getInt("amount"));
-                                        coupon.setType(CouponType.valueOf(rows.getString("CouponType")));
+					coupon.setType(CouponType.valueOf(rows.getString("type")));
 					coupon.setMessage(rows.getString("message"));
 					coupon.setPrice(rows.getDouble("price"));
 					coupon.setImage(rows.getString("image"));
@@ -216,7 +211,6 @@ public class CustomerDBDAO implements CustomerDAO {
 		boolean succeeded = false;
 		try {
 			con = getConnection();
-			// 2. Create SQL insert
 			PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE custName=?");
 			stat.setString(1, custName);
 
@@ -252,7 +246,6 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				PreparedStatement stat = con
 						.prepareStatement("SELECT custId FROM " + TABLE_NAME + " WHERE custName=? ");
 				stat.setString(1, custName);
@@ -260,7 +253,6 @@ public class CustomerDBDAO implements CustomerDAO {
 				ResultSet rows = stat.executeQuery();
 
 				custId = rows.getLong("custId");
-				System.out.println("Customer id is " + custId);
 
 			}
 		} catch (SQLException e) {
@@ -274,52 +266,18 @@ public class CustomerDBDAO implements CustomerDAO {
 		return custId;
 	}
 
-	/*@Override
-	public void addCouponToCustomer(Coupon coupon, Customer customer) {
-		// 1. Get a connection (from pool)
-				try {
-					con = getConnection();
-					if (con != null) {
-						System.out.println("Connected");
-						// 2. create SQL INSER
-						PreparedStatement stat = con
-								.prepareStatement("INSERT INTO customer_coupon " + "(custId, couponId)" + " VALUES (?, ?)");
-						stat.setLong(1, customer.getCustId());
-						stat.setLong(2, coupon.getCouponId());
-
-						System.out.println("Executing: " + stat.toString());
-
-						int rowsInserted = stat.executeUpdate();
-
-						if (rowsInserted > 0) {
-							System.out.println("A new coupon " + coupon.getTitle() + " has been added successfully");
-						} else
-							System.out.println("An Error Has Occurred.");
-					}
-				} catch (SQLException e) {
-
-					System.out.println("Cannot ad coupon : " + coupon.getTitle() + ". " + e.getMessage());
-
-				} finally {
-					// 3. Release connection
-					releaseConnection(con);
-				}
-
-	}*/
-
 	private Connection getConnection() throws SQLException {
 
-		//return DriverManager.getConnection("jdbc:mysql://localhost/" + dbName, "root", "123123");
+		// return DriverManager.getConnection("jdbc:mysql://localhost/" +
+		// dbName, "root", "123123");
 		return CouponSystem.getConnectionPool().getConnection();
 	}
 
 	private void releaseConnection(Connection con) {
 
-		/*try {
-			con.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}*/
+		/*
+		 * try { con.close(); } catch (SQLException e) { e.printStackTrace(); }
+		 */
 		CouponSystem.getConnectionPool().free(con);
 	}
 

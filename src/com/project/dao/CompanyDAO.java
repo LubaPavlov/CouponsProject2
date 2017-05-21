@@ -17,7 +17,7 @@ public interface CompanyDAO {
 
 	public Collection<Company> getAllCompanies() throws DAOException;
 
-	public Collection<Coupon> getCoupons() throws DAOException;
+	public Collection<Coupon> getCoupons(long compId) throws DAOException;
 	
 	public long getCompanyId(String compName) throws DAOException;
 

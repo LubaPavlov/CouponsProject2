@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.project.beans.Company;
 import com.project.beans.Coupon;
+import com.project.beans.CouponType;
 import com.project.exceptions.DAOException;
 import com.project.main.CouponSystem;
 
@@ -23,7 +24,6 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	private static final String TABLE_NAME = "company";
 	private Connection con = null;
-	private String dbName = "coupon";
 
 	@Override
 	public void createCompany(Company company) throws DAOException {
@@ -36,10 +36,9 @@ public class CompanyDBDAO implements CompanyDAO {
 			stat.setString(1, company.getCompName());
 			stat.setString(2, company.getPassword());
 			stat.setString(3, company.getEmail());
-
 			System.out.println("Executing: " + stat.toString());
-
 			int rowsInserted = stat.executeUpdate();
+
 			if (rowsInserted > 0) {
 				System.out.println("A new company " + company.getCompName() + " has been created successfully");
 			} else
@@ -61,14 +60,10 @@ public class CompanyDBDAO implements CompanyDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");				
-				PreparedStatement stat = con.prepareStatement(
-						"DELETE FROM " + TABLE_NAME + "WHERE compId=?; DELETE FROM Company_Coupon WHERE compId=?");
+				System.out.println("Connected");
+				PreparedStatement stat = con.prepareStatement("DELETE FROM " + TABLE_NAME + "WHERE compId=?");
 				stat.setLong(1, company.getCompId());
-				stat.setLong(2, company.getCompId());
-
 				System.out.println("Executing: " + stat.toString());
-
 				int rowsDeleted = stat.executeUpdate();
 
 				if (rowsDeleted > 0) {
@@ -88,6 +83,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	@Override
 	public void updateCompany(Company company) {
+		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			PreparedStatement stat = con
@@ -116,6 +112,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	@Override
 	public Company getCompany(long compId) {
+		// 1. Get a connection (from pool)
 		Company company = new Company();
 		// 1. Get a connection (from pool)
 		try {
@@ -150,7 +147,6 @@ public class CompanyDBDAO implements CompanyDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME);
 				System.out.println("Executing: " + stat.toString());
 				ResultSet rows = stat.executeQuery();
@@ -171,24 +167,29 @@ public class CompanyDBDAO implements CompanyDAO {
 			releaseConnection(con);
 		}
 		return companies;
-
 	}
 
 	@Override
-	public Collection<Coupon> getCoupons() {
+	public Collection<Coupon> getCoupons(long compId) {
 		ArrayList<Coupon> coupons = new ArrayList<Coupon>();
 		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
-				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME);
-				System.out.println("Executing: " + stat.toString());
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM coupon.coupon where couponId in "
+						+ "(select couponId from company_coupon where compId like " + compId + ")");
 				ResultSet rows = stat.executeQuery();
 				while (rows.next()) {
 					Coupon coupon = new Coupon();
 					coupon.setCouponId(rows.getLong("couponId"));
 					coupon.setTitle(rows.getString("title"));
+					coupon.setStartDate(rows.getDate("startDate"));
+					coupon.setEndDate(rows.getDate("endDate"));
+					coupon.setAmount(rows.getInt("amount"));
+					coupon.setType(CouponType.valueOf(rows.getString("type")));
+					coupon.setMessage(rows.getString("message"));
+					coupon.setPrice(rows.getDouble("price"));
+					coupon.setImage(rows.getString("image"));
 					coupons.add(coupon);
 				}
 			}
@@ -207,6 +208,7 @@ public class CompanyDBDAO implements CompanyDAO {
 	@Override
 	public boolean login(String compName, String password) {
 		boolean succeeded = false;
+		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE compName=?");
@@ -236,25 +238,20 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		return succeeded;
 	}
-	
+
 	@Override
-	public long getCompanyId(String compName) throws DAOException{	
-		
+	public long getCompanyId(String compName) throws DAOException {
 		long compId = 0;
 		// 1. Get a connection (from pool)
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				PreparedStatement stat = con
 						.prepareStatement("SELECT compId FROM " + TABLE_NAME + " WHERE compName=? ");
 				stat.setString(1, compName);
 				System.out.println("Executing: " + stat.toString());
 				ResultSet rows = stat.executeQuery();
-
 				compId = rows.getLong("compId");
-				System.out.println("Company id is " + compId);
-
 			}
 		} catch (SQLException e) {
 
@@ -269,18 +266,18 @@ public class CompanyDBDAO implements CompanyDAO {
 
 	private Connection getConnection() throws SQLException {
 
-		//return DriverManager.getConnection("jdbc:mysql://localhost/" + dbName, "root", "123123");
+		// return DriverManager.getConnection("jdbc:mysql://localhost/" +
+		// dbName, "root", "123123");
 		return CouponSystem.getConnectionPool().getConnection();
 	}
 
 	private void releaseConnection(Connection con) {
 
-		/*try {
-			con.close();
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}*/
+		/*
+		 * try { con.close(); } catch (SQLException e) {
+		 * 
+		 * e.printStackTrace(); }
+		 */
 		CouponSystem.getConnectionPool().free(con);
 	}
 }

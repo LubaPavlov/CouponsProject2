@@ -17,7 +17,5 @@ public interface CouponDAO {
 	public Collection<Coupon> getAllCoupons();
 
 	public Coupon getCouponByType(CouponType couponType);
-
-	public Collection<Coupon> getOldCoupons();
 	
 }

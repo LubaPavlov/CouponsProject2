@@ -29,22 +29,41 @@ public class CouponSystem {
 	}
 
 	public CouponClientFacade login(String name, String password, ClientType clientType) throws DAOException {
+
+		// login of Admin
+		if (name == "admin" && password == "1234" && clientType == ClientType.ADMIN) {
+			AdminFacade adminFacade = new AdminFacade(customerDAO, companyDAO, couponDAO);
+			return adminFacade;
+		}
+		System.out.println("Login Failed");
+
+		// login of Company
+		if (clientType == ClientType.COMPANY) {
+			CompanyFacade companyFacade  = new CompanyFacade(companyDAO,couponDAO);
+			return companyFacade;
+		}
+
+		// login of Customer
+		if (clientType == ClientType.CUSTOMER) {
+			
+			CustomerFacade customerFacade  = new CustomerFacade(customerDAO);
+            return customerFacade;
+		}
 		return null;
-	
 	}
 
 	// returns DAO
-	public CustomerDAO getCustomerDao() {
+	public CustomerDAO getCustomerDAO() {
 		return this.customerDAO;
 	}
 
 	// returns DAO
-	public CompanyDAO getCompanyDao() {
+	public CompanyDAO getCompanyDAO() {
 		return this.companyDAO;
 	}
 
 	// returns DAO
-	public CouponDAO getCouponDao() {
+	public CouponDAO getCouponDAO() {
 		return this.couponDAO;
 	}
 
