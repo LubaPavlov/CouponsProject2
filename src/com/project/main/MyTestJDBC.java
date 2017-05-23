@@ -23,7 +23,7 @@ public class MyTestJDBC{
 	
 	public static void main(String[] args) throws DAOException {
 	
-		CouponSystem newsys2 = CouponSystem.getInstance();
+//		CouponSystem newsys2 = CouponSystem.getInstance();
 //		
 //		Scanner input = new Scanner(System.in);
 //	    System.out.println("Enter Username : ");
@@ -36,59 +36,53 @@ public class MyTestJDBC{
 //		newsys2.getCustomerDao();
 //		AdminFacade adminFacade = new AdminFacade();
 //		System.out.println(adminFacade.getAllCompanies());
-		
+
+//		CustomerDAO cDao = new CustomerDBDAO();
+//		cDao.login("Leo", "123123");
+		// Customer customer = new Customer("Leo","123123");
+		// cDao.createCustomer(customer);
+		// Customer customer2 = new Customer("Lilah","123456");
+		// cDao.createCustomer(customer2);
+		// Customer customer3 = new Customer("Idan","123456789");
+		// cDao.createCustomer(customer3);
+		 
+		// cDao.getCoupons(cDao.getCustomer(1));
+		 
+		// CompanyDAO compDao = new CompanyDBDAO();
+		// compDao.getCompany(3);
+		// System.out.println(compDao.getCoupons(3));
+		//
+//				CouponDAO couponDao = new CouponDBDAO();
+//				couponDao.getCouponByType(CouponType.FOOD);
+
+
+
+
+		// System.out.println(cDao.getCustomer(1));
+		// cDao.login("Fox","123456");
+		// cDao.updateCustomer(customer3);
+		// CompanyDAO compDao = new CompanyDBDAO();
+		// Company company1 = new Company("Fox", "123456","fox@gmail.com");
+		// compDao.createCompany(company1);
+		// System.out.println(compDao.getAllCompanies());
+		// compDao.login("Fox", "123456");
+		// Company company = new Company("Fox", "123456","fox@gmail.com");
+		// compDao.createCompany(company);
+
+		// CouponDAO couponDao = new CouponDBDAO();
+		// Coupon coupon1 = new Coupon();
+		//// couponDao.createCoupon(couponnew);
+		// couponnew.setTitle("dddddd");
+		// couponDao.updateCoupon(couponnew);
+		// couponDao.removeCoupon(couponDao.getCoupon(4));
+		// Coupon coupon4 = new Coupon();
+		// coupon4.setTitle("10% Off");
+		// coupon4.setStartDate(java.sql.Date.valueOf("2018-02-04"));
+		// coupon4.setEndDate(java.sql.Date.valueOf("2018-03-04"));
+		// coupon4.setAmount(20);
+		// coupon4.setType(CouponType.SPORTS);
+		// coupon4.setPrice(33);
+		// couponDao.createCoupon(coupon4);
 			
 	}}
-
-
-
-
-//	
-		
-
-// CustomerDAO cDao = new CustomerDBDAO();
-// cDao.login("Leo", "123123");
-// Customer customer = new Customer("Leo","123123");
-// cDao.createCustomer(customer);
-// Customer customer2 = new Customer("Lilah","123456");
-// cDao.createCustomer(customer2);
-// Customer customer3 = new Customer("Idan","123456789");
-// cDao.createCustomer(customer3);
- 
-// cDao.getCoupons(cDao.getCustomer(1));
- 
-// CompanyDAO compDao = new CompanyDBDAO();
-// compDao.getCompany(3);
-// System.out.println(compDao.getCoupons(3));
-//
-//		CouponDAO couponDao = new CouponDBDAO();
-//		couponDao.getCouponByType(CouponType.FOOD);
-
-
-
-
-// System.out.println(cDao.getCustomer(1));
-// cDao.login("Fox","123456");
-// cDao.updateCustomer(customer3);
-// CompanyDAO compDao = new CompanyDBDAO();
-// Company company1 = new Company("Fox", "123456","fox@gmail.com");
-// compDao.createCompany(company1);
-// System.out.println(compDao.getAllCompanies());
-// compDao.login("Fox", "123456");
-// Company company = new Company("Fox", "123456","fox@gmail.com");
-// compDao.createCompany(company);
-
-// CouponDAO couponDao = new CouponDBDAO();
-// Coupon coupon1 = new Coupon();
-//// couponDao.createCoupon(couponnew);
-// couponnew.setTitle("dddddd");
-// couponDao.updateCoupon(couponnew);
-// couponDao.removeCoupon(couponDao.getCoupon(4));
-// Coupon coupon4 = new Coupon();
-// coupon4.setTitle("10% Off");
-// coupon4.setStartDate(java.sql.Date.valueOf("2018-02-04"));
-// coupon4.setEndDate(java.sql.Date.valueOf("2018-03-04"));
-// coupon4.setAmount(20);
-// coupon4.setType(CouponType.SPORTS);
-// coupon4.setPrice(33);
-// couponDao.createCoupon(coupon4);
+	

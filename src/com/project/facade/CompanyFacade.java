@@ -20,7 +20,8 @@ public class CompanyFacade implements CouponClientFacade {
 
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType clientType) {
-		return null;
+		CompanyFacade companyFacade  = new CompanyFacade(companyDAO,couponDAO);
+		return companyFacade;
 	}
 
 }

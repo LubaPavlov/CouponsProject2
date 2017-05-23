@@ -14,9 +14,10 @@ import com.project.facade.CustomerFacade;
 public class CouponSystem {
 
 	private static CouponSystem couponSystemInstance = new CouponSystem();
-	private CompanyDAO companyDAO;
+	private CouponClientFacade couponClienFacade;
 	private CouponDAO couponDAO;
 	private CustomerDAO customerDAO;
+	private CompanyDAO companyDAO;
 	private static ConnectionPool pool;
 	private static String dbName = "coupon";
 
@@ -30,41 +31,27 @@ public class CouponSystem {
 
 	public CouponClientFacade login(String name, String password, ClientType clientType) throws DAOException {
 
-		// login of Admin
+		// Admin login - לפנות לפסד שיפעיל את הפונקציה של לוגין שתפעיל את
+		// הפנקמיה בדטה בייס
 		if (name == "admin" && password == "1234" && clientType == ClientType.ADMIN) {
-			AdminFacade adminFacade = new AdminFacade(customerDAO, companyDAO, couponDAO);
-			return adminFacade;
-		}
-		System.out.println("Login Failed");
 
-		// login of Company
+			couponSystemInstance.couponClienFacade.login(name, password, clientType);
+
+		}
+
+		// Company login
 		if (clientType == ClientType.COMPANY) {
-			CompanyFacade companyFacade  = new CompanyFacade(companyDAO,couponDAO);
-			return companyFacade;
+
+			couponSystemInstance.couponClienFacade.login(name, password, clientType);
 		}
 
-		// login of Customer
+		// Customer login
 		if (clientType == ClientType.CUSTOMER) {
-			
-			CustomerFacade customerFacade  = new CustomerFacade(customerDAO);
-            return customerFacade;
+
+			couponSystemInstance.couponClienFacade.login(name, password, clientType);
+
 		}
 		return null;
-	}
-
-	// returns DAO
-	public CustomerDAO getCustomerDAO() {
-		return this.customerDAO;
-	}
-
-	// returns DAO
-	public CompanyDAO getCompanyDAO() {
-		return this.companyDAO;
-	}
-
-	// returns DAO
-	public CouponDAO getCouponDAO() {
-		return this.couponDAO;
 	}
 
 	static {

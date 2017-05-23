@@ -7,15 +7,14 @@ import com.project.exceptions.DAOException;
 import com.project.main.ClientType;
 
 public class AdminFacade implements CouponClientFacade {
-	private CustomerDAO customerDAO;
-	private CompanyDAO companyDAO;
-	private CouponDAO couponDAO;
+	private CustomerDAO customerDAO = new CustomerDBDAO();
+	private CompanyDAO companyDAO = new CompanyDBDAO();
+	private CouponDAO couponDAO = new CouponDBDAO();
 
 	public AdminFacade() {
 	}
 
-	 public AdminFacade(CustomerDAO customerDAO, CompanyDAO companyDAO,
-	 CouponDAO couponDAO) {
+	 public AdminFacade(CustomerDAO customerDAO, CompanyDAO companyDAO, CouponDAO couponDAO) {
 	 this.customerDAO = customerDAO;
 	 this.companyDAO = companyDAO;
 	 this.couponDAO = couponDAO;
@@ -25,8 +24,9 @@ public class AdminFacade implements CouponClientFacade {
 	public CouponClientFacade login(String name, String password, ClientType clientType) {
 
 		if (name == "admin" && password == "1234" && clientType == ClientType.ADMIN) {
-
-		}
+			AdminFacade adminFacade = new AdminFacade(customerDAO, companyDAO, couponDAO);
+			return adminFacade;
+		}	
 		return null;
 	}
 
