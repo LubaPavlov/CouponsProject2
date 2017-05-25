@@ -250,14 +250,15 @@ public class CustomerDBDAO implements CustomerDAO {
 						.prepareStatement("SELECT custId FROM " + TABLE_NAME + " WHERE custName=? ");
 				stat.setString(1, custName);
 				System.out.println("Executing: " + stat.toString());
+				
 				ResultSet rows = stat.executeQuery();
-
+				while (rows.next()) {
 				custId = rows.getLong("custId");
-
+				}
 			}
 		} catch (SQLException e) {
 
-			System.out.println("Cannot found customer with ID " + custName + ". " + e.getMessage());
+			System.out.println("Cannot found customer ID " + custName + ". " + e.getMessage());
 
 		} finally {
 			// 3. Release connection

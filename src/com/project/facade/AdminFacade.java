@@ -24,15 +24,15 @@ public class AdminFacade implements CouponClientFacade {
 
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType clientType) {
-		AdminFacade adminFacade = null;
+		/*AdminFacade adminFacade = null;
 		if (name == "admin" && password == "1234" && clientType == ClientType.ADMIN) {
 			 adminFacade = new AdminFacade(customerDAO, companyDAO, couponDAO);
-			// return adminFacade;
+			 return adminFacade;
 		}	
 		else {
 			System.out.println("Not correct user info");
-		}
-		 return adminFacade;
+		}*/
+		 return null;
 	}
 
 	public void createCompany(Company company) throws DAOException {

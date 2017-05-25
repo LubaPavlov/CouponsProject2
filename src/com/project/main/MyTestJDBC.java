@@ -1,9 +1,10 @@
 package com.project.main;
 
+import java.util.Collection;
 
-import com.project.beans.Company;
+import javax.security.auth.login.LoginException;
+
 import com.project.beans.Coupon;
-import com.project.beans.CouponType;
 import com.project.beans.Customer;
 import com.project.dao.CompanyDAO;
 import com.project.dao.CompanyDBDAO;
@@ -16,54 +17,59 @@ import com.project.facade.AdminFacade;
 import com.project.facade.CouponClientFacade;
 import com.project.facade.CustomerFacade;
 
-public class MyTestJDBC{
-	
-	public static void main(String[] args) throws DAOException {
-	
-		
-//		CouponDAO couponDAO = new CouponDBDAO();
-//		CustomerDAO customerDAO = new CustomerDBDAO();
-//		CompanyDAO companyDAO = new CompanyDBDAO();
+public class MyTestJDBC {
 
-		CouponSystem newsys2 = CouponSystem.getInstance();
-					
-		System.out.println(newsys2.AdminFacade.login("admin", "12ddd34", ClientType.ADMIN));
-		
-	//	newsys2.AdminFacade.createCompany(new Company ("Dell", "12345","dell@gmail.com"));
-	
-//		
-//		Scanner input = new Scanner(System.in);
-//	    System.out.println("Enter Username : ");
-//	    String name = input.next();
-//	    System.out.println("Enter Password : ");
-//	    String password = input.next();
-//		
-//		newsys2.login(name, password, ClientType.ADMIN);
-		
-//		newsys2.getCustomerDao();
-//		AdminFacade adminFacade = new AdminFacade();
-//		System.out.println(adminFacade.getAllCompanies());
+	public static void main(String[] args) throws DAOException, LoginException {
 
-//		CustomerDAO cDao = new CustomerDBDAO();
-//		cDao.login("Leo", "123123");
+		CouponSystem newsys = CouponSystem.getInstance();
+		
+
+		CustomerFacade custFacade = (CustomerFacade) newsys.loginAsCustomer("Leo", "123123", ClientType.CUSTOMER);
+		
+		
+		Customer customer = new Customer();
+		Collection<Coupon> Coupon = custFacade.getAllPurchasedCoupons();
+		
+		//Collection<Coupon> couponim = custFacade.getAllPurchasedCouponsByPrice(99);
+	//	System.out.println(couponim);
+		// CouponClientFacade.login("admin", "1234", ClientType.ADMIN);
+		// AdminFacade.createCompany(new Company ("Dell",
+		// "12345","dell@gmail.com"));
+
+		//
+		// Scanner input = new Scanner(System.in);
+		// System.out.println("Enter Username : ");
+		// String name = input.next();
+		// System.out.println("Enter Password : ");
+		// String password = input.next();
+		//
+		// newsys2.login(name, password, ClientType.ADMIN);
+
+		// newsys2.getCustomerDao();
+		// AdminFacade adminFacade = new AdminFacade();
+		// System.out.println(adminFacade.getAllCompanies());
+		// CouponDAO couponDAO = new CouponDBDAO();
+		// CustomerDAO customerDAO = new CustomerDBDAO();
+		// CompanyDAO companyDAO = new CompanyDBDAO();
+
+//		 CustomerDAO cDao = new CustomerDBDAO();
+//		System.out.println( cDao.getCustomerId("Leo"));
+//		 cDao.login("Leo", "123123");
 		// Customer customer = new Customer("Leo","123123");
 		// cDao.createCustomer(customer);
 		// Customer customer2 = new Customer("Lilah","123456");
 		// cDao.createCustomer(customer2);
 		// Customer customer3 = new Customer("Idan","123456789");
 		// cDao.createCustomer(customer3);
-		 
+
 		// cDao.getCoupons(cDao.getCustomer(1));
-		 
+
 		// CompanyDAO compDao = new CompanyDBDAO();
 		// compDao.getCompany(3);
 		// System.out.println(compDao.getCoupons(3));
 		//
-//				CouponDAO couponDao = new CouponDBDAO();
-//				couponDao.getCouponByType(CouponType.FOOD);
-
-
-
+		// CouponDAO couponDao = new CouponDBDAO();
+		// couponDao.getCouponByType(CouponType.FOOD);
 
 		// System.out.println(cDao.getCustomer(1));
 		// cDao.login("Fox","123456");
@@ -90,6 +96,6 @@ public class MyTestJDBC{
 		// coupon4.setType(CouponType.SPORTS);
 		// coupon4.setPrice(33);
 		// couponDao.createCoupon(coupon4);
-			
-	}}
-	
+
+	}
+}

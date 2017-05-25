@@ -27,11 +27,11 @@ public class CustomerFacade implements CouponClientFacade {
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType clientType) throws DAOException {
 
-		if (clientType == ClientType.CUSTOMER && customerDAO.login(name, password)== true) {
+/*		if (clientType == ClientType.CUSTOMER && customerDAO.login(name, password)== true) {
 			 CustomerFacade customerFacade = new CustomerFacade(customerDAO);
 			return customerFacade;
-		}
-		else return null;
+		}*/
+	 return null;
 
 	}
 
