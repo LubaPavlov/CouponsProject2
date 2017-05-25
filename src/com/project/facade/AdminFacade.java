@@ -1,12 +1,14 @@
 package com.project.facade;
 
 import java.util.Collection;
+
 import com.project.beans.*;
 import com.project.dao.*;
 import com.project.exceptions.DAOException;
 import com.project.main.ClientType;
 
 public class AdminFacade implements CouponClientFacade {
+	
 	private CustomerDAO customerDAO = new CustomerDBDAO();
 	private CompanyDAO companyDAO = new CompanyDBDAO();
 	private CouponDAO couponDAO = new CouponDBDAO();
@@ -22,15 +24,19 @@ public class AdminFacade implements CouponClientFacade {
 
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType clientType) {
-
+		AdminFacade adminFacade = null;
 		if (name == "admin" && password == "1234" && clientType == ClientType.ADMIN) {
-			AdminFacade adminFacade = new AdminFacade(customerDAO, companyDAO, couponDAO);
-			return adminFacade;
+			 adminFacade = new AdminFacade(customerDAO, companyDAO, couponDAO);
+			// return adminFacade;
 		}	
-		return null;
+		else {
+			System.out.println("Not correct user info");
+		}
+		 return adminFacade;
 	}
 
 	public void createCompany(Company company) throws DAOException {
+		
 		boolean companyExist = false;
 		// Create new List of all existing companies
 		Collection<Company> companies = getAllCompanies();

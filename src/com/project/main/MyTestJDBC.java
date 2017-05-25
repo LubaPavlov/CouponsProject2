@@ -1,9 +1,5 @@
 package com.project.main;
 
-import java.awt.EventQueue;
-import java.util.Scanner;
-
-import javax.swing.JFrame;
 
 import com.project.beans.Company;
 import com.project.beans.Coupon;
@@ -17,13 +13,24 @@ import com.project.dao.CustomerDAO;
 import com.project.dao.CustomerDBDAO;
 import com.project.exceptions.DAOException;
 import com.project.facade.AdminFacade;
+import com.project.facade.CouponClientFacade;
 import com.project.facade.CustomerFacade;
 
 public class MyTestJDBC{
 	
 	public static void main(String[] args) throws DAOException {
 	
-//		CouponSystem newsys2 = CouponSystem.getInstance();
+		
+//		CouponDAO couponDAO = new CouponDBDAO();
+//		CustomerDAO customerDAO = new CustomerDBDAO();
+//		CompanyDAO companyDAO = new CompanyDBDAO();
+
+		CouponSystem newsys2 = CouponSystem.getInstance();
+					
+		System.out.println(newsys2.AdminFacade.login("admin", "12ddd34", ClientType.ADMIN));
+		
+	//	newsys2.AdminFacade.createCompany(new Company ("Dell", "12345","dell@gmail.com"));
+	
 //		
 //		Scanner input = new Scanner(System.in);
 //	    System.out.println("Enter Username : ");

@@ -14,12 +14,9 @@ import com.project.facade.CustomerFacade;
 public class CouponSystem {
 
 	private static CouponSystem couponSystemInstance = new CouponSystem();
-	private CouponClientFacade couponClienFacade;
-	private CouponDAO couponDAO;
-	private CustomerDAO customerDAO;
-	private CompanyDAO companyDAO;
+    public	AdminFacade AdminFacade = new AdminFacade();
 	private static ConnectionPool pool;
-	private static String dbName = "coupon";
+	private static String dbName = "coupon2";
 
 	public static synchronized CouponSystem getInstance() {
 		if (couponSystemInstance == null) {
@@ -31,28 +28,28 @@ public class CouponSystem {
 
 	public CouponClientFacade login(String name, String password, ClientType clientType) throws DAOException {
 
-		// Admin login - לפנות לפסד שיפעיל את הפונקציה של לוגין שתפעיל את
-		// הפנקמיה בדטה בייס
+        // Admin login
 		if (name == "admin" && password == "1234" && clientType == ClientType.ADMIN) {
 
-			couponSystemInstance.couponClienFacade.login(name, password, clientType);
+			couponSystemInstance.AdminFacade.login(name, password, ClientType.ADMIN);
 
 		}
 
 		// Company login
 		if (clientType == ClientType.COMPANY) {
 
-			couponSystemInstance.couponClienFacade.login(name, password, clientType);
 		}
 
 		// Customer login
 		if (clientType == ClientType.CUSTOMER) {
 
-			couponSystemInstance.couponClienFacade.login(name, password, clientType);
 
 		}
+		
 		return null;
 	}
+	
+	
 
 	static {
 		String url = "jdbc:mysql://localhost:3306/" + dbName;
