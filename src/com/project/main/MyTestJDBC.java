@@ -5,6 +5,7 @@ import java.util.Collection;
 import javax.security.auth.login.LoginException;
 
 import com.project.beans.Coupon;
+import com.project.beans.CouponType;
 import com.project.beans.Customer;
 import com.project.dao.CompanyDAO;
 import com.project.dao.CompanyDBDAO;
@@ -23,15 +24,14 @@ public class MyTestJDBC {
 
 		CouponSystem newsys = CouponSystem.getInstance();
 		
-
 		CustomerFacade custFacade = (CustomerFacade) newsys.loginAsCustomer("Leo", "123123", ClientType.CUSTOMER);
 		
+		//Collection<Coupon> couponim = custFacade.getAllPurchasedCouponsByType(CouponType.ELECTRICITY);
+	    
+		//System.out.println(couponim);
 		
-		Customer customer = new Customer();
-		Collection<Coupon> Coupon = custFacade.getAllPurchasedCoupons();
+		custFacade.PurchaseCoupon(new CouponDBDAO().getCoupon(2));
 		
-		//Collection<Coupon> couponim = custFacade.getAllPurchasedCouponsByPrice(99);
-	//	System.out.println(couponim);
 		// CouponClientFacade.login("admin", "1234", ClientType.ADMIN);
 		// AdminFacade.createCompany(new Company ("Dell",
 		// "12345","dell@gmail.com"));

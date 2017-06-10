@@ -1,5 +1,7 @@
 package com.project.facade;
 
+import javax.security.auth.login.LoginException;
+
 import com.project.beans.Company;
 import com.project.dao.CompanyDAO;
 import com.project.dao.CouponDAO;
@@ -20,13 +22,19 @@ public class CompanyFacade implements CouponClientFacade {
 	}
 
 	@Override
-	public CouponClientFacade login(String name, String password, ClientType clientType) throws DAOException {
+	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException {
 
-		if (clientType == ClientType.COMPANY && companyDAO.login(name, password)== true) {
-			CompanyFacade companyFacade  = new CompanyFacade(companyDAO,couponDAO);
-			return companyFacade;
+		try {
+			if (clientType == ClientType.COMPANY && companyDAO.login(name, password)== true) {
+				CompanyFacade companyFacade  = new CompanyFacade(companyDAO,couponDAO);
+				return companyFacade;
+			}
+			else return null;
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		else return null;
+		return null;
 		
 	}
 

@@ -176,7 +176,8 @@ public class CustomerDBDAO implements CustomerDAO {
 			con = getConnection();
 			if (con != null) {
 				PreparedStatement stat = con
-						.prepareStatement("SELECT * FROM " + "customer_coupon where custId= " + customer.getCustId());
+						.prepareStatement("SELECT * FROM coupon.coupon where couponId in "
+								+ "(select couponId from customer_coupon where custId= " + customer.getCustId()+ ")");
 
 				System.out.println("Executing: " + stat.toString());
 				ResultSet rows = stat.executeQuery();

@@ -39,8 +39,17 @@ public class CouponSystem {
 			// try to login
 			try {
 				if (customerDAO.login(name, password)) {
+					long custId = customerDAO.getCustomerId(name);
+					// construct a customer with those params
+					Customer customer = new Customer();
+					customer.setCustId(custId);
+					customer.setCustName(name);
+					customer.setPassword(password);
 					// create a CustomerFacade
-					CustomerFacade customerFacade = new CustomerFacade(customerDAO);
+					CustomerFacade customerFacade = new CustomerFacade(customerDAO,couponDAO);
+					// customerFacade need to ref that specific customer  ( 1 per client )
+					customerFacade.setCustomer(customer);			
+					
 					return customerFacade;
 				} else {
 

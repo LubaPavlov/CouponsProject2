@@ -3,6 +3,8 @@ package com.project.facade;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.security.auth.login.LoginException;
+
 import com.project.beans.Coupon;
 import com.project.beans.CouponType;
 import com.project.beans.Customer;
@@ -20,18 +22,25 @@ public class CustomerFacade implements CouponClientFacade {
 	public CustomerFacade() {
 	}
 
-	public CustomerFacade(CustomerDAO customerDAO) {
+	public CustomerFacade(CustomerDAO customerDAO, CouponDAO couponDAO) {
 		this.customerDAO = customerDAO;
+		this.couponDAO = couponDAO;
+	}
+
+	// return this customer
+	public Customer getCustomer() {
+		return this.customer;
+	}
+
+	// set the Facade for this customer
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	@Override
-	public CouponClientFacade login(String name, String password, ClientType clientType) throws DAOException {
+	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException {
 
-/*		if (clientType == ClientType.CUSTOMER && customerDAO.login(name, password)== true) {
-			 CustomerFacade customerFacade = new CustomerFacade(customerDAO);
-			return customerFacade;
-		}*/
-	 return null;
+		return null;
 
 	}
 
@@ -58,7 +67,6 @@ public class CustomerFacade implements CouponClientFacade {
 
 		customerDAO.addCouponToCustomer(purachseCoupon, this.customer);
 		purachseCoupon.setAmount(purachseCoupon.getAmount() - 1);
-
 		couponDAO.updateCoupon(purachseCoupon);
 		return true;
 	}
