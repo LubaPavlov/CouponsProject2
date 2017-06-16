@@ -82,7 +82,7 @@ public class MyTestJDBC {
 		// Company company = new Company("Fox", "123456","fox@gmail.com");
 		// compDao.createCompany(company);
 
-		// CouponDAO couponDao = new CouponDBDAO();
+		// ==CouponDAO couponDao = new CouponDBDAO();
 		// Coupon coupon1 = new Coupon();
 		//// couponDao.createCoupon(couponnew);
 		// couponnew.setTitle("dddddd");

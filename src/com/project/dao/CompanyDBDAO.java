@@ -265,19 +265,12 @@ public class CompanyDBDAO implements CompanyDAO {
 	}
 
 	private Connection getConnection() throws SQLException {
-
-		// return DriverManager.getConnection("jdbc:mysql://localhost/" +
-		// dbName, "root", "123123");
+		
 		return CouponSystem.getConnectionPool().getConnection();
 	}
 
 	private void releaseConnection(Connection con) {
 
-		/*
-		 * try { con.close(); } catch (SQLException e) {
-		 * 
-		 * e.printStackTrace(); }
-		 */
 		CouponSystem.getConnectionPool().free(con);
 	}
 }

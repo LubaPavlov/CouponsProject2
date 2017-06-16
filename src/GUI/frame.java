@@ -20,12 +20,14 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 public class frame extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtUserName;
-	private JPasswordField passwordField;
+	private JPasswordField pwdPassword;
 
 	/**
 	 * Launch the application.
@@ -48,7 +50,7 @@ public class frame extends JFrame {
 	 */
 	public frame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 497, 404);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -69,15 +71,34 @@ public class frame extends JFrame {
 			public void componentAdded(ContainerEvent arg0) {
 			}
 		});
-		txtUserName.setText("User name");
-		txtUserName.setBounds(87, 60, 238, 35);
+		txtUserName.setBounds(97, 63, 238, 35);
 		txtUserName.setColumns(10);
 		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(87, 118, 238, 35);
+		pwdPassword = new JPasswordField();
+		pwdPassword.setToolTipText("Password");
+		pwdPassword.setBounds(97, 143, 238, 35);
 		panel_1.setLayout(null);
 		panel_1.add(txtUserName);
-		panel_1.add(passwordField);
+		panel_1.add(pwdPassword);
+		
+		JButton btnNewButton = new JButton("Login");
+		btnNewButton.setBounds(177, 283, 97, 25);
+		panel_1.add(btnNewButton);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(97, 219, 238, 22);
+		panel_1.add(comboBox);
+		
+		JLabel lblNewLabel = new JLabel("User name");
+		lblNewLabel.setBounds(96, 34, 84, 16);
+		panel_1.add(lblNewLabel);
+		
+		JLabel lblPassword = new JLabel("Password");
+		lblPassword.setBounds(96, 113, 84, 16);
+		panel_1.add(lblPassword);
+		
+		JLabel lblUserRole = new JLabel("User role");
+		lblUserRole.setBounds(96, 190, 84, 16);
+		panel_1.add(lblUserRole);
 	}
-
 }
