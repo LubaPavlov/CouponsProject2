@@ -8,7 +8,7 @@ import com.project.exceptions.DAOException;
 import com.project.main.ClientType;
 
 public class AdminFacade implements CouponClientFacade {
-	
+
 	private CustomerDAO customerDAO = new CustomerDBDAO();
 	private CompanyDAO companyDAO = new CompanyDBDAO();
 	private CouponDAO couponDAO = new CouponDBDAO();
@@ -16,27 +16,33 @@ public class AdminFacade implements CouponClientFacade {
 	public AdminFacade() {
 	}
 
-	 public AdminFacade(CustomerDAO customerDAO, CompanyDAO companyDAO, CouponDAO couponDAO) {
-	 this.customerDAO = customerDAO;
-	 this.companyDAO = companyDAO;
-	 this.couponDAO = couponDAO;
-	 }
+	public AdminFacade(CustomerDAO customerDAO, CompanyDAO companyDAO, CouponDAO couponDAO) {
+		this.customerDAO = customerDAO;
+		this.companyDAO = companyDAO;
+		this.couponDAO = couponDAO;
+	}
 
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType clientType) {
-		/*AdminFacade adminFacade = null;
-		if (name == "admin" && password == "1234" && clientType == ClientType.ADMIN) {
-			 adminFacade = new AdminFacade(customerDAO, companyDAO, couponDAO);
-			 return adminFacade;
-		}	
-		else {
-			System.out.println("Not correct user info");
-		}*/
-		 return null;
+
+		if (clientType != ClientType.ADMIN) {
+			System.out.println("Error: client type is not admin");
+			throw new IndexOutOfBoundsException("Error: clinet type is not admin");
+		}
+
+		if (!name.equals("admin") || !password.equals("1234")) {
+			System.out.println("Login failed. Not correct username or password.");
+			throw new IndexOutOfBoundsException("Login failed. Not correct username or password.");
+		}
+
+		System.out.println("Login succeed");
+		AdminFacade facade = new AdminFacade();
+		return facade;
+
 	}
 
 	public void createCompany(Company company) throws DAOException {
-		
+
 		boolean companyExist = false;
 		// Create new List of all existing companies
 		Collection<Company> companies = getAllCompanies();
@@ -60,15 +66,16 @@ public class AdminFacade implements CouponClientFacade {
 		Collection<Company> companies = getAllCompanies();
 
 		for (Company existingCompany : companies) {
-			if (existingCompany.getCompName() == company.getCompName()) {
+			if (existingCompany.getCompName().equals(company.getCompName())){
 
 				Collection<Coupon> coupons = company.getCoupons();
 				for (Coupon couponToRemove : coupons) {
+					
 					couponDAO.removeCoupon(couponToRemove);
 				}
 				companyDAO.removeCompany(company);
 			} else {
-				throw new DAOException();
+				throw new DAOException("Cannot remove company");
 			}
 		}
 	}

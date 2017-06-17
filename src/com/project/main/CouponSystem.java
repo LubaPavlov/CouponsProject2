@@ -12,9 +12,6 @@ import com.project.exceptions.DAOException;
 import com.project.facade.*;
 
 public class CouponSystem {
-	private CustomerDAO customerDAO = new CustomerDBDAO();
-	private CompanyDAO companyDAO = new CompanyDBDAO();
-	private CouponDAO couponDAO = new CouponDBDAO();
 	private CouponClientFacade CouponClientFacade;
 	private static CouponSystem couponSystemInstance = new CouponSystem();
 	private static ConnectionPool pool;
@@ -32,45 +29,33 @@ public class CouponSystem {
 		// Start Daily Task Thread
 	}
 
-	public CouponClientFacade loginAsCustomer(String name, String password, ClientType clientType) throws LoginException {
+	public CouponClientFacade login(String name, String password, ClientType clientType)
+			throws LoginException {
 
-		// Customer login
-		if (clientType == ClientType.CUSTOMER) {
-			// try to login
-			try {
-				if (customerDAO.login(name, password)) {
-					long custId = customerDAO.getCustomerId(name);
-					// construct a customer with those params
-					Customer customer = new Customer();
-					customer.setCustId(custId);
-					customer.setCustName(name);
-					customer.setPassword(password);
-					// create a CustomerFacade
-					CustomerFacade customerFacade = new CustomerFacade(customerDAO,couponDAO);
-					// customerFacade need to ref that specific customer  ( 1 per client )
-					customerFacade.setCustomer(customer);			
-					
-					return customerFacade;
-				} else {
+		CouponClientFacade facade = null;
+		switch (clientType) {
 
-					throw new LoginException("Error");
-				}
-			} catch (DAOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		case ADMIN:
+			AdminFacade adminFacade = new AdminFacade();
+			facade = adminFacade.login(name, password, clientType);
+			break;
+
+		case COMPANY:
+			CompanyFacade companyFacade = new CompanyFacade();
+			facade = companyFacade.login(name, password, clientType);
+
+			break;
+		case CUSTOMER:
+			CustomerFacade customerFacade = new CustomerFacade();
+			facade = customerFacade.login(name, password, clientType);
+			break;
 		}
 
-		return null;
-	}
-
-	public CouponClientFacade loginAsAdmin(String name, String password, ClientType clientType) throws LoginException {
-		// Admin login
-		if (name == "admin" && password == "1234" && clientType == ClientType.ADMIN) {
-			AdminFacade adminFacade = new AdminFacade(customerDAO, companyDAO, couponDAO);
-			return adminFacade;
+		if (null == facade) {
+			throw new LoginException("clientType = " + clientType + "name =" + name);
 		}
-		return null;
+		return facade;
+
 	}
 
 	static {

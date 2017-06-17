@@ -10,7 +10,7 @@ import com.project.exceptions.DAOException;
 import com.project.main.ClientType;
 
 public class CompanyFacade implements CouponClientFacade {
-	private CompanyDAO companyDAO ;
+	private CompanyDAO companyDAO;
 	private CouponDAO couponDAO;
 
 	public CompanyFacade() {
@@ -22,20 +22,24 @@ public class CompanyFacade implements CouponClientFacade {
 	}
 
 	@Override
-	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException {
+	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException{
+
+		if (clientType != ClientType.COMPANY) {
+			System.out.println("Error: clinet type is not company");
+			throw new IndexOutOfBoundsException("Error: clinet type is not company");
+		}
 
 		try {
-			if (clientType == ClientType.COMPANY && companyDAO.login(name, password)== true) {
-				CompanyFacade companyFacade  = new CompanyFacade(companyDAO,couponDAO);
-				return companyFacade;
+			if (!companyDAO.login(name, password)) {
+				System.out.println("Login failed");
+				throw new IndexOutOfBoundsException("Wrong user name or password");	
 			}
-			else return null;
 		} catch (DAOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
-		
+		CompanyFacade facade = new CompanyFacade();
+		return facade;
+
 	}
 
 }

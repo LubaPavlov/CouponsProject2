@@ -4,6 +4,9 @@ import java.util.Collection;
 
 import javax.security.auth.login.LoginException;
 
+import org.w3c.dom.CDATASection;
+
+import com.project.beans.Company;
 import com.project.beans.Coupon;
 import com.project.beans.CouponType;
 import com.project.beans.Customer;
@@ -23,14 +26,20 @@ public class MyTestJDBC {
 	public static void main(String[] args) throws DAOException, LoginException {
 
 		CouponSystem newsys = CouponSystem.getInstance();
+		AdminFacade facade = (AdminFacade) newsys.login("admin", "1234", ClientType.ADMIN);
 		
-		CustomerFacade custFacade = (CustomerFacade) newsys.loginAsCustomer("Leo", "123123", ClientType.CUSTOMER);
+		//facade.createCompany(new Company("Golf", "123456","gold@gmail.com"));
+		System.out.println(facade.getAllCompanies());
+		Company comptorem = facade.getCompanyById(1);
+		facade.removeComapny(comptorem);
+		
+		//CustomerFacade custFacade = (CustomerFacade) newsys.loginAsCustomer("Leo", "123123", ClientType.CUSTOMER);
 		
 		//Collection<Coupon> couponim = custFacade.getAllPurchasedCouponsByType(CouponType.ELECTRICITY);
 	    
 		//System.out.println(couponim);
 		
-		custFacade.PurchaseCoupon(new CouponDBDAO().getCoupon(2));
+//		custFacade.PurchaseCoupon(new CouponDBDAO().getCoupon(2));
 		
 		// CouponClientFacade.login("admin", "1234", ClientType.ADMIN);
 		// AdminFacade.createCompany(new Company ("Dell",
