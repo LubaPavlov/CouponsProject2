@@ -62,7 +62,7 @@ public class CouponDBDAO implements CouponDAO {
 				try {
 					con = getConnection();
 					if (con != null) {
-						// 2. Create SQL UPDATE
+						// 2. Create SQL DELETE
 						PreparedStatement stat = con.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE couponId=?; "
 								+ "DELETE FROM company_coupon WHERE couponId=?; "
 								+ "DELETE FROM customer_coupon WHERE couponId=?;");

@@ -30,7 +30,7 @@ public class MyTestJDBC {
 		
 		//facade.createCompany(new Company("Golf", "123456","gold@gmail.com"));
 		System.out.println(facade.getAllCompanies());
-		Company comptorem = facade.getCompanyById(1);
+		Company comptorem = facade.getCompanyById(3);
 		facade.removeComapny(comptorem);
 		
 		//CustomerFacade custFacade = (CustomerFacade) newsys.loginAsCustomer("Leo", "123123", ClientType.CUSTOMER);

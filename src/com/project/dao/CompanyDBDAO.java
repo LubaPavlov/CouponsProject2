@@ -61,7 +61,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			con = getConnection();
 			if (con != null) {
 				System.out.println("Connected");
-				PreparedStatement stat = con.prepareStatement("DELETE FROM " + TABLE_NAME + "WHERE compId=?");
+				PreparedStatement stat = con.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE compId=?");
 				stat.setLong(1, company.getCompId());
 				System.out.println("Executing: " + stat.toString());
 				int rowsDeleted = stat.executeUpdate();

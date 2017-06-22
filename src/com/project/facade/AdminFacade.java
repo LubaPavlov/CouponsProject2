@@ -63,19 +63,20 @@ public class AdminFacade implements CouponClientFacade {
 	}
 
 	public void removeComapny(Company company) throws DAOException {
+		
 		Collection<Company> companies = getAllCompanies();
 
 		for (Company existingCompany : companies) {
-			if (existingCompany.getCompName().equals(company.getCompName())){
-
+			if (existingCompany.getCompName().equals(company.getCompName())) {
 				Collection<Coupon> coupons = company.getCoupons();
-				for (Coupon couponToRemove : coupons) {
-					
-					couponDAO.removeCoupon(couponToRemove);
+				if (coupons != null) {
+					for (Coupon couponToRemove : coupons) {
+						couponDAO.removeCoupon(couponToRemove);
+						companyDAO.removeCompany(company);
+					}
+				} else {
+					throw new DAOException();
 				}
-				companyDAO.removeCompany(company);
-			} else {
-				throw new DAOException("Cannot remove company");
 			}
 		}
 	}
