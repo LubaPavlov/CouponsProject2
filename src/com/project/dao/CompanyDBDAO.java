@@ -51,7 +51,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			System.out.println("Cannot create company : " + company.getCompName() + ". " + e.getMessage());
 
 		} finally {
-			// 3. Release connection
+			//Release connection
 			releaseConnection(con);
 		}
 	}
@@ -63,7 +63,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			con = getConnection();
 			if (con != null) {
 				System.out.println("Connected");
-				//Create SQL DELETE prepare statement
+				//Create MySQL DELETE prepare statement
 				PreparedStatement stat = con.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE compId=?");
 				//Set parameter in the DELETE query 
 				stat.setLong(1, company.getCompId());
@@ -93,7 +93,7 @@ public class CompanyDBDAO implements CompanyDAO {
 		//Get a connection from the Connection Pool
 		try {
 			con = getConnection();
-			//Create SQL UPDATE prepare statement
+			//Create MySQL UPDATE prepare statement
 			PreparedStatement stat = con
 					.prepareStatement("UPDATE " + TABLE_NAME + " SET email=?, password=? WHERE compName=?");
 			//Set parameters in the UPDATE query
@@ -128,7 +128,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			con = getConnection();
 			if (con != null) {
 				System.out.println("Connected");
-				//Create SQL SELECT prepare statement
+				//Create MySQL SELECT prepare statement
 				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE compId=? ");
 				//Set parameter in the SELECT query
 				stat.setLong(1, compId);
