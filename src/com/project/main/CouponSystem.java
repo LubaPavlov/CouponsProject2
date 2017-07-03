@@ -1,32 +1,31 @@
 package com.project.main;
 
 import java.sql.SQLException;
-
 import javax.security.auth.login.LoginException;
-
-import org.omg.Messaging.SyncScopeHelper;
-
-import com.project.beans.Customer;
 import com.project.dao.*;
-import com.project.exceptions.DAOException;
 import com.project.facade.*;
 
 public class CouponSystem {
-	private CouponClientFacade CouponClientFacade;
+	//private CouponClientFacade CouponClientFacade;
 	private static CouponSystem couponSystemInstance = new CouponSystem();
 	private static ConnectionPool pool;
 	private static String dbName = "coupon";
 
+	//Create a singleton instance of the coupon system
 	public static synchronized CouponSystem getInstance() {
 		if (couponSystemInstance == null) {
-			// create a CouponSystem only once
+			// Create a CouponSystem only once
 			couponSystemInstance = new CouponSystem();
 		}
 		return couponSystemInstance;
 	}
-
+	
 	private CouponSystem() {
 		// Start Daily Task Thread
+		DailyCouponExpirationTask dailyTask = new DailyCouponExpirationTask();
+		Thread dailyTaskThread = new Thread(dailyTask);
+		dailyTaskThread.start();
+		System.out.println("Starting Daily Task");
 	}
 
 	public CouponClientFacade login(String name, String password, ClientType clientType)
@@ -77,7 +76,7 @@ public class CouponSystem {
 
 	public void shutdown() throws SQLException {
 		pool.closeAllConnections();
-		System.out.println("system shutdown.");
+		System.out.println("System shutdown.");
 		System.exit(0);
 	}
 }

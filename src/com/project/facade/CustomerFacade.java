@@ -10,7 +10,7 @@ import com.project.beans.CouponType;
 import com.project.beans.Customer;
 import com.project.dao.CouponDAO;
 import com.project.dao.CustomerDAO;
-import com.project.exceptions.DAOException;
+import com.project.exceptions.CouponSystemException;
 import com.project.main.ClientType;
 
 public class CustomerFacade implements CouponClientFacade {
@@ -52,7 +52,7 @@ public class CustomerFacade implements CouponClientFacade {
 
 	// need to check if coupon is not expired
 
-	public boolean PurchaseCoupon(Coupon coupon) throws DAOException {
+	public boolean PurchaseCoupon(Coupon coupon) throws CouponSystemException {
 
 		Coupon purachseCoupon = couponDAO.getCoupon(coupon.getCouponId());
 
@@ -71,12 +71,12 @@ public class CustomerFacade implements CouponClientFacade {
 		return true;
 	}
 
-	public Collection<Coupon> getAllPurchasedCoupons() throws DAOException {
+	public Collection<Coupon> getAllPurchasedCoupons() throws CouponSystemException {
 		return customerDAO.getCoupons(this.customer);
 	}
 
 	// get all purchased coupons by coupon type
-	public Collection<Coupon> getAllPurchasedCouponsByType(CouponType couponType) throws DAOException {
+	public Collection<Coupon> getAllPurchasedCouponsByType(CouponType couponType) throws CouponSystemException {
 		Collection<Coupon> myCouponsByType = customerDAO.getCoupons(this.customer);
 		for (Iterator<Coupon> iterator = myCouponsByType.iterator(); iterator.hasNext();) {
 			Coupon coupon = iterator.next();
@@ -88,7 +88,7 @@ public class CustomerFacade implements CouponClientFacade {
 	}
 
 	// get all purchased coupons by price (< price)
-	public Collection<Coupon> getAllPurchasedCouponsByPrice(double price) throws DAOException {
+	public Collection<Coupon> getAllPurchasedCouponsByPrice(double price) throws CouponSystemException {
 		Collection<Coupon> myCouponsByPrice = customerDAO.getCoupons(this.customer);
 		for (Iterator<Coupon> iterator = myCouponsByPrice.iterator(); iterator.hasNext();) {
 			Coupon coupon = iterator.next();

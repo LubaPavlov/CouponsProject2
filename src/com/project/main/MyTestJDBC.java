@@ -16,14 +16,14 @@ import com.project.dao.CouponDAO;
 import com.project.dao.CouponDBDAO;
 import com.project.dao.CustomerDAO;
 import com.project.dao.CustomerDBDAO;
-import com.project.exceptions.DAOException;
+import com.project.exceptions.CouponSystemException;
 import com.project.facade.AdminFacade;
 import com.project.facade.CouponClientFacade;
 import com.project.facade.CustomerFacade;
 
 public class MyTestJDBC {
 
-	public static void main(String[] args) throws DAOException, LoginException {
+	public static void main(String[] args) throws CouponSystemException, LoginException {
 
 		CouponSystem newsys = CouponSystem.getInstance();
 		AdminFacade facade = (AdminFacade) newsys.login("admin", "1234", ClientType.ADMIN);

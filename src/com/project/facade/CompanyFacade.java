@@ -6,7 +6,7 @@ import com.project.beans.Company;
 import com.project.dao.CompanyDAO;
 import com.project.dao.CouponDAO;
 import com.project.dao.CustomerDAO;
-import com.project.exceptions.DAOException;
+import com.project.exceptions.CouponSystemException;
 import com.project.main.ClientType;
 
 public class CompanyFacade implements CouponClientFacade {
@@ -25,8 +25,8 @@ public class CompanyFacade implements CouponClientFacade {
 	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException{
 
 		if (clientType != ClientType.COMPANY) {
-			System.out.println("Error: clinet type is not company");
-			throw new IndexOutOfBoundsException("Error: clinet type is not company");
+			System.out.println("Error: clinet type is not a company");
+			throw new IndexOutOfBoundsException("Error: clinet type is not a company");
 		}
 
 		try {
@@ -34,7 +34,7 @@ public class CompanyFacade implements CouponClientFacade {
 				System.out.println("Login failed");
 				throw new IndexOutOfBoundsException("Wrong user name or password");	
 			}
-		} catch (DAOException e) {
+		} catch (CouponSystemException e) {
 			e.printStackTrace();
 		}
 		CompanyFacade facade = new CompanyFacade();

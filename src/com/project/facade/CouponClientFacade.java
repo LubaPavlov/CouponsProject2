@@ -2,7 +2,7 @@ package com.project.facade;
 
 import javax.security.auth.login.LoginException;
 
-import com.project.exceptions.DAOException;
+import com.project.exceptions.CouponSystemException;
 import com.project.main.ClientType;
 
 public interface CouponClientFacade {
