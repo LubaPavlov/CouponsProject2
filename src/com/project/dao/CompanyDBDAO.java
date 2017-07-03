@@ -39,7 +39,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			stat.setString(2, company.getPassword());
 			stat.setString(3, company.getEmail());
 			System.out.println("Executing: " + stat.toString());
-			
+			//Execute
 			int rowsInserted = stat.executeUpdate();
 			if (rowsInserted > 0) {
 				System.out.println("A new company " + company.getCompName() + " has been created successfully");
