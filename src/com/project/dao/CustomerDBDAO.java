@@ -118,7 +118,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			con = getConnection();
 			if (con != null) {
 				// Create MySQL SELECT prepare statement
-				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE custID=? ");
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE custID=?");
 				// Set parameter in the SELECT query
 				stat.setLong(1, custId);
 				System.out.println("Executing: " + stat.toString());
@@ -268,7 +268,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			if (con != null) {
 				// Create MySQL SELECT prepare statement
 				PreparedStatement stat = con
-						.prepareStatement("SELECT custId FROM " + TABLE_NAME + " WHERE custName=? ");
+						.prepareStatement("SELECT custId FROM " + TABLE_NAME + " WHERE custName =?");
 				// Set parameter in the SELECT query
 				stat.setString(1, custName);
 				System.out.println("Executing: " + stat.toString());

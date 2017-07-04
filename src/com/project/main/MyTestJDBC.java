@@ -25,17 +25,17 @@ public class MyTestJDBC {
 
 	public static void main(String[] args) throws CouponSystemException, LoginException {
 
-		CouponSystem newsys = CouponSystem.getInstance();
-		AdminFacade facade = (AdminFacade) newsys.login("admin", "1234", ClientType.ADMIN);
+	//	CouponSystem newsys = CouponSystem.getInstance();
+		//AdminFacade facade = (AdminFacade) newsys.login("admin", "1234", ClientType.ADMIN);
 		
 		//facade.createCompany(new Company("Golf", "123456","gold@gmail.com"));
-		System.out.println(facade.getAllCompanies());
-		Company comptorem = facade.getCompanyById(3);
-		facade.removeComapny(comptorem);
+		//System.out.println(facade.getAllCompanies());
+		//Company comptorem = facade.getCompanyById(3);
+		//facade.removeComapny(comptorem);
 		
-		//CustomerFacade custFacade = (CustomerFacade) newsys.loginAsCustomer("Leo", "123123", ClientType.CUSTOMER);
+	//	CustomerFacade facade = (CustomerFacade) newsys.login("Leo", "123123", ClientType.CUSTOMER);
 		
-		//Collection<Coupon> couponim = custFacade.getAllPurchasedCouponsByType(CouponType.ELECTRICITY);
+	//	Collection<Coupon> couponim = facade.getAllPurchasedCouponsByType(CouponType.ELECTRICITY);
 	    
 		//System.out.println(couponim);
 		
@@ -61,8 +61,9 @@ public class MyTestJDBC {
 		// CustomerDAO customerDAO = new CustomerDBDAO();
 		// CompanyDAO companyDAO = new CompanyDBDAO();
 
-//		 CustomerDAO cDao = new CustomerDBDAO();
-//		System.out.println( cDao.getCustomerId("Leo"));
+	    CustomerDAO cDao = new CustomerDBDAO();
+	//	System.out.println(cDao.getCustomer(1));
+     	System.out.println(cDao.getCustomerId("Idan"));
 //		 cDao.login("Leo", "123123");
 		// Customer customer = new Customer("Leo","123123");
 		// cDao.createCustomer(customer);
@@ -71,7 +72,7 @@ public class MyTestJDBC {
 		// Customer customer3 = new Customer("Idan","123456789");
 		// cDao.createCustomer(customer3);
 
-		// cDao.getCoupons(cDao.getCustomer(1));
+		 //cDao.getCoupons(cDao.getCustomer(1));
 
 		// CompanyDAO compDao = new CompanyDBDAO();
 		// compDao.getCompany(3);

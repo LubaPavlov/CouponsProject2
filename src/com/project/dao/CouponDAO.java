@@ -54,7 +54,7 @@ public interface CouponDAO {
 	 * @throws CouponSystemException
 	 *             the DAO exception
 	 */
-	public Coupon getCoupon(long coupon_id) throws CouponSystemException;
+	public Coupon getCoupon(long couponId) throws CouponSystemException;
 
 	/**
 	 * Gets the list of all coupons.

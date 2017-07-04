@@ -12,7 +12,7 @@ public interface CustomerDAO {
 
 	public void updateCustomer(Customer customer) throws CouponSystemException;
 
-	public Customer getCustomer(long cust_id) throws CouponSystemException;
+	public Customer getCustomer(long custId) throws CouponSystemException;
 
 	public Collection<Customer> getAllCustomers() throws CouponSystemException;
 

@@ -3,6 +3,7 @@ package com.project.main;
 import java.sql.SQLException;
 import javax.security.auth.login.LoginException;
 import com.project.dao.*;
+import com.project.exceptions.CouponSystemException;
 import com.project.facade.*;
 
 public class CouponSystem {
@@ -29,7 +30,7 @@ public class CouponSystem {
 	}
 
 	public CouponClientFacade login(String name, String password, ClientType clientType)
-			throws LoginException {
+			throws LoginException, CouponSystemException {
 
 		CouponClientFacade facade = null;
 		switch (clientType) {
@@ -42,8 +43,8 @@ public class CouponSystem {
 		case COMPANY:
 			CompanyFacade companyFacade = new CompanyFacade();
 			facade = companyFacade.login(name, password, clientType);
-
 			break;
+			
 		case CUSTOMER:
 			CustomerFacade customerFacade = new CustomerFacade();
 			facade = customerFacade.login(name, password, clientType);

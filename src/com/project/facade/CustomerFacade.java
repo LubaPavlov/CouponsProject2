@@ -8,17 +8,21 @@ import javax.security.auth.login.LoginException;
 import com.project.beans.Coupon;
 import com.project.beans.CouponType;
 import com.project.beans.Customer;
+import com.project.dao.CompanyDAO;
+import com.project.dao.CompanyDBDAO;
 import com.project.dao.CouponDAO;
+import com.project.dao.CouponDBDAO;
 import com.project.dao.CustomerDAO;
+import com.project.dao.CustomerDBDAO;
 import com.project.exceptions.CouponSystemException;
 import com.project.main.ClientType;
 
 public class CustomerFacade implements CouponClientFacade {
 
-	private CustomerDAO customerDAO;
-	private CouponDAO couponDAO;
+	private CustomerDAO customerDAO = new CustomerDBDAO();
+	private CouponDAO couponDAO = new CouponDBDAO();
 	private Customer customer;
-
+	
 	public CustomerFacade() {
 	}
 
@@ -38,9 +42,25 @@ public class CustomerFacade implements CouponClientFacade {
 	}
 
 	@Override
-	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException {
+	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException, CouponSystemException {
 
-		return null;
+		if (clientType != ClientType.CUSTOMER) {
+			System.out.println("Client type is not a customer");
+			throw new IndexOutOfBoundsException("Clinet type is not a customer");
+		}
+
+		try {
+			if (!customerDAO.login(name, password)) {
+				System.out.println("Login failed");
+				throw new IndexOutOfBoundsException("Wrong user name or password");	
+			}
+		} catch ( CouponSystemException e) {
+			throw new LoginException (e.getMessage());
+		}
+		CustomerFacade facade = new CustomerFacade();
+		Customer customer = new Customer();
+		customer = customerDAO.getCustomer(customerDAO.getCustomerId(name));
+		return facade;
 
 	}
 
@@ -72,12 +92,12 @@ public class CustomerFacade implements CouponClientFacade {
 	}
 
 	public Collection<Coupon> getAllPurchasedCoupons() throws CouponSystemException {
-		return customerDAO.getCoupons(this.customer);
+		return customer.getCoupons();
 	}
 
 	// get all purchased coupons by coupon type
 	public Collection<Coupon> getAllPurchasedCouponsByType(CouponType couponType) throws CouponSystemException {
-		Collection<Coupon> myCouponsByType = customerDAO.getCoupons(this.customer);
+		Collection<Coupon> myCouponsByType = getAllPurchasedCoupons();
 		for (Iterator<Coupon> iterator = myCouponsByType.iterator(); iterator.hasNext();) {
 			Coupon coupon = iterator.next();
 			if (coupon.getType() != couponType) {
