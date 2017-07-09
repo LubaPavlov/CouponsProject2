@@ -1,3 +1,7 @@
+/**
+ * @author Luba Pavlov
+ * @version 1.0, 03.07.2017
+ */
 package com.project.dao;
 import java.sql.*;
 import java.util.*;
@@ -10,17 +14,48 @@ import java.util.*;
  */
 
 public class ConnectionPool implements Runnable {
+	
 	private String url, username, password;
 	private int maxConnections;
 	private boolean waitIfBusy;
 	private List<Connection> availableConnections, busyConnections;
 	private boolean connectionPending = false;
 
+	/**
+	 * Instantiates a new connection pool.
+	 *
+	 * @param url
+	 *            the url
+	 * @param username
+	 *            the username
+	 * @param password
+	 *            the password
+	 * @throws SQLException
+	 *             the SQL exception
+	 */
 	public ConnectionPool(String url, String username, String password) throws SQLException 
 	{
 		this(url, username, password, 3, 10, true);
 	}
 	
+	/**
+	 * Instantiates a new connection pool.
+	 *
+	 * @param url
+	 *            the url
+	 * @param username
+	 *            the username
+	 * @param password
+	 *            the password
+	 * @param initialConnections
+	 *            the initial connections
+	 * @param maxConnections
+	 *            the max connections
+	 * @param waitIfBusy
+	 *            the wait if busy
+	 * @throws SQLException
+	 *             the SQL exception
+	 */
 	public ConnectionPool(String url, String username, String password, int initialConnections,
 			int maxConnections, boolean waitIfBusy) throws SQLException {
 		this.url = url;
@@ -38,6 +73,13 @@ public class ConnectionPool implements Runnable {
 		}
 	}
 
+	/**
+	 * Gets the connection.
+	 *
+	 * @return the connection
+	 * @throws SQLException
+	 *             the SQL exception
+	 */
 	public synchronized Connection getConnection() throws SQLException {
 		if (!availableConnections.isEmpty()) {
 			int lastIndex = availableConnections.size() - 1;
@@ -95,6 +137,9 @@ public class ConnectionPool implements Runnable {
 	// is established or if someone finishes with an existing
 	// connection.
 
+	/**
+	 * Make background connection.
+	 */
 	private void makeBackgroundConnection() {
 		connectionPending = true;
 		try {
@@ -105,6 +150,9 @@ public class ConnectionPool implements Runnable {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	public void run() {
 		try {
 			Connection connection = makeNewConnection();
@@ -123,6 +171,13 @@ public class ConnectionPool implements Runnable {
 	// the foreground when initializing the ConnectionPool,
 	// and called in the background when running.
 
+	/**
+	 * Make new connection.
+	 *
+	 * @return the connection
+	 * @throws SQLException
+	 *             the SQL exception
+	 */
 	private Connection makeNewConnection() throws SQLException {
 		// Load database driver if not already loaded
 		//Class.forName(driver);
@@ -132,6 +187,12 @@ public class ConnectionPool implements Runnable {
 	
 	}
 
+	/**
+	 * Free.
+	 *
+	 * @param connection
+	 *            the connection
+	 */
 	public synchronized void free(Connection connection) {
 		busyConnections.remove(connection);
 		availableConnections.add(connection);
@@ -139,6 +200,11 @@ public class ConnectionPool implements Runnable {
 		notifyAll();
 	}
 
+	/**
+	 * Total connections.
+	 *
+	 * @return the int
+	 */
 	public synchronized int totalConnections() {
 		return (availableConnections.size() + busyConnections.size());
 	}
@@ -158,6 +224,12 @@ public class ConnectionPool implements Runnable {
 		busyConnections = new ArrayList<>();
 	}
 
+	/**
+	 * Close connections.
+	 *
+	 * @param connections
+	 *            the connections
+	 */
 	private void closeConnections(List<Connection> connections) {
 		
 			connections.forEach(con -> {
@@ -171,6 +243,9 @@ public class ConnectionPool implements Runnable {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public synchronized String toString() {
 		String info = "ConnectionPool(" + url + "," + username + ")" + ", available=" + availableConnections.size()
 				+ ", busy=" + busyConnections.size() + ", max=" + maxConnections;

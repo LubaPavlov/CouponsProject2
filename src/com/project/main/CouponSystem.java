@@ -1,3 +1,7 @@
+/**
+ * @author Luba Pavlov
+ * @version 1.0, 03.07.2017
+ */
 package com.project.main;
 
 import java.sql.SQLException;
@@ -6,13 +10,23 @@ import com.project.dao.*;
 import com.project.exceptions.CouponSystemException;
 import com.project.facade.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CouponSystem.
+ */
 public class CouponSystem {
+	
+	/** The coupon system instance. */
 	//private CouponClientFacade CouponClientFacade;
 	private static CouponSystem couponSystemInstance = new CouponSystem();
 	private static ConnectionPool pool;
 	private static String dbName = "coupon";
 
-	//Create a singleton instance of the coupon system
+	/**
+	 * Create the single instance of CouponSystem.
+	 *
+	 * @return single instance of CouponSystem
+	 */
 	public static synchronized CouponSystem getInstance() {
 		if (couponSystemInstance == null) {
 			// Create a CouponSystem only once
@@ -21,14 +35,32 @@ public class CouponSystem {
 		return couponSystemInstance;
 	}
 	
+	/**
+	 * Instantiates a new coupon system and start Daily Task Thread
+	 */
 	private CouponSystem() {
 		// Start Daily Task Thread
-		DailyCouponExpirationTask dailyTask = new DailyCouponExpirationTask();
+		/*DailyCouponExpirationTask dailyTask = new DailyCouponExpirationTask();
 		Thread dailyTaskThread = new Thread(dailyTask);
 		dailyTaskThread.start();
-		System.out.println("Starting Daily Task");
+		System.out.println("Starting Daily Task");*/
 	}
 
+	/**
+	 * A method to Login to the CouponSystem return the correct facade by the client TYPE
+	 *
+	 * @param name
+	 *            the name of the client
+	 * @param password
+	 *            the password of the client 
+	 * @param clientType
+	 *            the client type
+	 * @return the coupon client facade
+	 * @throws LoginException
+	 *             the login exception
+	 * @throws CouponSystemException
+	 *             the coupon system exception
+	 */
 	public CouponClientFacade login(String name, String password, ClientType clientType)
 			throws LoginException, CouponSystemException {
 
@@ -51,7 +83,7 @@ public class CouponSystem {
 			break;
 		}
 
-		if (null == facade) {
+		if (facade == null) {
 			throw new LoginException("clientType = " + clientType + "name =" + name);
 		}
 		return facade;
@@ -59,7 +91,7 @@ public class CouponSystem {
 	}
 
 	static {
-		String url = "jdbc:mysql://localhost:3306/" + dbName;
+		String url = "jdbc:mysql://localhost:3306/" + dbName + "?autoReconnect=true&useSSL=false";
 
 		String username = "root";
 		String password = "123123";
@@ -71,10 +103,21 @@ public class CouponSystem {
 		}
 	}
 
+	/**
+	 * Gets the connection pool.
+	 *
+	 * @return the connection pool
+	 */
 	public static ConnectionPool getConnectionPool() {
 		return pool;
 	}
 
+	/**
+	 * Shutdown.
+	 *
+	 * @throws SQLException
+	 *             the SQL exception
+	 */
 	public void shutdown() throws SQLException {
 		pool.closeAllConnections();
 		System.out.println("System shutdown.");

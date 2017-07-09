@@ -1,3 +1,7 @@
+/**
+ * @author Luba Pavlov
+ * @version 1.0, 03.07.2017
+ */
 package com.project.dao;
 
 import java.sql.Connection;
@@ -14,16 +18,25 @@ import com.project.beans.CouponType;
 import com.project.exceptions.CouponSystemException;
 import com.project.main.CouponSystem;
 
-/*CouponDBDAO class implements CouponDAO interface.
-Providing methods to INSERT, UPDATE, DELETE 
-and SELECT data from and to MySQL database.*/
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CouponDBDAO implements CouponDAO interface.
+ * Providing methods to INSERT, UPDATE, DELETE 
+ * and SELECT data from and to MySQL database.
+ */
 public class CouponDBDAO implements CouponDAO {
 
 	private static final String TABLE_NAME = "coupon";
 	private Connection con = null;
 
-	// A method to CREATE a new Coupon in the Coupon table with auto-generated ID
+	/**
+	 *A method to CREATE a new Coupon in the Coupon table with auto-generated ID
+	 *
+	 * @param Coupon
+	 *            the coupon to be created
+	 * @throws CouponSystemException
+	 *             the DAO exception
+	 */	
 	@Override
 	public void createCoupon(Coupon coupon) throws CouponSystemException {
 		// Get a connection from the Connection Pool
@@ -61,8 +74,15 @@ public class CouponDBDAO implements CouponDAO {
 		}
 	}
 
-	/*A method to REMOVE Coupon from the Coupon table 
-	and Join tables: company_coupon, customer_coupon*/
+	/**
+	 * A method to REMOVE Coupon from the Coupon table
+	 * and Join tables: company_coupon, customer_coupon
+	 *
+	 * @param Coupon
+	 *            the coupon to be deleted
+	 * @throws CouponSystemException
+	 *             the DAO exception
+	 */
 	@Override
 	public void removeCoupon(Coupon coupon) throws CouponSystemException {
 		// Get a connection from the Connection Pool
@@ -95,7 +115,14 @@ public class CouponDBDAO implements CouponDAO {
 		}
 	}
 
-	// A method to UPDATE Coupon details in the Coupon table
+	/**
+	 * A method to UPDATE Coupon details in the Coupon table
+	 *
+	 * @param Coupon
+	 *            the coupon to be updated
+	 * @throws CouponSystemException
+	 *             the DAO exception
+	 */ 
 	@Override
 	public void updateCoupon(Coupon coupon) throws CouponSystemException {
 		// Get a connection from the Connection Pool
@@ -133,7 +160,15 @@ public class CouponDBDAO implements CouponDAO {
 		}
 	}
 
-	// A method to GET a Coupon object by Coupon ID from Coupon table
+	/**
+	 * A method to GET a Coupon object by Coupon ID from Coupon table
+	 *
+	 * @param coupon_id
+	 *            the coupon id
+	 * @return the coupon
+	 * @throws CouponSystemException
+	 *             the DAO exception
+	 */
 	@Override
 	public Coupon getCoupon(long couponId) throws CouponSystemException {
 		Coupon coupon = null;
@@ -173,8 +208,14 @@ public class CouponDBDAO implements CouponDAO {
 		}
 		return coupon;
 	}
-
-	// A method to GET a collection of all coupons
+	
+	/**
+	 * A method to GET a collection of all coupons
+	 *
+	 * @return the list of all coupons
+	 * @throws CouponSystemException
+	 *             the DAO exception
+	 */	
 	@Override
 	public Collection<Coupon> getAllCoupons() throws CouponSystemException {
 		// Create a new Coupons collection
@@ -217,7 +258,15 @@ public class CouponDBDAO implements CouponDAO {
 		return coupons;
 	}
 
-	// A method to GET a Coupon object by a coupon type
+	/**
+	 * A method to GET a Coupon object by a coupon type
+	 *
+	 * @param couponType
+	 *            the coupon type
+	 * @return the coupon by provided type
+	 * @throws CouponSystemException
+	 *             the DAO exception
+	 */	
 	@Override
 	public Coupon getCouponByType(CouponType couponType) throws CouponSystemException {
 		Coupon coupon = null;
@@ -259,11 +308,24 @@ public class CouponDBDAO implements CouponDAO {
 		return coupon;
 	}
 
+	/**
+	 * Gets the connection.
+	 *
+	 * @return the connection to pool
+	 * @throws SQLException
+	 *             the SQL exception
+	 */
 	private Connection getConnection() throws SQLException {
 
 		return CouponSystem.getConnectionPool().getConnection();
 	}
 
+	/**
+	 * Release connection.
+	 *
+	 * @param con
+	 *            the connection to pool
+	 */
 	private void releaseConnection(Connection con) {
 
 		CouponSystem.getConnectionPool().free(con);

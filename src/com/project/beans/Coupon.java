@@ -1,4 +1,4 @@
-/*
+/**
  * @author Luba Pavlov
  * @version 1.0, 03.07.2017
  */
