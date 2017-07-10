@@ -14,7 +14,8 @@ import com.project.dao.CouponDAO;
 import com.project.dao.CouponDBDAO;
 import com.project.dao.CustomerDAO;
 import com.project.dao.CustomerDBDAO;
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
+import com.project.exceptions.FacadeException;
 import com.project.main.ClientType;
 
 public class CustomerFacade implements CouponClientFacade {
@@ -29,7 +30,7 @@ public class CustomerFacade implements CouponClientFacade {
 	public CustomerFacade(CustomerDAO customerDAO, CouponDAO couponDAO, Customer customer) {
 		this.customerDAO = customerDAO;
 		this.couponDAO = couponDAO;
-		this.customer  = customer;
+		this.customer = customer;
 	}
 
 	// return this customer
@@ -42,25 +43,21 @@ public class CustomerFacade implements CouponClientFacade {
 		this.customer = customer;
 	}
 
-	//Login
+	// Login
 	@Override
-	public CouponClientFacade login(String name, String password, ClientType clientType)
-			throws LoginException, CouponSystemException {
+	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException {
 
 		if (clientType != ClientType.CUSTOMER) {
-			System.out.println("Client type is not a customer");
 			throw new IndexOutOfBoundsException("Clinet type is not a customer");
 		}
-		
+
 		if (!customerDAO.login(name, password)) {
-			System.out.println("Login failed");
 			throw new IndexOutOfBoundsException("Wrong user name or password");
 		}
-		
-		
+
 		CustomerFacade custfacade = new CustomerFacade();
 		this.customer = customerDAO.getCustomerByName(name);
-		custfacade.setCustomer(this.customer);	
+		custfacade.setCustomer(this.customer);
 		return custfacade;
 	}
 
@@ -72,31 +69,46 @@ public class CustomerFacade implements CouponClientFacade {
 
 	// need to check if coupon is not expired
 
-	public boolean purchaseCoupon(Coupon coupon) throws CouponSystemException {
+	public boolean purchaseCoupon(Coupon coupon) throws FacadeException {
 
-		Coupon purachseCoupon = couponDAO.getCoupon(coupon.getCouponId());
+		Coupon purachseCoupon;
+		try {
+			purachseCoupon = getCoupon(coupon.getCouponId());
+		} catch (Exception e) {
+			throw new FacadeException("Coupon not found");
+		}
+
+		Collection<Coupon> myCoupons = customerDAO.getCoupons(this.customer);
+
+		for (Coupon purachse : myCoupons) {
+
+			if (purachse.getCouponId() == purachseCoupon.getCouponId()) {
+				throw new FacadeException("You already purchased this coupon");
+			}
+		}
 
 		if (purachseCoupon.getAmount() <= 0) {
-			System.out.println("No coupons left");
-			return false;
+			throw new FacadeException("No coupons left");
 		}
-		if (getAllPurchasedCoupons().contains(purachseCoupon)) {
-			System.out.println("You already purchased this coupon");
-			return false;
+
+		try {
+			customerDAO.addCouponToCustomer(purachseCoupon, this.customer);
+			purachseCoupon.setAmount(purachseCoupon.getAmount() - 1);
+			couponDAO.updateCoupon(purachseCoupon);
+			return true;
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			throw new FacadeException(e.getLocalizedMessage());
 		}
-		customerDAO.addCouponToCustomer(purachseCoupon, this.customer);
-		purachseCoupon.setAmount(purachseCoupon.getAmount() - 1);
-		couponDAO.updateCoupon(purachseCoupon);
-		return true;
 	}
 
-	public Collection<Coupon> getAllPurchasedCoupons() throws CouponSystemException {
+	public Collection<Coupon> getAllPurchasedCoupons() throws FacadeException {
 
 		return customerDAO.getCoupons(this.customer);
 	}
 
 	// get all purchased coupons by coupon type
-	public Collection<Coupon> getAllPurchasedCouponsByType(CouponType couponType) throws CouponSystemException {
+	public Collection<Coupon> getAllPurchasedCouponsByType(CouponType couponType) throws FacadeException {
 		Collection<Coupon> myCouponsByType = getAllPurchasedCoupons();
 		for (Iterator<Coupon> iterator = myCouponsByType.iterator(); iterator.hasNext();) {
 			Coupon coupon = iterator.next();
@@ -108,7 +120,7 @@ public class CustomerFacade implements CouponClientFacade {
 	}
 
 	// get all purchased coupons by price (< price)
-	public Collection<Coupon> getAllPurchasedCouponsByPrice(double price) throws CouponSystemException {
+	public Collection<Coupon> getAllPurchasedCouponsByPrice(double price) throws FacadeException {
 		Collection<Coupon> myCouponsByPrice = customerDAO.getCoupons(this.customer);
 		for (Iterator<Coupon> iterator = myCouponsByPrice.iterator(); iterator.hasNext();) {
 			Coupon coupon = iterator.next();
@@ -117,6 +129,11 @@ public class CustomerFacade implements CouponClientFacade {
 			}
 		}
 		return myCouponsByPrice;
+	}
+
+	public Coupon getCoupon(long couponId) throws FacadeException {
+
+		return couponDAO.getCoupon(couponId);
 	}
 
 }

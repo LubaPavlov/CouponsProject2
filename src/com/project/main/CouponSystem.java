@@ -7,7 +7,8 @@ package com.project.main;
 import java.sql.SQLException;
 import javax.security.auth.login.LoginException;
 import com.project.dao.*;
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
+import com.project.exceptions.FacadeException;
 import com.project.facade.*;
 
 // TODO: Auto-generated Javadoc
@@ -58,11 +59,10 @@ public class CouponSystem {
 	 * @return the coupon client facade
 	 * @throws LoginException
 	 *             the login exception
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws FacadeException 
 	 */
 	public CouponClientFacade login(String name, String password, ClientType clientType)
-			throws LoginException, CouponSystemException {
+			throws LoginException, FacadeException{
 
 		CouponClientFacade facade = null;
 		switch (clientType) {

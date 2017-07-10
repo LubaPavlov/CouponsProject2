@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.project.dao.CouponDAO;
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
 import com.project.main.CouponSystem;
 
 public class DailyCouponExpirationTask implements Runnable {
@@ -58,7 +58,7 @@ public class DailyCouponExpirationTask implements Runnable {
 					
 					lastExecTime = now;
 				}
-				catch (SQLException | CouponSystemException e){
+				catch (SQLException | DAOException e){
 					
 					System.err.println("An error occured trying to delete expired coupons: " + e.getMessage());
 				}

@@ -17,161 +17,161 @@ import com.project.beans.Company;
 import com.project.beans.Coupon;
 import com.project.beans.CouponType;
 import com.project.beans.Customer;
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
 import com.project.main.CouponSystem;
-
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CompanyDBDAO implements CompanyDAO interface.
- * Providing methods to INSERT, UPDATE, DELETE 
- * and SELECT data from and to MySQL database.
+ * The Class CompanyDBDAO implements CompanyDAO interface. Providing methods to
+ * INSERT, UPDATE, DELETE and SELECT data from and to MySQL database.
  */
 public class CompanyDBDAO implements CompanyDAO {
 
 	private static final String TABLE_NAME = "company";
 	private Connection con = null;
-	
+
 	/**
-	 * A method to CREATE a new Company in the Company table with auto-generated ID 
+	 * A method to CREATE the given company in the database with auto-generated
+	 * ID
 	 *
 	 * @param Company
 	 *            the company to be created
-	 * @throws CouponSystemException
+	 * @throws DAOException
+	 *             If something fails at database level.
 	 * 
 	 */
 	@Override
-	public void createCompany(Company company) throws CouponSystemException {
+	public void createCompany(Company company) throws DAOException {
+
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
-			//Create MySQL INSERT prepare statement
+			// Create MySQL INSERT prepare statement
 			PreparedStatement stat = con.prepareStatement(
 					"INSERT INTO " + TABLE_NAME + "(compName, password, email)" + " VALUES (?, ?, ?)");
-			//Set parameters in the INSERT query
+			// Set parameters in the INSERT query
 			stat.setString(1, company.getCompName());
 			stat.setString(2, company.getPassword());
 			stat.setString(3, company.getEmail());
 			System.out.println("Executing: " + stat.toString());
-			//Execute update statement
+			// Execute update statement
 			int rowsInserted = stat.executeUpdate();
-			if (rowsInserted > 0) {
-				System.out.println("A new company " + company.getCompName() + " has been created successfully");
-			} else
-				System.out.println("An Error Has Occurred. Check if entered data is correct.");
+			if (rowsInserted == 0) {
+				throw new DAOException("Creating company failed, no rows affected.");
+			}
 
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("Cannot create company : " + company.getCompName() + ". " + e);
+			throw new DAOException(e);
 
 		} finally {
-			//Release connection
+			// Release connection
 			releaseConnection(con);
 		}
 	}
 
 	/**
-	 *  A method to REMOVE Company from the Company table
+	 * A method to REMOVE Company from the Company table
 	 *
 	 * @param Company
 	 *            the company to be deleted
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException
+	 *             If something fails at database level.
 	 */
 	@Override
-	public void removeCompany(Company company)throws CouponSystemException {
-		//Get a connection from the Connection Pool
+	public void removeCompany(Company company) throws DAOException {
+		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
 			if (con != null) {
 				System.out.println("Connected");
-				//Create MySQL DELETE prepare statement
+				// Create MySQL DELETE prepare statement
 				PreparedStatement stat = con.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE compId=?");
-				//Set parameter in the DELETE query 
+				// Set parameter in the DELETE query
 				stat.setLong(1, company.getCompId());
 				System.out.println("Executing: " + stat.toString());
 				// Execute update statement
 				int rowsDeleted = stat.executeUpdate();
+				if (rowsDeleted == 0) {
 
-				if (rowsDeleted > 0) {
-					System.out.println("A company " + company.getCompName() + " has been deleted successfully");
-				} else
-					System.out.println("An Error Has Occurred.");
+					throw new DAOException("Delete company failed, no rows affected.");
+				}
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("Cannot remove company : " + company.getCompName() + ". " + e);
+			throw new DAOException(e);
 
 		} finally {
-			//Release connection
+			// Release connection
 			releaseConnection(con);
 		}
 	}
 
 	/**
-	 * A method to UPDATE Company details in the Company table except Company name and ID
+	 * A method to UPDATE Company details in the Company table except Company
+	 * name and ID
 	 *
 	 * @param Company
 	 *            the company to be updated
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException
+	 *             If something fails at database level.
 	 */
-	public void updateCompany(Company company) throws CouponSystemException {
-		//Get a connection from the Connection Pool
+	public void updateCompany(Company company) throws DAOException {
+		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
-			//Create MySQL UPDATE prepare statement
+			// Create MySQL UPDATE prepare statement
 			PreparedStatement stat = con
 					.prepareStatement("UPDATE " + TABLE_NAME + " SET email=?, password=? WHERE compName=?");
-			//Set parameters in the UPDATE query
+			// Set parameters in the UPDATE query
 			stat.setString(1, company.getEmail());
 			stat.setString(2, company.getPassword());
 			stat.setString(3, company.getCompName());
 			System.out.println("Executing: " + stat.toString());
-            //Execute update statement
+			// Execute update statement
 			int rowsUpdated = stat.executeUpdate();
-			if (rowsUpdated > 0) {
-				System.out.println(company + " has been updated successfully");
-			} else
-				System.out.println("An Error Has Occurred. Check if entered data is correct.");
+			if (rowsUpdated == 0) {
+				throw new DAOException("Update company failed, no rows affected.");
+			}
 
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("Cannot update company : " + company.getCompName() + ". " + e);
+			throw new DAOException(e);
 
 		} finally {
-			//Release connection
+			// Release connection
 			releaseConnection(con);
 		}
 	}
 
 	/**
-	 * A method to GET a Company by Company ID from Company table
+	 * Returns the company from the database matching the given companyID.
 	 *
 	 * @param comp_id
 	 *            the company id
-	 * @return the company
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @return the company object
+	 * @throws DAOException
+	 *             If something fails at database level.
 	 */
-	@Override	
-	public Company getCompany(long compId) throws CouponSystemException {
-		//Create a new Company object
-		Company company = new Company();
-	        // Get a connection from the Connection Pool
+	@Override
+	public Company getCompany(long compId) throws DAOException {
+		Company company = null;
+		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
 			if (con != null) {
 				System.out.println("Connected");
-				//Create MySQL SELECT prepare statement
+				// Create MySQL SELECT prepare statement
 				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE compId=? ");
-				//Set parameter in the SELECT query
+				// Set parameter in the SELECT query
 				stat.setLong(1, compId);
 				System.out.println("Executing: " + stat.toString());
-				//Execute query statement
+				// Execute query statement
 				ResultSet rows = stat.executeQuery();
 				while (rows.next()) {
-					//Set object's fields
+					// Create a new Company object
+					company = new Company();
+					// Set object's fields
 					company.setCompId(rows.getLong("compId"));
 					company.setCompName(rows.getString("compName"));
 					company.setPassword(rows.getString("password"));
@@ -179,32 +179,32 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("Cannot found the company  with ID : " + compId + ". " + e);
+			throw new DAOException(e);
 
 		} finally {
-			//Release connection
+			// Release connection
 			releaseConnection(con);
 		}
 		return company;
 	}
 
 	/**
-	 * A method to GET a collections of all companies from Company table
+	 * Returns a collections of all companies from Company table
 	 *
 	 * @return the collection of all companies
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException
+	 *             If something fails at database level.
 	 */
-	public Collection<Company> getAllCompanies() throws CouponSystemException {
+	public Collection<Company> getAllCompanies() throws DAOException {
 		ArrayList<Company> companies = new ArrayList<Company>();
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
 			if (con != null) {
-				//Create MySQL SELECT prepare statement
+				// Create MySQL SELECT prepare statement
 				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME);
 				System.out.println("Executing: " + stat.toString());
-				//Execute query statement
+				// Execute query statement
 				ResultSet rows = stat.executeQuery();
 				while (rows.next()) {
 					Company company = new Company();
@@ -216,41 +216,41 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("SQL Error" + ". " + e);
+			throw new DAOException(e);
 
 		} finally {
-			//Release connection
+			// Release connection
 			releaseConnection(con);
 		}
 		return companies;
 	}
 
 	/**
-	 * A method to GET a collections of all coupons of a specific company  
+	 * Returns a collections of all coupons of a specific company
 	 *
 	 * @param compId
 	 *            the company id
-	 * @return the coupons of the provided company ID 
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @return the coupons of the provided company ID
+	 * @throws DAOException
+	 *             If something fails at database level.
 	 */
-	@Override    
-	public Collection<Coupon> getCoupons(long compId) throws CouponSystemException {		
-		//Create a new Coupons collection
+	@Override
+	public Collection<Coupon> getCoupons(long compId) throws DAOException {
+		// Create a new Coupons collection
 		ArrayList<Coupon> coupons = new ArrayList<Coupon>();
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
 			if (con != null) {
-				//Create MySQL SELECT prepare statement
+				// Create MySQL SELECT prepare statement
 				PreparedStatement stat = con.prepareStatement("SELECT * FROM coupon.coupon where couponId in "
 						+ "(select couponId from company_coupon where compId like " + compId + ")");
-				//Execute query statement
+				// Execute query statement
 				ResultSet rows = stat.executeQuery();
 				while (rows.next()) {
-					//Create a new coupon object
+					// Create a new coupon object
 					Coupon coupon = new Coupon();
-					//Set object's fields
+					// Set object's fields
 					coupon.setCouponId(rows.getLong("couponId"));
 					coupon.setTitle(rows.getString("title"));
 					coupon.setStartDate(rows.getDate("startDate"));
@@ -266,28 +266,29 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("SQL Error " + ". " + e);
+			throw new DAOException(e);
 
 		} finally {
-			//Release connection
+			// Release connection
 			releaseConnection(con);
 		}
 		return coupons;
 
 	}
+
 	/**
-	 * A method to LOGIN 
+	 * A method to LOGIN
 	 *
 	 * @param compName
 	 *            the company name
 	 * @param password
 	 *            the company password
 	 * @return true, if successful
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException
+	 *             If something fails at database level.
 	 */
 	@Override
-	public boolean login(String compName, String password) throws CouponSystemException {
+	public boolean login(String compName, String password) throws DAOException {
 		boolean succeeded = false;
 		// Get a connection from the Connection Pool
 		try {
@@ -301,19 +302,15 @@ public class CompanyDBDAO implements CompanyDAO {
 			while (rows.next()) {
 				String myPassword = rows.getString("password");
 				if (myPassword.equals(password)) {
-					System.out.println("Success!");
-					return succeeded = true;
-				} else {
-					System.out.println("Failure!");
-					return succeeded = false;
-				}
+				    succeeded = true;
+				} 
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("An error occured" + e);
-			
+			throw new DAOException(e);
+
 		} finally {
-			//Release connection
+			// Release connection
 			releaseConnection(con);
 		}
 
@@ -321,45 +318,45 @@ public class CompanyDBDAO implements CompanyDAO {
 	}
 
 	/**
-	 * A method to GET a Company ID by Company Name 
+	 * A method to GET a Company ID by Company Name
 	 *
 	 * @param compName
 	 *            the company name
 	 * @return the company id
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException
+	 *             If something fails at database level.
 	 */
-	@Override 
-	public long getCompanyId(String compName) throws CouponSystemException {
+	@Override
+	public long getCompanyId(String compName) throws DAOException {
 		long compId = 0;
-		//Get a connection from the Connection Pool
+		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
 			if (con != null) {
-				//Create MySQL SELECT prepare statement
+				// Create MySQL SELECT prepare statement
 				PreparedStatement stat = con
 						.prepareStatement("SELECT compId FROM " + TABLE_NAME + " WHERE compName=? ");
-				//Set parameter in the SELECT query
+				// Set parameter in the SELECT query
 				stat.setString(1, compName);
 				System.out.println("Executing: " + stat.toString());
-				//Execute query statement
+				// Execute query statement
 				ResultSet rows = stat.executeQuery();
 				// Set field
 				compId = rows.getLong("compId");
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("Cannot found company ID " + compName + ". " + e);
+			throw new DAOException(e);
 
 		} finally {
-			//Release connection
+			// Release connection
 			releaseConnection(con);
 		}
 		return compId;
 	}
-	
+
 	@Override
-	public Company getCompanyByName(String name) throws CouponSystemException {
+	public Company getCompanyByName(String name) throws DAOException {
 		Company company = null;
 		// Get a connection from the Connection Pool
 		try {
@@ -384,7 +381,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("Cannot found compnany " + name + ". " + e);
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -401,7 +398,7 @@ public class CompanyDBDAO implements CompanyDAO {
 	 *             the SQL exception
 	 */
 	private Connection getConnection() throws SQLException {
-		
+
 		return CouponSystem.getConnectionPool().getConnection();
 	}
 
@@ -416,36 +413,47 @@ public class CompanyDBDAO implements CompanyDAO {
 		CouponSystem.getConnectionPool().free(con);
 	}
 
+	/**
+	 * A method to add a coupon to a company.
+	 *
+	 * @param company
+	 *            the company object
+	 * @param couponId
+	 *            the coupon id
+	 * @throws DAOException
+	 *             If something fails at database level.
+	 */
 	@Override
-	public void addCoupon(Company company, long couponId) throws CouponSystemException {
+	public void addCoupon(Company company, long couponId) throws DAOException {
+
 		// Get a connection from the Connection Pool
-				try {
-					con = getConnection();
-					if (con != null) {
-						System.out.println("Connected");
-						// Create MySQL INSERT prepare statement
-						PreparedStatement stat = con
-								.prepareStatement("INSERT INTO company_coupon " + "(compId, couponId)" + " VALUES (?, ?)");
-						// Set parameter in the INSERT query
-						stat.setLong(1, company.getCompId());
-						stat.setLong(2, couponId);
-						System.out.println("Executing: " + stat.toString());
-						// Execute query statement
-						int rowsInserted = stat.executeUpdate();
-						if (rowsInserted > 0) {
-							System.out.println("A new coupon has been added successfully");
-						} else
-							System.out.println("An Error Has Occurred.");
-					}
-				} catch (SQLException e) {
-
-					throw new CouponSystemException("Cannot add coupon : " + ". " + e);
-
-				} finally {
-					// Release connection
-					releaseConnection(con);
+		try {
+			con = getConnection();
+			if (con != null) {
+				System.out.println("Connected");
+				// Create MySQL INSERT prepare statement
+				PreparedStatement stat = con
+						.prepareStatement("INSERT INTO company_coupon " + "(compId, couponId)" + " VALUES (?, ?)");
+				// Set parameter in the INSERT query
+				stat.setLong(1, company.getCompId());
+				stat.setLong(2, couponId);
+				System.out.println("Executing: " + stat.toString());
+				// Execute query statement
+				int rowsInserted = stat.executeUpdate();
+				if (rowsInserted == 0) {
+					throw new DAOException("Add coupon to company failed, no rows affected.");
 				}
-		
+
+			}
+		} catch (SQLException e) {
+
+			throw new DAOException(e);
+
+		} finally {
+			// Release connection
+			releaseConnection(con);
+		}
+
 	}
 
 }

@@ -10,7 +10,8 @@ import javax.security.auth.login.LoginException;
 
 import com.project.beans.*;
 import com.project.dao.*;
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
+import com.project.exceptions.FacadeException;
 import com.project.main.ClientType;
 
 // TODO: Auto-generated Javadoc
@@ -58,11 +59,11 @@ public class AdminFacade implements CouponClientFacade {
 	 * @return the coupon client facade
 	 * @throws LoginException
 	 *             the login exception
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
 	@Override
-	public CouponClientFacade login(String name, String password, ClientType clientType) {
+	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException, FacadeException {
 
 		if (clientType != ClientType.ADMIN) {
 			System.out.println("Client type is not admin");
@@ -85,10 +86,10 @@ public class AdminFacade implements CouponClientFacade {
 	 *
 	 * @param company
 	 *            the company
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
-	public void createCompany(Company company) throws CouponSystemException {
+	public void createCompany(Company company) throws FacadeException {
 
 		boolean companyExist = false;
 		// Create new List of all existing companies
@@ -105,7 +106,7 @@ public class AdminFacade implements CouponClientFacade {
 		if (!companyExist)
 			companyDAO.createCompany(company);
 		else {
-			throw new CouponSystemException();
+			throw new DAOException();
 		}
 	}
 
@@ -115,10 +116,10 @@ public class AdminFacade implements CouponClientFacade {
 	 *
 	 * @param company
 	 *            the company object
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
-	public void removeCompany(Company company) throws CouponSystemException {
+	public void removeCompany(Company company) throws FacadeException {
 
 		Collection<Company> companies = getAllCompanies();
 
@@ -131,7 +132,7 @@ public class AdminFacade implements CouponClientFacade {
 						couponDAO.removeCoupon(couponToRemove);
 					}
 				} else {
-					throw new CouponSystemException();
+					throw new DAOException();
 				}
 			}
 		}
@@ -144,10 +145,10 @@ public class AdminFacade implements CouponClientFacade {
 	 *
 	 * @param company
 	 *            the company object
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
-	public void updateCompany(Company company) throws CouponSystemException {
+	public void updateCompany(Company company) throws FacadeException {
 
 		Collection<Company> companies = getAllCompanies();
 
@@ -155,7 +156,7 @@ public class AdminFacade implements CouponClientFacade {
 			if (existingCompany.getCompName() == company.getCompName()) {
 				companyDAO.updateCompany(company);
 			} else {
-				throw new CouponSystemException();
+				throw new DAOException();
 			}
 		}
 	}
@@ -164,10 +165,10 @@ public class AdminFacade implements CouponClientFacade {
 	 * A method to GET a collections of all companies from Company table
 	 *
 	 * @return the collection of all companies
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
-	public Collection<Company> getAllCompanies() throws CouponSystemException {
+	public Collection<Company> getAllCompanies() throws FacadeException {
 		if (companyDAO == null) {
 			return null;
 		}
@@ -180,10 +181,10 @@ public class AdminFacade implements CouponClientFacade {
 	 * @param compId
 	 *            the company id
 	 * @return the company object by id
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
-	public Company getCompanyById(long compId) throws CouponSystemException {
+	public Company getCompanyById(long compId) throws FacadeException {
 		return companyDAO.getCompany(compId);
 	}
 
@@ -193,10 +194,10 @@ public class AdminFacade implements CouponClientFacade {
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
-	public void createCustomer(Customer customer) throws CouponSystemException {
+	public void createCustomer(Customer customer) throws FacadeException {
 
 		boolean customerExist = false;
 		// Create new List of all existing customers
@@ -211,7 +212,7 @@ public class AdminFacade implements CouponClientFacade {
 		if (!customerExist)
 			customerDAO.createCustomer(customer);
 		else {
-			throw new CouponSystemException();
+			throw new DAOException();
 		}
 	}
 
@@ -221,10 +222,10 @@ public class AdminFacade implements CouponClientFacade {
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
-	public void removeCustomer(Customer customer) throws CouponSystemException {
+	public void removeCustomer(Customer customer) throws FacadeException {
 		// Create new List of all existing customers
 		Collection<Customer> customers = getAllCustomers();
 		for (Customer existingCustomer : customers) {
@@ -242,10 +243,10 @@ public class AdminFacade implements CouponClientFacade {
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
-	public void updateCustomer(Customer customer) throws CouponSystemException {
+	public void updateCustomer(Customer customer) throws FacadeException {
 		// Create new List of all existing companies
 		Collection<Customer> customers = getAllCustomers();
 
@@ -264,10 +265,10 @@ public class AdminFacade implements CouponClientFacade {
 	 * @param custId
 	 *            the customer id
 	 * @return the customer
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
-	public Customer getCustomer(long custId) throws CouponSystemException {
+	public Customer getCustomer(long custId) throws FacadeException {
 		if (customerDAO == null) {
 			return null;
 		}
@@ -278,10 +279,10 @@ public class AdminFacade implements CouponClientFacade {
 	 * A method to GET a collection of all customers
 	 *
 	 * @return the collection of all customers
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
-	public Collection<Customer> getAllCustomers() throws CouponSystemException {
+	public Collection<Customer> getAllCustomers() throws FacadeException {
 		if (customerDAO == null) {
 			return null;
 		}
@@ -294,10 +295,10 @@ public class AdminFacade implements CouponClientFacade {
 	 * @param custId
 	 *            the customer id
 	 * @return the customer object by id
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
-	public Customer getCustomerById(Long custId) throws CouponSystemException {
+	public Customer getCustomerById(Long custId) throws FacadeException {
 		if (customerDAO == null) {
 			return null;
 		}

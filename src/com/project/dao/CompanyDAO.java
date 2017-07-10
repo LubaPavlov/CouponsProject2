@@ -7,7 +7,7 @@ package com.project.dao;
 import java.util.Collection;
 
 import com.project.beans.*;
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -16,34 +16,31 @@ import com.project.exceptions.CouponSystemException;
 public interface CompanyDAO {
 	
 	/**
-	 * Creates a new company.
+	 * A method to CREATE the given company in the database with auto-generated ID
 	 *
 	 * @param Company
 	 *            the company to be created
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public void createCompany(Company Company) throws CouponSystemException;
+	public void createCompany(Company Company) throws DAOException;
 
 	/**
-	 * Deletes the company.
+	 * A method to REMOVE Company from the Company table
 	 *
 	 * @param Company
 	 *            the company to be deleted
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public void removeCompany(Company Company) throws CouponSystemException;
+	public void removeCompany(Company Company) throws DAOException;
 
 	/**
 	 * Update the company.
 	 *
 	 * @param Company
 	 *            the company to be updated
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public void updateCompany(Company Company)throws CouponSystemException;
+	public void updateCompany(Company Company)throws DAOException;
 
 	/**
 	 * Gets the company by company ID.
@@ -51,19 +48,17 @@ public interface CompanyDAO {
 	 * @param comp_id
 	 *            the company id
 	 * @return the company
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public Company getCompany(long comp_id) throws CouponSystemException;
+	public Company getCompany(long comp_id) throws DAOException;
 
 	/**
 	 * Gets the list of all companies.
 	 *
 	 * @return the all companies
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public Collection<Company> getAllCompanies() throws CouponSystemException;
+	public Collection<Company> getAllCompanies() throws DAOException;
 
 	/**
 	 * Gets the list of coupons by company ID.
@@ -71,10 +66,9 @@ public interface CompanyDAO {
 	 * @param compId
 	 *            the company id
 	 * @return the coupons of the provided company ID 
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public Collection<Coupon> getCoupons(long compId) throws CouponSystemException;
+	public Collection<Coupon> getCoupons(long compId) throws DAOException;
 	
 	/**
 	 * Gets the company id by company name.
@@ -82,10 +76,9 @@ public interface CompanyDAO {
 	 * @param compName
 	 *            the company name
 	 * @return the company id
-	 * @throws CouponSystemException
-	 *            the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public long getCompanyId(String compName) throws CouponSystemException;
+	public long getCompanyId(String compName) throws DAOException;
 	
 	/**
 	 * Gets the company by name.
@@ -93,21 +86,19 @@ public interface CompanyDAO {
 	 * @param name
 	 *            the name of the company
 	 * @return the company object by name
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public Company getCompanyByName(String name) throws CouponSystemException;
+	public Company getCompanyByName(String name) throws DAOException;
 	
 	/**
 	 * Add a new COUPON to the company_coupon JOIN table
 	 *
 	 * @param Company
 	 *            the company that coupon will be added
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
 	
-	public void addCoupon(Company company, long couponId)throws CouponSystemException;
+	public void addCoupon(Company company, long couponId)throws DAOException;
 	
 	/**
 	 * Login.
@@ -117,9 +108,8 @@ public interface CompanyDAO {
 	 * @param password
 	 *            the company password
 	 * @return true, if successful
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public boolean login(String compName, String password) throws CouponSystemException;
+	public boolean login(String compName, String password) throws DAOException;
 
 }

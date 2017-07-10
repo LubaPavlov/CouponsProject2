@@ -6,7 +6,7 @@ package com.project.dao;
 
 import java.util.Collection;
 import com.project.beans.*;
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -19,30 +19,27 @@ public interface CustomerDAO {
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public void createCustomer(Customer customer) throws CouponSystemException;
+	public void createCustomer(Customer customer) throws DAOException;
 
 	/**
 	 * Removes the customer.
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public void removeCustomer(Customer customer) throws CouponSystemException;
+	public void removeCustomer(Customer customer) throws DAOException;
 
 	/**
 	 * Update customer.
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public void updateCustomer(Customer customer) throws CouponSystemException;
+	public void updateCustomer(Customer customer) throws DAOException;
 
 	/**
 	 * Gets the customer.
@@ -50,19 +47,17 @@ public interface CustomerDAO {
 	 * @param custId
 	 *            the customer id
 	 * @return the customer object
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public Customer getCustomer(long custId) throws CouponSystemException;
+	public Customer getCustomer(long custId) throws DAOException;
 
 	/**
 	 * Gets the all customers.
 	 *
 	 * @return the collection of all customers
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public Collection<Customer> getAllCustomers() throws CouponSystemException;
+	public Collection<Customer> getAllCustomers() throws DAOException;
 
 	/**
 	 * Gets the coupons.
@@ -70,10 +65,9 @@ public interface CustomerDAO {
 	 * @param customer
 	 *            the customer object
 	 * @return the coupons collection
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public Collection<Coupon> getCoupons(Customer customer) throws CouponSystemException;
+	public Collection<Coupon> getCoupons(Customer customer) throws DAOException;
 
 	/**
 	 * Login.
@@ -83,10 +77,9 @@ public interface CustomerDAO {
 	 * @param password
 	 *            the customer's password
 	 * @return true, if successful
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public boolean login(String custName, String password) throws CouponSystemException;
+	public boolean login(String custName, String password) throws DAOException;
 
 	/**
 	 * Gets the customer id.
@@ -94,10 +87,9 @@ public interface CustomerDAO {
 	 * @param custName
 	 *            the customer's name
 	 * @return the customer's id
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public long getCustomerId(String custName) throws CouponSystemException;
+	public long getCustomerId(String custName) throws DAOException;
 
 	/**
 	 * Adds the coupon to customer.
@@ -106,10 +98,9 @@ public interface CustomerDAO {
 	 *            the coupon object
 	 * @param customer
 	 *            the customer object
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public void addCouponToCustomer(Coupon coupon, Customer customer) throws CouponSystemException;
+	public void addCouponToCustomer(Coupon coupon, Customer customer) throws DAOException;
 
 	/**
 	 * Gets the customer by name.
@@ -117,9 +108,8 @@ public interface CustomerDAO {
 	 * @param name
 	 *            the name of the customer
 	 * @return the customer object by name
-	 * @throws CouponSystemException
-	 *             the coupon system exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public Customer getCustomerByName(String name) throws CouponSystemException;
+	public Customer getCustomerByName(String name) throws DAOException;
 
 }

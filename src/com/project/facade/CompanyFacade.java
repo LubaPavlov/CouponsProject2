@@ -12,7 +12,8 @@ import com.project.dao.CompanyDBDAO;
 import com.project.dao.CouponDAO;
 import com.project.dao.CouponDBDAO;
 import com.project.dao.CustomerDAO;
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
+import com.project.exceptions.FacadeException;
 import com.project.main.ClientType;
 
 public class CompanyFacade implements CouponClientFacade {
@@ -37,7 +38,7 @@ public class CompanyFacade implements CouponClientFacade {
 
 	@Override
 	public CouponClientFacade login(String name, String password, ClientType clientType)
-			throws LoginException, CouponSystemException {
+			throws LoginException, FacadeException {
 
 		if (clientType != ClientType.COMPANY) {
 			System.out.println("Error: clinet type is not a company");
@@ -49,7 +50,7 @@ public class CompanyFacade implements CouponClientFacade {
 				System.out.println("Login failed");
 				throw new IndexOutOfBoundsException("Wrong user name or password");
 			}
-		} catch (CouponSystemException e) {
+		} catch (DAOException e) {
 			e.printStackTrace();
 		}
 
@@ -60,7 +61,7 @@ public class CompanyFacade implements CouponClientFacade {
 
 	}
 
-	public void updateCompany(Company company) throws CouponSystemException {
+	public void updateCompany(Company company) throws FacadeException {
 
 		Collection<Company> companies = getAllCompanies();
 
@@ -68,12 +69,12 @@ public class CompanyFacade implements CouponClientFacade {
 			if (existingCompany.getCompName() == company.getCompName()) {
 				companyDAO.updateCompany(company);
 			} else {
-				throw new CouponSystemException();
+				throw new DAOException();
 			}
 		}
 	}
 
-	public boolean createCoupon(Coupon coupon) throws CouponSystemException {
+	public boolean createCoupon(Coupon coupon) throws FacadeException {
 		boolean couponExist = false;
 		// Create new List of all existing
 		Collection<Coupon> allCoupons = getAllCoupons();
@@ -96,21 +97,21 @@ public class CompanyFacade implements CouponClientFacade {
 		
 		else {
 			
-			throw new CouponSystemException("Coupon with this title already exists");
+			throw new DAOException("Coupon with this title already exists");
 		}
 		
 		return true;
 
 	}
 
-	public Collection<Company> getAllCompanies() throws CouponSystemException {
+	public Collection<Company> getAllCompanies() throws FacadeException {
 		if (companyDAO == null) {
 			return null;
 		}
 		return companyDAO.getAllCompanies();
 	}
 
-	public Collection<Coupon> getAllCoupons() throws CouponSystemException {
+	public Collection<Coupon> getAllCoupons() throws FacadeException {
 		if (couponDAO == null) {
 			return null;
 		}

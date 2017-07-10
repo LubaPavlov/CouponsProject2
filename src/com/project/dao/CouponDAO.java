@@ -7,7 +7,7 @@ package com.project.dao;
 import java.util.Collection;
 
 import com.project.beans.*;
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -20,30 +20,27 @@ public interface CouponDAO {
 	 *
 	 * @param Coupon
 	 *            the coupon to be created
-	 * @throws CouponSystemException
-	 *             the DAO exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public void createCoupon(Coupon Coupon) throws CouponSystemException;
+	public void createCoupon(Coupon Coupon) throws DAOException;
 
 	/**
 	 * Deletes the coupon.
 	 *
 	 * @param Coupon
 	 *            the coupon to be deleted
-	 * @throws CouponSystemException
-	 *             the DAO exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public void removeCoupon(Coupon Coupon) throws CouponSystemException;
+	public void removeCoupon(Coupon Coupon) throws DAOException;
 
 	/**
 	 * Update coupon.
 	 *
 	 * @param Coupon
 	 *            the coupon to be updated
-	 * @throws CouponSystemException
-	 *             the DAO exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public void updateCoupon(Coupon Coupon) throws CouponSystemException;
+	public void updateCoupon(Coupon Coupon) throws DAOException;
 
 	/**
 	 * Gets the coupon.
@@ -51,19 +48,17 @@ public interface CouponDAO {
 	 * @param coupon_id
 	 *            the coupon id
 	 * @return the coupon
-	 * @throws CouponSystemException
-	 *             the DAO exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public Coupon getCoupon(long couponId) throws CouponSystemException;
+	public Coupon getCoupon(long couponId) throws DAOException;
 
 	/**
 	 * Gets the list of all coupons.
 	 *
 	 * @return the list of all coupons
-	 * @throws CouponSystemException
-	 *             the DAO exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public Collection<Coupon> getAllCoupons() throws CouponSystemException;
+	public Collection<Coupon> getAllCoupons() throws DAOException;
 
 	/**
 	 * Gets the coupon by type.
@@ -71,9 +66,8 @@ public interface CouponDAO {
 	 * @param couponType
 	 *            the coupon type
 	 * @return the coupon by provided type
-	 * @throws CouponSystemException
-	 *             the DAO exception
+	 * @throws DAOException If something fails at database level.
 	 */
-	public Coupon getCouponByType(CouponType couponType) throws CouponSystemException;
+	public Coupon getCouponByType(CouponType couponType) throws DAOException;
 
 }

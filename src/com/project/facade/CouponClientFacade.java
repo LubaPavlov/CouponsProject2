@@ -6,7 +6,8 @@ package com.project.facade;
 
 import javax.security.auth.login.LoginException;
 
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
+import com.project.exceptions.FacadeException;
 import com.project.main.ClientType;
 
 // TODO: Auto-generated Javadoc
@@ -27,9 +28,10 @@ public interface CouponClientFacade {
 	 * @return the coupon client facade
 	 * @throws LoginException
 	 *             the login exception
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
+	 * @throws FacadeException 
 	 */
-	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException, CouponSystemException;
+	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException, FacadeException;
 
 }

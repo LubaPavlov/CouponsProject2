@@ -15,14 +15,13 @@ import java.util.Collection;
 import com.project.beans.Company;
 import com.project.beans.Coupon;
 import com.project.beans.CouponType;
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
 import com.project.main.CouponSystem;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class CouponDBDAO implements CouponDAO interface.
- * Providing methods to INSERT, UPDATE, DELETE 
- * and SELECT data from and to MySQL database.
+ * The Class CouponDBDAO implements CouponDAO interface. Providing methods to
+ * INSERT, UPDATE, DELETE and SELECT data from and to MySQL database.
  */
 public class CouponDBDAO implements CouponDAO {
 
@@ -30,15 +29,16 @@ public class CouponDBDAO implements CouponDAO {
 	private Connection con = null;
 
 	/**
-	 *A method to CREATE a new Coupon in the Coupon table with auto-generated ID
+	 * A method to CREATE a new Coupon in the Coupon table with auto-generated
+	 * ID
 	 *
 	 * @param Coupon
 	 *            the coupon to be created
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the DAO exception
-	 */	
+	 */
 	@Override
-	public void createCoupon(Coupon coupon) throws CouponSystemException {
+	public void createCoupon(Coupon coupon) throws DAOException {
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
@@ -59,14 +59,13 @@ public class CouponDBDAO implements CouponDAO {
 				System.out.println("Executing: " + stat.toString());
 				// Execute update statement
 				int rowsInserted = stat.executeUpdate();
-				if (rowsInserted > 0) {
-					System.out.println("A new coupon " + coupon.getTitle() + " has been created successfully");
-				} else
-					System.out.println("An Error Has Occurred. Check if entered data is correct.");
+				if (rowsInserted == 0) {
+					throw new DAOException("Create coupon failed, no rows affected.");
+				}
 			}
 		} catch (SQLException e) {
-			
-			throw new CouponSystemException("Cannot create coupon : " + coupon.getTitle() + ". " + e.getMessage());
+
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -75,16 +74,16 @@ public class CouponDBDAO implements CouponDAO {
 	}
 
 	/**
-	 * A method to REMOVE Coupon from the Coupon table
-	 * and Join tables: company_coupon, customer_coupon
+	 * A method to REMOVE Coupon from the Coupon table and Join tables:
+	 * company_coupon, customer_coupon
 	 *
 	 * @param Coupon
 	 *            the coupon to be deleted
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the DAO exception
 	 */
 	@Override
-	public void removeCoupon(Coupon coupon) throws CouponSystemException {
+	public void removeCoupon(Coupon coupon) throws DAOException {
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
@@ -100,14 +99,13 @@ public class CouponDBDAO implements CouponDAO {
 				System.out.println("Executing: " + stat.toString());
 				// Execute update statement
 				int rowsDeleted = stat.executeUpdate();
-				if (rowsDeleted > 0) {
-					System.out.println(coupon + " has been deteled successfully");
-				} else
-					System.out.println("An Error Has Occurred.");
+				if (rowsDeleted == 0) {
+					throw new DAOException("Delete coupon failed, no rows affected.");
+				}
 			}
 		} catch (SQLException e) {
-			
-			throw new CouponSystemException("Cannot delete coupon : " + coupon.getTitle() + ". " + e.getMessage());
+
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -120,39 +118,35 @@ public class CouponDBDAO implements CouponDAO {
 	 *
 	 * @param Coupon
 	 *            the coupon to be updated
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the DAO exception
-	 */ 
+	 */
 	@Override
-	public void updateCoupon(Coupon coupon) throws CouponSystemException {
+	public void updateCoupon(Coupon coupon) throws DAOException {
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
 			if (con != null) {
 				// Create SQL UPDATE prepare statement
-				PreparedStatement stat = con.prepareStatement("UPDATE " + TABLE_NAME + " SET"
-						+ "(title, startDate, endDate, amount, type, message, price, image) "
-						+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+				PreparedStatement stat = con.prepareStatement("UPDATE " + TABLE_NAME
+						+ " SET endDate=?, amount=?, message=?, price=?, image=? WHERE couponId=?");
 				// Set parameters in the UPDATE query
-				stat.setString(1, coupon.getTitle());
-				stat.setDate(2, coupon.getStartDate());
-				stat.setDate(3, coupon.getEndDate());
-				stat.setInt(4, coupon.getAmount());
-				stat.setString(5, coupon.getType().toString());
-				stat.setString(6, coupon.getMessage());
-				stat.setDouble(7, coupon.getPrice());
-				stat.setString(8, coupon.getImage());
+				stat.setDate(1, coupon.getEndDate());
+				stat.setInt(2, coupon.getAmount());
+				stat.setString(3, coupon.getMessage());
+				stat.setDouble(4, coupon.getPrice());
+				stat.setString(5, coupon.getImage());
+				stat.setLong(6, coupon.getCouponId());
 				System.out.println("Executing: " + stat.toString());
 				// Execute update statement
 				int rowsInserted = stat.executeUpdate();
-				if (rowsInserted > 0) {
-					System.out.println(coupon + " has been updated successfully");
-				} else
-					System.out.println("An Error Has Occurred.");
+				if (rowsInserted == 0) {
+					throw new DAOException("Update coupon failed, no rows affected.");
+				}
 			}
 		} catch (SQLException e) {
-			
-			throw new CouponSystemException("Cannot update coupon : " + coupon.getTitle() + ". " + e.getMessage());
+
+			throw new DAOException(e.getMessage(), e.getCause());
 
 		} finally {
 			// Release connection
@@ -166,11 +160,11 @@ public class CouponDBDAO implements CouponDAO {
 	 * @param coupon_id
 	 *            the coupon id
 	 * @return the coupon
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the DAO exception
 	 */
 	@Override
-	public Coupon getCoupon(long couponId) throws CouponSystemException {
+	public Coupon getCoupon(long couponId) throws DAOException {
 		Coupon coupon = null;
 		// Get a connection from the Connection Pool
 		try {
@@ -199,8 +193,8 @@ public class CouponDBDAO implements CouponDAO {
 				}
 			}
 		} catch (SQLException e) {
-			
-			throw new CouponSystemException("Cannot found a coupon : " + couponId + ". " + e.getMessage());
+
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -208,16 +202,16 @@ public class CouponDBDAO implements CouponDAO {
 		}
 		return coupon;
 	}
-	
+
 	/**
 	 * A method to GET a collection of all coupons
 	 *
 	 * @return the list of all coupons
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the DAO exception
-	 */	
+	 */
 	@Override
-	public Collection<Coupon> getAllCoupons() throws CouponSystemException {
+	public Collection<Coupon> getAllCoupons() throws DAOException {
 		// Create a new Coupons collection
 		ArrayList<Coupon> coupons = new ArrayList<Coupon>();
 		// Get a connection from the Connection Pool
@@ -248,8 +242,8 @@ public class CouponDBDAO implements CouponDAO {
 				}
 			}
 		} catch (SQLException e) {
-			
-			throw new CouponSystemException("SQL Error" + ". " + e.getMessage());
+
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -264,11 +258,11 @@ public class CouponDBDAO implements CouponDAO {
 	 * @param couponType
 	 *            the coupon type
 	 * @return the coupon by provided type
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the DAO exception
-	 */	
+	 */
 	@Override
-	public Coupon getCouponByType(CouponType couponType) throws CouponSystemException {
+	public Coupon getCouponByType(CouponType couponType) throws DAOException {
 		Coupon coupon = null;
 		// Get a connection from the Connection Pool
 		try {
@@ -297,8 +291,8 @@ public class CouponDBDAO implements CouponDAO {
 				}
 			}
 		} catch (SQLException e) {
-			
-			throw new CouponSystemException("Cannot found a coupon : " + couponType + ". " + e.getMessage());
+
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection

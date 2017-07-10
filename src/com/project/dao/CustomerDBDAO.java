@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import com.project.beans.*;
-import com.project.exceptions.CouponSystemException;
+import com.project.exceptions.DAOException;
 import com.project.main.CouponSystem;
 
 // TODO: Auto-generated Javadoc
@@ -30,35 +30,30 @@ public class CustomerDBDAO implements CustomerDAO {
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
 	@Override
-	public void createCustomer(Customer customer) throws CouponSystemException {
+	public void createCustomer(Customer customer) throws DAOException {
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
 			// Create MySQL INSERT prepare statement
 			PreparedStatement stat = con
-					.prepareStatement("INSERT INTO " + TABLE_NAME +
-							"(custName, password)" + " VALUES (?, ?)");
+					.prepareStatement("INSERT INTO " + TABLE_NAME + "(custName, password)" + " VALUES (?, ?)");
 			// Set parameters in the INSERT query
 			stat.setString(1, customer.getCustName());
 			stat.setString(2, customer.getPassword());
 			System.out.println("Executing: " + stat.toString());
 			// Execute update statement
 			int rowsInserted = stat.executeUpdate();
-			if (rowsInserted > 0) {
-				System.out.println("A new customer " + customer.getCustName() + 
-						" has been created successfully");
-			} else
-				System.out.println(
-						"An Error Has Occurred. Check if entered data is correct.");
+			if (rowsInserted == 0) {
+				throw new DAOException("Create customer failed, no rows affected.");
+			}
 
 		} catch (SQLException e) {
 
-			throw new CouponSystemException(
-					"Cannot create customer : " + customer.getCustName() +". " + e.getMessage());
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -72,35 +67,31 @@ public class CustomerDBDAO implements CustomerDAO {
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
 	@Override
-	public void removeCustomer(Customer customer) throws CouponSystemException {
+	public void removeCustomer(Customer customer) throws DAOException {
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
 			if (con != null) {
 				// Create MySQL DELETE prepare statement
 				PreparedStatement stat = con.prepareStatement(
-						"DELETE FROM " + TABLE_NAME + 
-						"WHERE Cust_id=?; DELETE FROM Customer_Coupon WHERE Cust_id=?");
+						"DELETE FROM " + TABLE_NAME + "WHERE Cust_id=?; DELETE FROM Customer_Coupon WHERE Cust_id=?");
 				// Set parameter in the DELETE query
 				stat.setLong(1, customer.getCustId());
 				stat.setLong(2, customer.getCustId());
 				System.out.println("Executing: " + stat.toString());
 				// Execute update statement
 				int rowsDeleted = stat.executeUpdate();
-				if (rowsDeleted > 0) {
-					System.out.println("A customer " + customer.getCustName() +
-							" has been deleted successfully");
-				} else
-					System.out.println("An Error Has Occurred.");
+				if (rowsDeleted == 0) {
+					throw new DAOException("Delete customer failed, no rows affected.");
+				}
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException(
-					"Cannot remove customer : " + customer.getCustName() + ". " + e.getMessage());
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -114,31 +105,28 @@ public class CustomerDBDAO implements CustomerDAO {
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
 	@Override
-	public void updateCustomer(Customer customer) throws CouponSystemException {
+	public void updateCustomer(Customer customer) throws DAOException {
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
 			// Create SQL UPDATE prepare statement
-			PreparedStatement stat = con.prepareStatement(
-					"UPDATE " + TABLE_NAME + " SET password=? WHERE custName=?");
+			PreparedStatement stat = con.prepareStatement("UPDATE " + TABLE_NAME + " SET password=? WHERE custName=?");
 			// Set parameters in the UPDATE query
 			stat.setString(1, customer.getPassword());
 			stat.setString(2, customer.getCustName());
 			System.out.println("Executing: " + stat.toString());
 			// Execute update statement
 			int rowsUpdated = stat.executeUpdate();
-			if (rowsUpdated > 0) {
-				System.out.println(customer + " has been updated successfully");
-			} else
-				System.out.println("An Error Has Occurred. Check if entered data is correct.");
+			if (rowsUpdated == 0) {
+				throw new DAOException("Update customer failed, no rows affected.");
+			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException(
-					"Cannot update customer : " + customer.getCustName() + ". " + e.getMessage());
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -152,19 +140,18 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * @param custId
 	 *            the customer id
 	 * @return the customer object
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
 	@Override
-	public Customer getCustomer(long custId) throws CouponSystemException {
+	public Customer getCustomer(long custId) throws DAOException {
 		Customer customer = null;
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
 			if (con != null) {
 				// Create MySQL SELECT prepare statement
-				PreparedStatement stat = con.prepareStatement(
-						"SELECT * FROM " + TABLE_NAME + " WHERE custID=?");
+				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE custID=?");
 				// Set parameter in the SELECT query
 				stat.setLong(1, custId);
 				System.out.println("Executing: " + stat.toString());
@@ -181,8 +168,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException(
-					"Cannot found customer with ID " + custId + ". " + e.getMessage());
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -195,11 +181,11 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * A method to GET a collection of all customers
 	 *
 	 * @return the collection of all customers
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
 	@Override
-	public Collection<Customer> getAllCustomers() throws CouponSystemException {
+	public Collection<Customer> getAllCustomers() throws DAOException {
 		// Create a new Customers collection
 		ArrayList<Customer> customers = new ArrayList<Customer>();
 		// Get a connection from the Connection Pool
@@ -224,7 +210,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("SQL Error" + ". " + e.getMessage());
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -239,11 +225,11 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * @param customer
 	 *            the customer object
 	 * @return the coupons collection
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
 	@Override
-	public Collection<Coupon> getCoupons(Customer customer) throws CouponSystemException {
+	public Collection<Coupon> getCoupons(Customer customer) throws DAOException {
 		// Create a new Coupons collection
 		ArrayList<Coupon> coupons = new ArrayList<Coupon>();
 		// Get a connection from the Connection Pool
@@ -275,7 +261,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("SQL Error" + ". " + e.getMessage());
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -292,11 +278,11 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * @param password
 	 *            the customer's password
 	 * @return true, if successful
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
 	@Override
-	public boolean login(String custName, String password) throws CouponSystemException {
+	public boolean login(String custName, String password) throws DAOException {
 		boolean succeeded = false;
 		// Get a connection from the Connection Pool
 		try {
@@ -311,18 +297,11 @@ public class CustomerDBDAO implements CustomerDAO {
 			while (rows.next()) {
 				String myPassword = rows.getString("password");
 				if (myPassword.equals(password)) {
-					System.out.println("Success!");
-					return succeeded = true;
-				} else {
-					System.out.println("Failure!");
-					return succeeded = false;
+					succeeded = true;
 				}
 			}
-		} catch (
-
-		SQLException e) {
-
-			throw new CouponSystemException("An error occured" + e.getMessage());
+		} catch (SQLException e) {
+			throw new DAOException(e);
 		} finally {
 			// Release connection
 			releaseConnection(con);
@@ -336,11 +315,11 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * @param custName
 	 *            the customer's name
 	 * @return the customer's id
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
 	@Override
-	public long getCustomerId(String custName) throws CouponSystemException {
+	public long getCustomerId(String custName) throws DAOException {
 		long custId = 0;
 		// Get a connection from the Connection Pool
 		try {
@@ -358,7 +337,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("Cannot found customer " + custName + ". " + e.getMessage());
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -375,11 +354,11 @@ public class CustomerDBDAO implements CustomerDAO {
 	 *            the coupon object
 	 * @param customer
 	 *            the customer object
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
 	@Override
-	public void addCouponToCustomer(Coupon coupon, Customer customer) throws CouponSystemException {
+	public void addCouponToCustomer(Coupon coupon, Customer customer) throws DAOException {
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
@@ -394,14 +373,13 @@ public class CustomerDBDAO implements CustomerDAO {
 				System.out.println("Executing: " + stat.toString());
 				// Execute query statement
 				int rowsInserted = stat.executeUpdate();
-				if (rowsInserted > 0) {
-					System.out.println("A new coupon " + coupon.getTitle() + " has been added successfully");
-				} else
-					System.out.println("An Error Has Occurred.");
+				if (rowsInserted == 0) {
+					throw new DAOException("Add coupon to customer failed, no rows affected.");
+				}
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("Cannot ad coupon : " + coupon.getTitle() + ". " + e.getMessage());
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
@@ -415,11 +393,11 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * @param name
 	 *            the name of the customer
 	 * @return the customer object by name
-	 * @throws CouponSystemException
+	 * @throws DAOException
 	 *             the coupon system exception
 	 */
 	@Override
-	public Customer getCustomerByName(String name) throws CouponSystemException {
+	public Customer getCustomerByName(String name) throws DAOException {
 		Customer customer = null;
 		// Get a connection from the Connection Pool
 		try {
@@ -444,7 +422,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new CouponSystemException("Cannot found customer " + name + ". " + e.getMessage());
+			throw new DAOException(e);
 
 		} finally {
 			// Release connection
