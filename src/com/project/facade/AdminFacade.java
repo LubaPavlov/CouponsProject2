@@ -35,11 +35,8 @@ public class AdminFacade implements CouponClientFacade {
 	 * Instantiates a new ADMIN facade.
 	 *
 	 * @param customerDAO
-	 *            the customer DAO
 	 * @param companyDAO
-	 *            the company DAO
 	 * @param couponDAO
-	 *            the coupon DAO
 	 */
 	public AdminFacade(CustomerDAO customerDAO, CompanyDAO companyDAO, CouponDAO couponDAO) {
 		this.customerDAO = customerDAO;
@@ -48,7 +45,7 @@ public class AdminFacade implements CouponClientFacade {
 	}
 
 	/**
-	 * Login to the Coupon System with ADMIN Client Type
+	 * Login to the Coupon System with ADMIN Client Type.
 	 *
 	 * @param name
 	 *            the name of the client
@@ -58,12 +55,11 @@ public class AdminFacade implements CouponClientFacade {
 	 *            the client type ADMIN
 	 * @return the coupon client facade
 	 * @throws LoginException
-	 *             the login exception
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws FacadeException
 	 */
 	@Override
-	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException, FacadeException {
+	public CouponClientFacade login(String name, String password, ClientType clientType)
+			throws LoginException, FacadeException {
 
 		if (clientType != ClientType.ADMIN) {
 			System.out.println("Client type is not admin");
@@ -82,107 +78,104 @@ public class AdminFacade implements CouponClientFacade {
 
 	/**
 	 * A method to CREATE a new Company in the Company table with auto-generated
-	 * ID
+	 * ID.
 	 *
 	 * @param company
-	 *            the company
-	 * @throws DAOException
-	 *             the coupon system exception
+	 *            the company object 
+	 * @throws FacadeException
 	 */
 	public void createCompany(Company company) throws FacadeException {
-
-		boolean companyExist = false;
-		// Create new List of all existing companies
-		Collection<Company> companies = getAllCompanies();
-
-		for (Company existingCompany : companies) {
-
-			if (existingCompany.getCompName() == company.getCompName()) {
-				companyExist = true;
-				System.out.println("Company witht this name already exists in the system");
-				break;
+		// Check if company name not null
+		if (!(company.getCompName() == null)) {
+			// Create new List of all existing companies
+			Collection<Company> companies = getAllCompanies();
+			// Checking if the Company already exists
+			for (Company existingCompany : companies) {
+				if (!(existingCompany.getCompName().equals(company.getCompName()))) {
+					System.out.println("Company " + company.getCompName() + " already exists in the system");
+					break;
+				}
 			}
-		}
-		if (!companyExist)
+			// CREATE a new company
 			companyDAO.createCompany(company);
-		else {
-			throw new DAOException();
-		}
+			System.out.println("Company " + company.getCompName() + " has been created");
+		} else
+			System.out.println("Not valid request.The company cannot be null");
 	}
 
 	/**
 	 * A method to REMOVE Company from the Company table, invokes couponDAO
-	 * method removeComany
+	 * method removeComany.
 	 *
 	 * @param company
 	 *            the company object
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws FacadeException
 	 */
 	public void removeCompany(Company company) throws FacadeException {
-
+		// Create new List of all existing companies
 		Collection<Company> companies = getAllCompanies();
-
+		// Checking if the Company exists
 		for (Company existingCompany : companies) {
 			if (existingCompany.getCompName().equals(company.getCompName())) {
-
 				Collection<Coupon> coupons = company.getCoupons();
+				// check if company has coupons
 				if (coupons != null) {
 					for (Coupon couponToRemove : coupons) {
+						// Remove coupons of the provided company
 						couponDAO.removeCoupon(couponToRemove);
+						System.out.println("The coupons of the company has been removed");
 					}
-				} else {
-					throw new DAOException();
 				}
+				// Remove company
+				companyDAO.removeCompany(company);
+				System.out.println("The company " + company.getCompName() + " has been removed");
 			}
 		}
-		companyDAO.removeCompany(company);
 	}
 
 	/**
 	 * A method to UPDATE Company details in the Company table except Company
-	 * name and ID
+	 * name and ID.
 	 *
 	 * @param company
 	 *            the company object
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws FacadeException
 	 */
 	public void updateCompany(Company company) throws FacadeException {
-
-		Collection<Company> companies = getAllCompanies();
-
-		for (Company existingCompany : companies) {
-			if (existingCompany.getCompName() == company.getCompName()) {
-				companyDAO.updateCompany(company);
-			} else {
-				throw new DAOException();
+		// Check if company not null
+		if (!(company == null)) {
+			// Create new List of all existing companies
+			Collection<Company> companies = getAllCompanies();
+			// Check if company is exists
+			for (Company existingCompany : companies) {
+				if (!(existingCompany.getCompName().equals(company.getCompName()))) {
+					System.out.println("The company " + company.getCompName() + " not found");
+				}
 			}
-		}
+			// Update the company
+			companyDAO.updateCompany(company);
+			System.out.println("The company " + company.getCompName() + " has been updated");
+		} else
+			System.out.println("Not valid request.The company cannot be null");
 	}
 
 	/**
-	 * A method to GET a collections of all companies from Company table
+	 * A method to GET a collections of all companies from Company table.
 	 *
 	 * @return the collection of all companies
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws FacadeException
 	 */
 	public Collection<Company> getAllCompanies() throws FacadeException {
-		if (companyDAO == null) {
-			return null;
-		}
 		return companyDAO.getAllCompanies();
 	}
 
 	/**
-	 * A method to GET a Company by Company ID from Company table
+	 * A method to GET a Company by Company ID from Company table.
 	 *
 	 * @param compId
 	 *            the company id
 	 * @return the company object by id
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws FacadeException
 	 */
 	public Company getCompanyById(long compId) throws FacadeException {
 		return companyDAO.getCompany(compId);
@@ -190,118 +183,114 @@ public class AdminFacade implements CouponClientFacade {
 
 	/**
 	 * A method to CREATE a new Customer in the Customer table with
-	 * auto-generated ID
+	 * auto-generated ID.
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws FacadeException
 	 */
 	public void createCustomer(Customer customer) throws FacadeException {
-
-		boolean customerExist = false;
-		// Create new List of all existing customers
-		Collection<Customer> customers = getAllCustomers();
-
-		for (Customer existingCustomer : customers) {
-			if (existingCustomer.getCustName() == customer.getCustName()) {
-				customerExist = true;
-				break;
+		// Check if company name not null
+		if (!(customer.getCustName() == null)) {
+			boolean customerExist = false;
+			// Create new List of all existing customers
+			Collection<Customer> customers = getAllCustomers();
+			// Check if customer already exists in the system, if yes break
+			for (Customer existingCustomer : customers) {
+				if (existingCustomer.getCustName().equals(customer.getCustName())) {
+					customerExist = true;
+					System.out.println("The customer " + customer.getCustName() + " already exists in the system");
+					break;
+				}
 			}
-		}
-		if (!customerExist)
-			customerDAO.createCustomer(customer);
-		else {
-			throw new DAOException();
-		}
+			if (!customerExist) {
+				// Create a new customer
+				customerDAO.createCustomer(customer);
+				System.out.println("A new customer " + customer.getCustName() + " has been created");
+			}
+		} else
+			System.out.println("Not valid request.The customer cannot be null");
 	}
 
 	/**
 	 * A method to DELETE Customer from the Customer table and Customer_Coupon
-	 * table
+	 * table.
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws FacadeException
 	 */
 	public void removeCustomer(Customer customer) throws FacadeException {
-		// Create new List of all existing customers
-		Collection<Customer> customers = getAllCustomers();
-		for (Customer existingCustomer : customers) {
-			if (existingCustomer.getCustName() == customer.getCustName()) {
-				customerDAO.removeCustomer(customer);
-			} else {
-				System.out.println("Cannot found customer " + customer.getCustName());
+		// Check if customer not null
+		if (!(customer == null)) {
+			// Create new List of all existing customers
+			Collection<Customer> customers = getAllCustomers();
+			// Check if company exists
+			for (Customer existingCustomer : customers) {
+				if (existingCustomer.getCustName().equals(customer.getCustName())) {
+					// Create collection of all customer's coupons
+					Collection<Coupon> coupons = customer.getCoupons();
+					// Check if provided customer has coupons
+					if (coupons != null) {
+						for (Coupon couponToRemove : coupons) {
+							// Remove all customer's coupon from join table
+							couponDAO.removeCoupon(couponToRemove);
+							System.out.println("The coupons of the customer has been removed");
+						}
+					}
+					// Remove customer
+					customerDAO.removeCustomer(customer);
+					System.out.println("The customer has been removed");
+				}
 			}
-		}
+		} else
+			System.out.println("Not valid request.The customer cannot be null");
 	}
 
 	/**
 	 * A method to UPDATE Customer details in the Customer table except Company
-	 * name and ID
+	 * name and ID.
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws FacadeException
 	 */
 	public void updateCustomer(Customer customer) throws FacadeException {
-		// Create new List of all existing companies
-		Collection<Customer> customers = getAllCustomers();
+		// Check if customer name not null
+		if (!(customer == null)) {
+			// Create new List of all existing customers
+			Collection<Customer> customers = getAllCustomers();
 
-		for (Customer existingCustomer : customers) {
-			if (existingCustomer.getCustName() == customer.getCustName()) {
-				customerDAO.updateCustomer(customer);
-			} else {
-				System.out.println("Cannot found customer" + customer.getCustName());
+			for (Customer existingCustomer : customers) {
+				// Check if company exists in the system
+				if (existingCustomer.getCustName().equals(customer.getCustName())) {
+					customerDAO.updateCustomer(customer);
+					System.out.println("Customer " + customer.getCustName() + " has been updated");
+				}
 			}
-		}
+		} else
+			System.out.println("Not valid request.The company cannot be null");
 	}
 
 	/**
-	 * A method to GET a Customer object by Customer ID from Customer table
+	 * A method to GET a Customer object by Customer ID from Customer table.
 	 *
 	 * @param custId
 	 *            the customer id
 	 * @return the customer
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws FacadeException
 	 */
-	public Customer getCustomer(long custId) throws FacadeException {
-		if (customerDAO == null) {
-			return null;
-		}
+	public Customer getCustomerById(long custId) throws FacadeException {
 		return customerDAO.getCustomer(custId);
 	}
 
 	/**
-	 * A method to GET a collection of all customers
+	 * A method to GET a collection of all customers.
 	 *
 	 * @return the collection of all customers
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws FacadeException
 	 */
 	public Collection<Customer> getAllCustomers() throws FacadeException {
-		if (customerDAO == null) {
-			return null;
-		}
 		return customerDAO.getAllCustomers();
-	}
-
-	/**
-	 * A method to GET a Customer object by Customer ID from Customer table
-	 *
-	 * @param custId
-	 *            the customer id
-	 * @return the customer object by id
-	 * @throws DAOException
-	 *             the coupon system exception
-	 */
-	public Customer getCustomerById(Long custId) throws FacadeException {
-		if (customerDAO == null) {
-			return null;
-		}
-		return customerDAO.getCustomer(custId);
 	}
 }

@@ -70,7 +70,6 @@ public class Customer implements Serializable {
 	 *            the new customer id
 	 */
 	public void setCustId(long custId) {
-		checkCustId(custId);
 		this.custId = custId;
 	}
 
@@ -90,7 +89,6 @@ public class Customer implements Serializable {
 	 *            the new customer name
 	 */
 	public void setCustName(String custName) {
-		checkCustName(custName);
 		this.custName = custName;
 	}
 
@@ -100,7 +98,6 @@ public class Customer implements Serializable {
 	 * @return the customer password
 	 */
 	public String getPassword() {
-		checkPassword(password);
 		return password;
 	}
 
@@ -111,7 +108,6 @@ public class Customer implements Serializable {
 	 *            the new customer password
 	 */
 	public void setPassword(String password) {
-		checkPassword(password);
 		this.password = password;
 	}
 
@@ -143,40 +139,44 @@ public class Customer implements Serializable {
 				+ coupons + "]";
 	}
 
-	/**
-	 * Check customer id.
-	 *
-	 * @param custId
-	 *            the customer id
-	 */
-	private void checkCustId(long custId) {
-		if (custId == 0){
-			throw new IllegalArgumentException("ID can't be zero");
-		}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((coupons == null) ? 0 : coupons.hashCode());
+		result = prime * result + (int) (custId ^ (custId >>> 32));
+		result = prime * result + ((custName == null) ? 0 : custName.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		return result;
 	}
 
-	/**
-	 * Check customer name.
-	 *
-	 * @param custName
-	 *            the customer name
-	 */
-	private void checkCustName(String custName) {
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Customer other = (Customer) obj;
+		if (coupons == null) {
+			if (other.coupons != null)
+				return false;
+		} else if (!coupons.equals(other.coupons))
+			return false;
+		if (custId != other.custId)
+			return false;
 		if (custName == null) {
-			throw new NullPointerException("Name can't be null");
-		}
-	}
-
-	/**
-	 * Check customer password.
-	 *
-	 * @param password
-	 *            the customer password
-	 */
-	private void checkPassword(String password) {
-		if (password == null||password.isEmpty()) {
-			throw new NullPointerException("Password can't be null or empty");
-		}
+			if (other.custName != null)
+				return false;
+		} else if (!custName.equals(other.custName))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		return true;
 	}
 
 }

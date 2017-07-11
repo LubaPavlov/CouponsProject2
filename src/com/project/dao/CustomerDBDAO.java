@@ -35,6 +35,7 @@ public class CustomerDBDAO implements CustomerDAO {
 	 */
 	@Override
 	public void createCustomer(Customer customer) throws DAOException {
+
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
@@ -72,16 +73,18 @@ public class CustomerDBDAO implements CustomerDAO {
 	 */
 	@Override
 	public void removeCustomer(Customer customer) throws DAOException {
+//		if (customer == null) {
+//			throw new DAOException("Customer null");
+//		}
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
 			if (con != null) {
 				// Create MySQL DELETE prepare statement
 				PreparedStatement stat = con.prepareStatement(
-						"DELETE FROM " + TABLE_NAME + "WHERE Cust_id=?; DELETE FROM Customer_Coupon WHERE Cust_id=?");
+						"DELETE FROM " + TABLE_NAME + " WHERE custId=?");
 				// Set parameter in the DELETE query
 				stat.setLong(1, customer.getCustId());
-				stat.setLong(2, customer.getCustId());
 				System.out.println("Executing: " + stat.toString());
 				// Execute update statement
 				int rowsDeleted = stat.executeUpdate();
@@ -91,7 +94,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection

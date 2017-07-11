@@ -80,6 +80,11 @@ public class CompanyDBDAO implements CompanyDAO {
 	 */
 	@Override
 	public void removeCompany(Company company) throws DAOException {
+
+		if (company.equals(null)) {
+			throw new DAOException("Customer null");
+		}
+
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();
@@ -302,8 +307,8 @@ public class CompanyDBDAO implements CompanyDAO {
 			while (rows.next()) {
 				String myPassword = rows.getString("password");
 				if (myPassword.equals(password)) {
-				    succeeded = true;
-				} 
+					succeeded = true;
+				}
 			}
 		} catch (SQLException e) {
 
@@ -328,6 +333,7 @@ public class CompanyDBDAO implements CompanyDAO {
 	 */
 	@Override
 	public long getCompanyId(String compName) throws DAOException {
+
 		long compId = 0;
 		// Get a connection from the Connection Pool
 		try {

@@ -1,3 +1,7 @@
+/**
+ * @author Luba Pavlov
+ * @version 1.0, 03.07.2017
+ */
 package com.project.facade;
 
 import java.sql.Connection;
@@ -7,6 +11,10 @@ import com.project.dao.CouponDAO;
 import com.project.exceptions.DAOException;
 import com.project.main.CouponSystem;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DailyCouponExpirationTask.
+ */
 public class DailyCouponExpirationTask implements Runnable {
 	
 	private Connection con = null;
@@ -14,7 +22,7 @@ public class DailyCouponExpirationTask implements Runnable {
 	private CouponDAO couponDAO;
 	
 	/**
-	 * An empty constructor
+	 * An empty constructor.
 	 */
 	public DailyCouponExpirationTask(){
 	}
@@ -58,7 +66,7 @@ public class DailyCouponExpirationTask implements Runnable {
 					
 					lastExecTime = now;
 				}
-				catch (SQLException | DAOException e){
+				catch (SQLException e){
 					
 					System.err.println("An error occured trying to delete expired coupons: " + e.getMessage());
 				}
@@ -72,7 +80,7 @@ public class DailyCouponExpirationTask implements Runnable {
 	}
 	
 	/**
-	 * A static method to stop Daily Task
+	 * A static method to stop Daily Task.
 	 */
 	public static void stopTask(){
 		
@@ -80,11 +88,22 @@ public class DailyCouponExpirationTask implements Runnable {
 		System.out.println("STOP DAILY TASK");
 	}
 	
+	/**
+	 * Gets the connection.
+	 *
+	 * @return the connection
+	 * @throws SQLException
+	 */
 	private Connection getConnection() throws SQLException {
 		
 		return CouponSystem.getConnectionPool().getConnection();
 	}
 
+	/**
+	 * Release connection.
+	 *
+	 * @param the connection
+	 */
 	private void releaseConnection(Connection con) {
 
 		CouponSystem.getConnectionPool().free(con);

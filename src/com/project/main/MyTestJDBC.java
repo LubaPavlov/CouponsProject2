@@ -29,46 +29,53 @@ public class MyTestJDBC {
 
 		CouponSystem newsys = CouponSystem.getInstance();
 
-		// AdminFacade facade = (AdminFacade) newsys.login("admin", "1234",
-		// ClientType.ADMIN);
+		//Admin facade 
+		
+		AdminFacade facade = (AdminFacade) newsys.login("admin", "1234", ClientType.ADMIN);		
+		
+		//Customer functions
+		
+		//System.out.println(facade.getAllCustomers());
+		//System.out.println(facade.getCustomerById(7));
+		//facade.createCustomer(new Customer());
+        //facade.updateCustomer(new Customer("Mikix","5555555"));
+		//facade.updateCustomer(facade.getCustomerById(1));
+        //facade.removeCustomer(facade.getCustomerById(33));
+		
+		//Companay functions
+		
+		//facade.createCompany(new Company("lenovo", "123456", "lenovo@gmail.com"));
+		//facade.createCompany(new Company("lenovo", "123456", "lenovo@gmail.com"));
+		//System.out.println(facade.getAllCompanies());
+		//System.out.println(facade.getCompanyById(11));
+		//facade.removeCompany(facade.getCompanyById(16));
+		//facade.updateCompany(facade.getCompanyById(1));
+
+
+
+        //Customer facade
+		
 		/*
-		 * try { facade.createCompany(new Company("lenovo123",
-		 * "123456","lenovo@gmail.com")); } catch (Exception e) {
-		 * System.err.println(e.getMessage()); }
-		 */
-		// System.out.println(facade.getCompanyById(2));
-		// System.out.println(facade.getAllCompanies());
-		// Company comptorem = facade.getCompanyById(3);
-		// facade.removeCompany(comptorem);
+		 *CustomerFacade facade = (CustomerFacade) newsys.login("Leo","123123", ClientType.CUSTOMER);
+		 *System.out.println(facade.getAllPurchasedCoupons());
+		 *System.out.println(facade.getAllPurchasedCouponsByPrice(100));
+		 *System.out.println(facade.getAllPurchasedCouponsByType(CouponType.SPORTS));
+		 *facade.purchaseCoupon(facade.getCoupon(13));
+        */
+		
+        //Company facade				 
 
-		try {
-			CustomerFacade facade = (CustomerFacade) newsys.login("Leo", "123123", ClientType.CUSTOMER);
-			System.out.println(facade.getAllPurchasedCoupons());
-			//facade.purchaseCoupon(facade.getCoupon(9));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.err.println(e.getLocalizedMessage());
-		}
-		// Collection<Coupon> couponim =
-		// facade.getAllPurchasedCouponsByType(CouponType.ELECTRICITY);
-
-
-
-		// CompanyFacade facade = (CompanyFacade) newsys.login("Next", "123",ClientType.COMPANY);
-		// Coupon coupon1 = new Coupon();
 		/*
+		 * CompanyFacade facade = (CompanyFacade) newsys.login("Next", "123",ClientType.COMPANY);
+		 * 
+		 * Coupon coupon1 = new Coupon();
 		 * coupon1.setTitle("10% Off next discount99");
 		 * coupon1.setStartDate(java.sql.Date.valueOf("2018-02-04"));
 		 * coupon1.setEndDate(java.sql.Date.valueOf("2018-03-04"));
 		 * coupon1.setAmount(20); coupon1.setType(CouponType.SPORTS);
 		 * coupon1.setPrice(33);
+		 * facade.createCoupon(coupon1)
 		 */
-		// try {
-		// facade.createCoupon(coupon3);
-		// } catch (Exception e) {
-
-		// System.err.println(e.getMessage());
-		// }
 
 	}
 }

@@ -1,10 +1,11 @@
+/**
+ * @author Luba Pavlov
+ * @version 1.0, 03.07.2017
+ */
 package com.project.exceptions;
 
 public class FacadeException extends Exception {
-	
-	/**
-	 * Constant
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	/**
