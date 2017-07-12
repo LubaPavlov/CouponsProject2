@@ -68,7 +68,7 @@ public class DailyCouponExpirationTask implements Runnable {
 				}
 				catch (SQLException e){
 					
-					System.err.println("An error occured trying to delete expired coupons: " + e.getMessage());
+					System.err.println("An error occured: " + e.getMessage());
 				}
 				
 				finally {

@@ -73,9 +73,6 @@ public class CustomerDBDAO implements CustomerDAO {
 	 */
 	@Override
 	public void removeCustomer(Customer customer) throws DAOException {
-//		if (customer == null) {
-//			throw new DAOException("Customer null");
-//		}
 		// Get a connection from the Connection Pool
 		try {
 			con = getConnection();

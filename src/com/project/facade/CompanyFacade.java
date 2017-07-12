@@ -29,7 +29,6 @@ public class CompanyFacade implements CouponClientFacade {
 	private CompanyDAO companyDAO = new CompanyDBDAO();
 	private CouponDAO couponDAO = new CouponDBDAO();
 	private Company company = new Company();
-	private Coupon coupon;
 
 	/**
 	 * Instantiates a new company facade.

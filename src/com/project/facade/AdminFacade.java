@@ -81,7 +81,7 @@ public class AdminFacade implements CouponClientFacade {
 	 * ID.
 	 *
 	 * @param company
-	 *            the company object 
+	 *            the company object
 	 * @throws FacadeException
 	 */
 	public void createCompany(Company company) throws FacadeException {
@@ -112,25 +112,30 @@ public class AdminFacade implements CouponClientFacade {
 	 * @throws FacadeException
 	 */
 	public void removeCompany(Company company) throws FacadeException {
-		// Create new List of all existing companies
-		Collection<Company> companies = getAllCompanies();
-		// Checking if the Company exists
-		for (Company existingCompany : companies) {
-			if (existingCompany.getCompName().equals(company.getCompName())) {
-				Collection<Coupon> coupons = company.getCoupons();
-				// check if company has coupons
-				if (coupons != null) {
-					for (Coupon couponToRemove : coupons) {
-						// Remove coupons of the provided company
-						couponDAO.removeCoupon(couponToRemove);
-						System.out.println("The coupons of the company has been removed");
+
+		if (!(company == null)) {
+			// Create new List of all existing companies
+			Collection<Company> companies = getAllCompanies();
+			// Checking if the Company exists
+			for (Company existingCompany : companies) {
+				if (existingCompany.getCompName().equals(company.getCompName())) {
+					Collection<Coupon> coupons = company.getCoupons();
+					// check if company has coupons
+					if (coupons != null) {
+						for (Coupon couponToRemove : coupons) {
+							// Remove coupons of the provided company
+							couponDAO.removeCoupon(couponToRemove);
+							System.out.println("The coupons of the company has been removed");
+						}
 					}
+					// Remove company
+					companyDAO.removeCompany(company);
+					System.out.println("The company " + company.getCompName() + " has been removed");
 				}
-				// Remove company
-				companyDAO.removeCompany(company);
-				System.out.println("The company " + company.getCompName() + " has been removed");
 			}
 		}
+		else
+			System.out.println("Not valid request.The company cannot be null");
 	}
 
 	/**
