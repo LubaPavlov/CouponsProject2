@@ -62,7 +62,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -99,7 +99,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -136,7 +136,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -179,7 +179,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -216,7 +216,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -266,7 +266,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -307,7 +307,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -347,7 +347,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -382,7 +382,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -448,7 +448,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection

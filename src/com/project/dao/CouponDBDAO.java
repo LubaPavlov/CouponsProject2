@@ -62,10 +62,21 @@ public class CouponDBDAO implements CouponDAO {
 				if (rowsInserted == 0) {
 					throw new DAOException("Create coupon failed, no rows affected.");
 				}
+				else {
+					stat = con.prepareStatement("SELECT couponId FROM " + TABLE_NAME + " WHERE title=?");
+					// Set parameters in the INSERT query
+					stat.setString(1, coupon.getTitle());
+					System.out.println("Executing: " + stat.toString());
+					ResultSet rows = stat.executeQuery();
+					// Set field
+					while (rows.next()) {
+					coupon.setCouponId(rows.getLong("couponId"));	}			
+				}			
+				
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -105,7 +116,7 @@ public class CouponDBDAO implements CouponDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -194,7 +205,7 @@ public class CouponDBDAO implements CouponDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -243,7 +254,7 @@ public class CouponDBDAO implements CouponDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -292,7 +303,7 @@ public class CouponDBDAO implements CouponDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -324,5 +335,7 @@ public class CouponDBDAO implements CouponDAO {
 
 		CouponSystem.getConnectionPool().free(con);
 	}
+	
+	
 
 }

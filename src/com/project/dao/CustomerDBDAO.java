@@ -54,7 +54,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -126,7 +126,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -168,7 +168,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -210,7 +210,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -261,7 +261,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -301,7 +301,7 @@ public class CustomerDBDAO implements CustomerDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 		} finally {
 			// Release connection
 			releaseConnection(con);
@@ -337,7 +337,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -379,7 +379,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection
@@ -422,7 +422,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e);
+			throw new DAOException(e.getMessage());
 
 		} finally {
 			// Release connection

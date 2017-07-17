@@ -4,7 +4,7 @@
  */
 package com.project.exceptions;
 
-public class FacadeException extends Exception {
+public class FacadeException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
