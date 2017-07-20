@@ -32,8 +32,9 @@ public class ConnectionPool implements Runnable {
 	 *            the password
 	 * @throws SQLException
 	 *             the SQL exception
+	 * @throws ClassNotFoundException 
 	 */
-	public ConnectionPool(String url, String username, String password) throws SQLException 
+	public ConnectionPool(String url, String username, String password) throws SQLException, ClassNotFoundException 
 	{
 		this(url, username, password, 3, 10, true);
 	}
@@ -55,9 +56,10 @@ public class ConnectionPool implements Runnable {
 	 *            the wait if busy
 	 * @throws SQLException
 	 *             the SQL exception
+	 * @throws ClassNotFoundException 
 	 */
 	public ConnectionPool(String url, String username, String password, int initialConnections,
-			int maxConnections, boolean waitIfBusy) throws SQLException {
+			int maxConnections, boolean waitIfBusy) throws SQLException, ClassNotFoundException {
 		this.url = url;
 		this.username = username;
 		this.password = password;
@@ -177,10 +179,11 @@ public class ConnectionPool implements Runnable {
 	 * @return the connection
 	 * @throws SQLException
 	 *             the SQL exception
+	 * @throws ClassNotFoundException 
 	 */
-	private Connection makeNewConnection() throws SQLException {
+	private Connection makeNewConnection() throws SQLException, ClassNotFoundException {
 		// Load database driver if not already loaded
-		//Class.forName(driver);
+		Class.forName("com.mysql.jdbc.Driver");
 		// Establish network connection to database
 		Connection connection = DriverManager.getConnection(url, username, password);
 		return (connection);

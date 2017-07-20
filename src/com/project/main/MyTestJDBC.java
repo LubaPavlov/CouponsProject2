@@ -52,7 +52,7 @@ public class MyTestJDBC {
 		CompanyFacade facade = (CompanyFacade) newsys.login("Next", "123456",ClientType.COMPANY);
 		 
     	 Coupon coupon1 = new Coupon();
-		 coupon1.setTitle("Sale9");
+		 coupon1.setTitle("Sale99");
 		 coupon1.setStartDate(java.sql.Date.valueOf("2017-07-12"));
 		 coupon1.setEndDate(java.sql.Date.valueOf("2018-03-04"));
 		 coupon1.setAmount(10); coupon1.setType(CouponType.CLOTHING);

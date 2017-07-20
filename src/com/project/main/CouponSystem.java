@@ -91,13 +91,14 @@ public class CouponSystem {
 	}
 
 	static {
+		
+		
 		String url = "jdbc:mysql://localhost:3306/" + dbName + "?autoReconnect=true&useSSL=false";
-
 		String username = "root";
 		String password = "123123";
 		try {
 			pool = new ConnectionPool(url, username, password);
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			System.out.println("Cannot create connection pool. " + "reason: " + e.getMessage());
 			System.exit(1);
 		}
