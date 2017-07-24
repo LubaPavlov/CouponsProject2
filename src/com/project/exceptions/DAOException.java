@@ -9,7 +9,7 @@ package com.project.exceptions;
  * The Class DAOException represents a generic exception. 
  * It should wrap any exception of the underlying code, such as SQLExceptions.
  */
-public class DAOException extends RuntimeException{
+public class DAOException extends Exception{
 	
 
 	/**
