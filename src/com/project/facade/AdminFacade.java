@@ -62,12 +62,10 @@ public class AdminFacade implements CouponClientFacade {
 			throws LoginException, FacadeException {
 
 		if (clientType != ClientType.ADMIN) {
-			System.out.println("Client type is not admin");
 			throw new IndexOutOfBoundsException("Clinet type is not admin");
 		}
 
 		if (!name.equals("admin") || !password.equals("1234")) {
-			System.out.println("Login failed. Not correct username or password.");
 			throw new IndexOutOfBoundsException("Login failed. Not correct username or password.");
 		}
 
@@ -83,8 +81,9 @@ public class AdminFacade implements CouponClientFacade {
 	 * @param company
 	 *            the company object
 	 * @throws FacadeException
+	 * @throws DAOException 
 	 */
-	public void createCompany(Company company) throws FacadeException {
+	public void createCompany(Company company) throws FacadeException, DAOException {
 		// Check if company name not null
 		if (!(company.getCompName() == null)) {
 			// Create new List of all existing companies
@@ -110,8 +109,9 @@ public class AdminFacade implements CouponClientFacade {
 	 * @param company
 	 *            the company object
 	 * @throws FacadeException
+	 * @throws DAOException 
 	 */
-	public void removeCompany(Company company) throws FacadeException {
+	public void removeCompany(Company company) throws FacadeException, DAOException {
 
 		if (!(company == null)) {
 			// Create new List of all existing companies
@@ -145,8 +145,9 @@ public class AdminFacade implements CouponClientFacade {
 	 * @param company
 	 *            the company object
 	 * @throws FacadeException
+	 * @throws DAOException 
 	 */
-	public void updateCompany(Company company) throws FacadeException {
+	public void updateCompany(Company company) throws FacadeException, DAOException {
 		// Check if company not null
 		if (!(company == null)) {
 			// Create new List of all existing companies
@@ -169,8 +170,9 @@ public class AdminFacade implements CouponClientFacade {
 	 *
 	 * @return the collection of all companies
 	 * @throws FacadeException
+	 * @throws DAOException 
 	 */
-	public Collection<Company> getAllCompanies() throws FacadeException {
+	public Collection<Company> getAllCompanies() throws FacadeException, DAOException {
 		return companyDAO.getAllCompanies();
 	}
 
@@ -181,8 +183,9 @@ public class AdminFacade implements CouponClientFacade {
 	 *            the company id
 	 * @return the company object by id
 	 * @throws FacadeException
+	 * @throws DAOException 
 	 */
-	public Company getCompanyById(long compId) throws FacadeException {
+	public Company getCompanyById(long compId) throws FacadeException, DAOException {
 		return companyDAO.getCompany(compId);
 	}
 
@@ -193,8 +196,9 @@ public class AdminFacade implements CouponClientFacade {
 	 * @param customer
 	 *            the customer object
 	 * @throws FacadeException
+	 * @throws DAOException 
 	 */
-	public void createCustomer(Customer customer) throws FacadeException {
+	public void createCustomer(Customer customer) throws FacadeException, DAOException {
 		// Check if company name not null
 		if (!(customer.getCustName() == null)) {
 			boolean customerExist = false;
@@ -224,8 +228,9 @@ public class AdminFacade implements CouponClientFacade {
 	 * @param customer
 	 *            the customer object
 	 * @throws FacadeException
+	 * @throws DAOException 
 	 */
-	public void removeCustomer(Customer customer) throws FacadeException {
+	public void removeCustomer(Customer customer) throws FacadeException, DAOException {
 		// Check if customer not null
 		if (!(customer == null)) {
 			// Create new List of all existing customers
@@ -259,8 +264,9 @@ public class AdminFacade implements CouponClientFacade {
 	 * @param customer
 	 *            the customer object
 	 * @throws FacadeException
+	 * @throws DAOException 
 	 */
-	public void updateCustomer(Customer customer) throws FacadeException {
+	public void updateCustomer(Customer customer) throws FacadeException, DAOException {
 		// Check if customer name not null
 		if (!(customer == null)) {
 			// Create new List of all existing customers
@@ -284,8 +290,9 @@ public class AdminFacade implements CouponClientFacade {
 	 *            the customer id
 	 * @return the customer
 	 * @throws FacadeException
+	 * @throws DAOException 
 	 */
-	public Customer getCustomerById(long custId) throws FacadeException {
+	public Customer getCustomerById(long custId) throws FacadeException, DAOException {
 		return customerDAO.getCustomer(custId);
 	}
 
@@ -294,8 +301,9 @@ public class AdminFacade implements CouponClientFacade {
 	 *
 	 * @return the collection of all customers
 	 * @throws FacadeException
+	 * @throws DAOException 
 	 */
-	public Collection<Customer> getAllCustomers() throws FacadeException {
+	public Collection<Customer> getAllCustomers() throws FacadeException, DAOException {
 		return customerDAO.getAllCustomers();
 	}
 }
