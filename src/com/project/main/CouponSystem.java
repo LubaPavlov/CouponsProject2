@@ -16,9 +16,9 @@ import com.project.facade.*;
  * The Class CouponSystem.
  */
 public class CouponSystem {
-	
+
 	/** The coupon system instance. */
-	//private CouponClientFacade CouponClientFacade;
+	// private CouponClientFacade CouponClientFacade;
 	private static CouponSystem couponSystemInstance = new CouponSystem();
 	private static ConnectionPool pool;
 	private static String dbName = "coupon";
@@ -35,34 +35,38 @@ public class CouponSystem {
 		}
 		return couponSystemInstance;
 	}
-	
+
 	/**
 	 * Instantiates a new coupon system and start Daily Task Thread
 	 */
 	private CouponSystem() {
 		// Start Daily Task Thread
-		/*DailyCouponExpirationTask dailyTask = new DailyCouponExpirationTask();
-		Thread dailyTaskThread = new Thread(dailyTask);
-		dailyTaskThread.start();
-		System.out.println("Starting Daily Task");*/
+		/*
+		 * DailyCouponExpirationTask dailyTask = new
+		 * DailyCouponExpirationTask(); Thread dailyTaskThread = new
+		 * Thread(dailyTask); dailyTaskThread.start();
+		 * System.out.println("Starting Daily Task");
+		 */
 	}
 
 	/**
-	 * A method to Login to the CouponSystem return the correct facade by the client TYPE
+	 * A method to Login to the CouponSystem return the correct facade by the
+	 * client TYPE
 	 *
 	 * @param name
 	 *            the name of the client
 	 * @param password
-	 *            the password of the client 
+	 *            the password of the client
 	 * @param clientType
 	 *            the client type
 	 * @return the coupon client facade
 	 * @throws LoginException
 	 *             the login exception
-	 * @throws FacadeException 
+	 * @throws FacadeException
+	 * @throws DAOException
 	 */
 	public CouponClientFacade login(String name, String password, ClientType clientType)
-			throws LoginException, FacadeException{
+			throws LoginException, FacadeException, DAOException {
 
 		CouponClientFacade facade = null;
 		switch (clientType) {
@@ -76,7 +80,7 @@ public class CouponSystem {
 			CompanyFacade companyFacade = new CompanyFacade();
 			facade = companyFacade.login(name, password, clientType);
 			break;
-			
+
 		case CUSTOMER:
 			CustomerFacade customerFacade = new CustomerFacade();
 			facade = customerFacade.login(name, password, clientType);
@@ -87,12 +91,10 @@ public class CouponSystem {
 			throw new LoginException("clientType = " + clientType + "name =" + name);
 		}
 		return facade;
-
 	}
 
 	static {
-		
-		
+
 		String url = "jdbc:mysql://localhost:3306/" + dbName + "?autoReconnect=true&useSSL=false";
 		String username = "root";
 		String password = "123123";

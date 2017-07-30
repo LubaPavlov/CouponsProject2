@@ -25,7 +25,7 @@ import com.project.main.ClientType;
  * The Class CompanyFacade.
  */
 public class CompanyFacade implements CouponClientFacade {
-	
+
 	private CompanyDAO companyDAO = new CompanyDBDAO();
 	private CouponDAO couponDAO = new CouponDBDAO();
 	private Company company = new Company();
@@ -78,21 +78,19 @@ public class CompanyFacade implements CouponClientFacade {
 	public CouponClientFacade login(String name, String password, ClientType clientType)
 			throws LoginException, FacadeException {
 
-		if (clientType != ClientType.COMPANY) {
-			System.out.println("Error: clinet type is not a company");
-			throw new IndexOutOfBoundsException("Error: clinet type is not a company");
-		}
-
 		try {
 			if (!companyDAO.login(name, password)) {
-				System.out.println("Login failed");
-				throw new IndexOutOfBoundsException("Wrong user name or password");
+				throw new FacadeException("Wrong user name or password");
 			}
 		} catch (DAOException e) {
-			e.printStackTrace();
+			throw new FacadeException(e.getMessage());
 		}
 		CompanyFacade companyFacade = new CompanyFacade();
-		this.company = companyDAO.getCompanyByName(name);
+		try {
+			this.company = companyDAO.getCompanyByName(name);
+		} catch (DAOException e) {
+			throw new FacadeException(e.getMessage());
+		}
 		companyFacade.setCompany(this.company);
 		return companyFacade;
 	}
@@ -104,25 +102,30 @@ public class CompanyFacade implements CouponClientFacade {
 	 * @param company
 	 *            the company object
 	 * @throws FacadeException
+	 * @throws DAOException
 	 */
 	public void updateCompany(Company company) throws FacadeException {
 		Collection<Company> companies = getAllCompanies();
 		for (Company existingCompany : companies) {
 			if (existingCompany.getCompName() == company.getCompName()) {
-				companyDAO.updateCompany(company);
-			} else {
-				throw new FacadeException();
+				try {
+					companyDAO.updateCompany(company);
+				} catch (DAOException e) {
+					throw new FacadeException(e.getMessage());
+				}
 			}
 		}
 	}
 
 	/**
-	 * A method to CREATE a new coupon in the coupon table and ADD this Coupon to a logged in Company
+	 * A method to CREATE a new coupon in the coupon table and ADD this Coupon
+	 * to a logged in Company
 	 *
 	 * @param coupon
 	 *            the coupon object
 	 * @return true, if successful
 	 * @throws FacadeException
+	 * @throws DAOException
 	 */
 	public boolean createCoupon(Coupon coupon) throws FacadeException {
 		boolean couponExist = false;
@@ -134,25 +137,33 @@ public class CompanyFacade implements CouponClientFacade {
 				break;
 			}
 		}
-		if (!couponExist) {			
-			    couponDAO.createCoupon(coupon);
-				System.out.println("A new coupon has been added");		
-			    companyDAO.addCoupon(this.company, coupon.getCouponId());			
-		}		
-		else {	
+		if (!couponExist) {
+			try {
+				couponDAO.createCoupon(coupon);
+				System.out.println("A new coupon has been added");
+				companyDAO.addCoupon(this.company, coupon.getCouponId());
+			} catch (DAOException e) {
+				throw new FacadeException(e.getMessage());
+			}
+		} else {
 			System.out.println("Coupon with this title already exists");
-		}	
+		}
 		return true;
 	}
 
 	/**
-	 * A method to GET a collections of all companies (used in "update" method to check if company exists)
+	 * A method to GET a collections of all companies (used in "update" method
+	 * to check if company exists)
 	 *
 	 * @return the collection of all companies
 	 * @throws FacadeException
 	 */
 	public Collection<Company> getAllCompanies() throws FacadeException {
-		return companyDAO.getAllCompanies();
+		try {
+			return companyDAO.getAllCompanies();
+		} catch (DAOException e) {
+			throw new FacadeException(e.getMessage());
+		}
 	}
 
 	/**
@@ -162,6 +173,10 @@ public class CompanyFacade implements CouponClientFacade {
 	 * @throws FacadeException
 	 */
 	public Collection<Coupon> getAllCoupons() throws FacadeException {
-		return couponDAO.getAllCoupons();
+		try {
+			return couponDAO.getAllCoupons();
+		} catch (DAOException e) {
+			throw new FacadeException(e.getMessage());
+		}
 	}
 }

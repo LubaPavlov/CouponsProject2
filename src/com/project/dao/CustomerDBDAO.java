@@ -30,8 +30,8 @@ public class CustomerDBDAO implements CustomerDAO {
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public void createCustomer(Customer customer) throws DAOException {
@@ -54,7 +54,7 @@ public class CustomerDBDAO implements CustomerDAO {
 
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -68,8 +68,8 @@ public class CustomerDBDAO implements CustomerDAO {
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public void removeCustomer(Customer customer) throws DAOException {
@@ -78,8 +78,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			con = getConnection();
 			if (con != null) {
 				// Create MySQL DELETE prepare statement
-				PreparedStatement stat = con.prepareStatement(
-						"DELETE FROM " + TABLE_NAME + " WHERE custId=?");
+				PreparedStatement stat = con.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE custId=?");
 				// Set parameter in the DELETE query
 				stat.setLong(1, customer.getCustId());
 				System.out.println("Executing: " + stat.toString());
@@ -91,7 +90,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -105,8 +104,8 @@ public class CustomerDBDAO implements CustomerDAO {
 	 *
 	 * @param customer
 	 *            the customer object
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public void updateCustomer(Customer customer) throws DAOException {
@@ -126,7 +125,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -140,8 +139,8 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * @param custId
 	 *            the customer id
 	 * @return the customer object
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public Customer getCustomer(long custId) throws DAOException {
@@ -168,7 +167,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -181,8 +180,8 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * A method to GET a collection of all customers
 	 *
 	 * @return the collection of all customers
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public Collection<Customer> getAllCustomers() throws DAOException {
@@ -210,7 +209,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -225,8 +224,8 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * @param customer
 	 *            the customer object
 	 * @return the coupons collection
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public Collection<Coupon> getCoupons(Customer customer) throws DAOException {
@@ -261,7 +260,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -278,15 +277,14 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * @param password
 	 *            the customer's password
 	 * @return true, if successful
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public boolean login(String custName, String password) throws DAOException {
 		boolean succeeded = false;
 		// Get a connection from the Connection Pool
 		try {
-
 			con = getConnection();
 			// Create MySQL SELECT prepare statement
 			PreparedStatement stat = con.prepareStatement("SELECT password FROM " + TABLE_NAME + " WHERE custName=?");
@@ -301,7 +299,7 @@ public class CustomerDBDAO implements CustomerDAO {
 				}
 			}
 		} catch (SQLException e) {
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 		} finally {
 			// Release connection
 			releaseConnection(con);
@@ -315,8 +313,8 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * @param custName
 	 *            the customer's name
 	 * @return the customer's id
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public long getCustomerId(String custName) throws DAOException {
@@ -337,7 +335,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -354,8 +352,8 @@ public class CustomerDBDAO implements CustomerDAO {
 	 *            the coupon object
 	 * @param customer
 	 *            the customer object
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public void addCouponToCustomer(Coupon coupon, Customer customer) throws DAOException {
@@ -363,7 +361,6 @@ public class CustomerDBDAO implements CustomerDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				// Create MySQL INSERT prepare statement
 				PreparedStatement stat = con
 						.prepareStatement("INSERT INTO customer_coupon " + "(custId, couponId)" + " VALUES (?, ?)");
@@ -379,7 +376,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -393,8 +390,8 @@ public class CustomerDBDAO implements CustomerDAO {
 	 * @param name
 	 *            the name of the customer
 	 * @return the customer object by name
-	 * @throws DAOException
-	 *             the coupon system exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public Customer getCustomerByName(String name) throws DAOException {
@@ -422,7 +419,7 @@ public class CustomerDBDAO implements CustomerDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection

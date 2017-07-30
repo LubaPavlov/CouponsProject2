@@ -34,8 +34,8 @@ public class CouponDBDAO implements CouponDAO {
 	 *
 	 * @param Coupon
 	 *            the coupon to be created
-	 * @throws DAOException
-	 *             the DAO exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public void createCoupon(Coupon coupon) throws DAOException {
@@ -76,7 +76,7 @@ public class CouponDBDAO implements CouponDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -90,8 +90,8 @@ public class CouponDBDAO implements CouponDAO {
 	 *
 	 * @param Coupon
 	 *            the coupon to be deleted
-	 * @throws DAOException
-	 *             the DAO exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public void removeCoupon(Coupon coupon) throws DAOException {
@@ -116,7 +116,7 @@ public class CouponDBDAO implements CouponDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -129,8 +129,8 @@ public class CouponDBDAO implements CouponDAO {
 	 *
 	 * @param Coupon
 	 *            the coupon to be updated
-	 * @throws DAOException
-	 *             the DAO exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public void updateCoupon(Coupon coupon) throws DAOException {
@@ -157,7 +157,7 @@ public class CouponDBDAO implements CouponDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage(), e.getCause());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage(), e.getCause());
 
 		} finally {
 			// Release connection
@@ -171,8 +171,8 @@ public class CouponDBDAO implements CouponDAO {
 	 * @param coupon_id
 	 *            the coupon id
 	 * @return the coupon
-	 * @throws DAOException
-	 *             the DAO exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public Coupon getCoupon(long couponId) throws DAOException {
@@ -205,7 +205,7 @@ public class CouponDBDAO implements CouponDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: "+ e.getMessage());
 
 		} finally {
 			// Release connection
@@ -218,8 +218,8 @@ public class CouponDBDAO implements CouponDAO {
 	 * A method to GET a collection of all coupons
 	 *
 	 * @return the list of all coupons
-	 * @throws DAOException
-	 *             the DAO exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public Collection<Coupon> getAllCoupons() throws DAOException {
@@ -254,7 +254,7 @@ public class CouponDBDAO implements CouponDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: "+ e.getMessage());
 
 		} finally {
 			// Release connection
@@ -269,8 +269,8 @@ public class CouponDBDAO implements CouponDAO {
 	 * @param couponType
 	 *            the coupon type
 	 * @return the coupon by provided type
-	 * @throws DAOException
-	 *             the DAO exception
+	 * @throws DAOException 
+	 *            If something fails at database level.
 	 */
 	@Override
 	public Coupon getCouponByType(CouponType couponType) throws DAOException {
@@ -303,7 +303,7 @@ public class CouponDBDAO implements CouponDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: "+ e.getMessage());
 
 		} finally {
 			// Release connection

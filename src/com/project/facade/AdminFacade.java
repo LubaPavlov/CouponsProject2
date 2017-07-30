@@ -61,16 +61,10 @@ public class AdminFacade implements CouponClientFacade {
 	public CouponClientFacade login(String name, String password, ClientType clientType)
 			throws LoginException, FacadeException {
 
-		if (clientType != ClientType.ADMIN) {
-			System.out.println("Client type is not admin");
-			throw new IndexOutOfBoundsException("Clinet type is not admin");
-		}
-
 		if (!name.equals("admin") || !password.equals("1234")) {
-			System.out.println("Login failed. Not correct username or password.");
-			throw new IndexOutOfBoundsException("Login failed. Not correct username or password.");
+			throw new FacadeException("Login failed. Not correct username or password.");
 		}
-
+		
 		System.out.println("Login succeed");
 		AdminFacade facade = new AdminFacade();
 		return facade;
@@ -91,16 +85,21 @@ public class AdminFacade implements CouponClientFacade {
 			Collection<Company> companies = getAllCompanies();
 			// Checking if the Company already exists
 			for (Company existingCompany : companies) {
-				if (!(existingCompany.getCompName().equals(company.getCompName()))) {
-					System.out.println("Company " + company.getCompName() + " already exists in the system");
+				if ((existingCompany.getCompName().equals(company.getCompName()))) {
+					System.out.println("Company " + company.getCompName() + "already exists in the system");
 					break;
 				}
 			}
 			// CREATE a new company
-			companyDAO.createCompany(company);
+			try {
+				companyDAO.createCompany(company);
+			} catch (DAOException e) {
+
+				throw new FacadeException(e.getMessage());
+			}
 			System.out.println("Company " + company.getCompName() + " has been created");
 		} else
-			System.out.println("Not valid request.The company cannot be null");
+			throw new FacadeException("Not valid request.The company cannot be null");
 	}
 
 	/**
@@ -124,18 +123,25 @@ public class AdminFacade implements CouponClientFacade {
 					if (coupons != null) {
 						for (Coupon couponToRemove : coupons) {
 							// Remove coupons of the provided company
-							couponDAO.removeCoupon(couponToRemove);
+							try {
+								couponDAO.removeCoupon(couponToRemove);
+							} catch (DAOException e) {
+								throw new FacadeException(e.getMessage());
+							}
 							System.out.println("The coupons of the company has been removed");
 						}
 					}
 					// Remove company
-					companyDAO.removeCompany(company);
+					try {
+						companyDAO.removeCompany(company);
+					} catch (DAOException e) {
+						throw new FacadeException(e.getMessage());
+					}
 					System.out.println("The company " + company.getCompName() + " has been removed");
 				}
 			}
-		}
-		else
-			System.out.println("Not valid request.The company cannot be null");
+		} else
+			throw new FacadeException("Not valid request.The company cannot be null");
 	}
 
 	/**
@@ -158,7 +164,11 @@ public class AdminFacade implements CouponClientFacade {
 				}
 			}
 			// Update the company
-			companyDAO.updateCompany(company);
+			try {
+				companyDAO.updateCompany(company);
+			} catch (DAOException e) {
+				throw new FacadeException(e.getMessage());
+			}
 			System.out.println("The company " + company.getCompName() + " has been updated");
 		} else
 			System.out.println("Not valid request.The company cannot be null");
@@ -171,7 +181,12 @@ public class AdminFacade implements CouponClientFacade {
 	 * @throws FacadeException
 	 */
 	public Collection<Company> getAllCompanies() throws FacadeException {
-		return companyDAO.getAllCompanies();
+		try {
+			return companyDAO.getAllCompanies();
+		} catch (DAOException e) {
+
+			throw new FacadeException(e.getMessage());
+		}
 	}
 
 	/**
@@ -183,8 +198,28 @@ public class AdminFacade implements CouponClientFacade {
 	 * @throws FacadeException
 	 */
 	public Company getCompanyById(long compId) throws FacadeException {
-		return companyDAO.getCompany(compId);
+		try {
+			return companyDAO.getCompany(compId);
+		} catch (DAOException e) {
+			throw new FacadeException(e.getMessage());
+		}
 	}
+	
+	/**
+	 * A method to GET a Company by Company Name from Company table.
+	 *
+	 * @param compName
+	 * @return the company object by name
+	 * @throws FacadeException
+	 */
+	public long getCompanyIdByName(String compName) throws FacadeException {
+		try {
+			return companyDAO.getCompanyId(compName);
+		} catch (DAOException e) {
+			throw new FacadeException(e.getMessage());
+		}
+	}
+
 
 	/**
 	 * A method to CREATE a new Customer in the Customer table with
@@ -210,7 +245,11 @@ public class AdminFacade implements CouponClientFacade {
 			}
 			if (!customerExist) {
 				// Create a new customer
-				customerDAO.createCustomer(customer);
+				try {
+					customerDAO.createCustomer(customer);
+				} catch (DAOException e) {
+					throw new FacadeException(e.getMessage());
+				}
 				System.out.println("A new customer " + customer.getCustName() + " has been created");
 			}
 		} else
@@ -239,17 +278,26 @@ public class AdminFacade implements CouponClientFacade {
 					if (coupons != null) {
 						for (Coupon couponToRemove : coupons) {
 							// Remove all customer's coupon from join table
-							couponDAO.removeCoupon(couponToRemove);
+							try {
+								couponDAO.removeCoupon(couponToRemove);
+							} catch (DAOException e) {
+								throw new FacadeException(e.getMessage());
+							}
 							System.out.println("The coupons of the customer has been removed");
 						}
 					}
 					// Remove customer
-					customerDAO.removeCustomer(customer);
+					try {
+						customerDAO.removeCustomer(customer);
+					} catch (DAOException e) {
+						// TODO Auto-generated catch block
+						throw new FacadeException(e.getMessage());
+					}
 					System.out.println("The customer has been removed");
 				}
 			}
 		} else
-			System.out.println("Not valid request.The customer cannot be null");
+			throw new FacadeException("Not valid request.The customer cannot be null");
 	}
 
 	/**
@@ -269,12 +317,16 @@ public class AdminFacade implements CouponClientFacade {
 			for (Customer existingCustomer : customers) {
 				// Check if company exists in the system
 				if (existingCustomer.getCustName().equals(customer.getCustName())) {
-					customerDAO.updateCustomer(customer);
-					System.out.println("Customer " + customer.getCustName() + " has been updated");
+					try {
+						customerDAO.updateCustomer(customer);
+					} catch (DAOException e) {
+						throw new FacadeException(e.getMessage());
+					}
+					//System.out.println("Customer " + customer.getCustName() + " has been updated");
 				}
 			}
 		} else
-			System.out.println("Not valid request.The company cannot be null");
+			throw new FacadeException("Not valid request.The company cannot be null");
 	}
 
 	/**
@@ -286,7 +338,11 @@ public class AdminFacade implements CouponClientFacade {
 	 * @throws FacadeException
 	 */
 	public Customer getCustomerById(long custId) throws FacadeException {
-		return customerDAO.getCustomer(custId);
+		try {
+			return customerDAO.getCustomer(custId);
+		} catch (DAOException e) {
+			throw new FacadeException(e.getMessage());
+		}
 	}
 
 	/**
@@ -296,6 +352,10 @@ public class AdminFacade implements CouponClientFacade {
 	 * @throws FacadeException
 	 */
 	public Collection<Customer> getAllCustomers() throws FacadeException {
-		return customerDAO.getAllCustomers();
+		try {
+			return customerDAO.getAllCustomers();
+		} catch (DAOException e) {
+			throw new FacadeException(e.getMessage());
+		}
 	}
 }

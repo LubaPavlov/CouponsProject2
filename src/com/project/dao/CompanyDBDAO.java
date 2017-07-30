@@ -62,7 +62,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -84,7 +84,6 @@ public class CompanyDBDAO implements CompanyDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				// Create MySQL DELETE prepare statement
 				PreparedStatement stat = con.prepareStatement("DELETE FROM " + TABLE_NAME + " WHERE compId=?");
 				// Set parameter in the DELETE query
@@ -99,7 +98,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -136,7 +135,7 @@ public class CompanyDBDAO implements CompanyDAO {
 
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -160,7 +159,6 @@ public class CompanyDBDAO implements CompanyDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				// Create MySQL SELECT prepare statement
 				PreparedStatement stat = con.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE compId=? ");
 				// Set parameter in the SELECT query
@@ -179,7 +177,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -216,7 +214,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -266,7 +264,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -307,7 +305,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -347,7 +345,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -382,7 +380,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection
@@ -431,7 +429,6 @@ public class CompanyDBDAO implements CompanyDAO {
 		try {
 			con = getConnection();
 			if (con != null) {
-				System.out.println("Connected");
 				// Create MySQL INSERT prepare statement
 				PreparedStatement stat = con
 						.prepareStatement("INSERT INTO company_coupon " + "(compId, couponId)" + " VALUES (?, ?)");
@@ -448,7 +445,7 @@ public class CompanyDBDAO implements CompanyDAO {
 			}
 		} catch (SQLException e) {
 
-			throw new DAOException(e.getMessage());
+			throw new DAOException("Exception occurred! Message: " + e.getMessage());
 
 		} finally {
 			// Release connection

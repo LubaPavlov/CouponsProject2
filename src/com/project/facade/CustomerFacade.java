@@ -89,20 +89,22 @@ public class CustomerFacade implements CouponClientFacade {
 	 * @throws FacadeException
 	 */
 	@Override
-	public CouponClientFacade login(String name, String password, ClientType clientType) throws LoginException {
-
-		if (clientType != ClientType.CUSTOMER) {
-			throw new IndexOutOfBoundsException("Clinet type is not a customer");
-		}
-
-		if (!customerDAO.login(name, password)) {
-			throw new IndexOutOfBoundsException("Wrong user name or password");
-		}
+	public CouponClientFacade login(String name, String password, ClientType clientType)
+			throws LoginException, FacadeException {
 
 		CustomerFacade custfacade = new CustomerFacade();
-		this.customer = customerDAO.getCustomerByName(name);
+		try {
+			if (!customerDAO.login(name, password)) {
+				throw new FacadeException("Wrong user name or password");
+			}
+			this.customer = customerDAO.getCustomerByName(name);
+		} catch (DAOException e) {
+			throw new FacadeException("Error user not found");
+		}
+		System.out.println("Login succeed");
 		custfacade.setCustomer(this.customer);
 		return custfacade;
+
 	}
 
 	/**
@@ -123,7 +125,12 @@ public class CustomerFacade implements CouponClientFacade {
 			throw new FacadeException("Coupon not found");
 		}
 
-		Collection<Coupon> myCoupons = customerDAO.getCoupons(this.customer);
+		Collection<Coupon> myCoupons = null;
+		try {
+			myCoupons = customerDAO.getCoupons(this.customer);
+		} catch (DAOException e1) {
+			throw new FacadeException(e1.getLocalizedMessage());
+		}
 
 		for (Coupon purachse : myCoupons) {
 			// check that this customer doesn't already purchased this coupon
@@ -155,7 +162,11 @@ public class CustomerFacade implements CouponClientFacade {
 	 * @throws FacadeException
 	 */
 	public Collection<Coupon> getAllPurchasedCoupons() throws FacadeException {
-		return customerDAO.getCoupons(this.customer);
+		try {
+			return customerDAO.getCoupons(this.customer);
+		} catch (DAOException e) {
+			throw new FacadeException(e.getLocalizedMessage());
+		}
 	}
 
 	/**
@@ -185,7 +196,14 @@ public class CustomerFacade implements CouponClientFacade {
 	 * @throws FacadeException
 	 */
 	public Collection<Coupon> getAllPurchasedCouponsByPrice(double price) throws FacadeException {
-		Collection<Coupon> myCouponsByPrice = customerDAO.getCoupons(this.customer);
+
+		Collection<Coupon> myCouponsByPrice;
+		try {
+			myCouponsByPrice = customerDAO.getCoupons(this.customer);
+		} catch (DAOException e) {
+			throw new FacadeException(e.getMessage());
+		}
+
 		for (Iterator<Coupon> iterator = myCouponsByPrice.iterator(); iterator.hasNext();) {
 			Coupon coupon = iterator.next();
 			if (coupon.getPrice() > price) {
@@ -204,7 +222,11 @@ public class CustomerFacade implements CouponClientFacade {
 	 */
 	public Coupon getCoupon(long couponId) throws FacadeException {
 
-		return couponDAO.getCoupon(couponId);
+		try {
+			return couponDAO.getCoupon(couponId);
+		} catch (DAOException e) {
+			throw new FacadeException(e.getLocalizedMessage());
+		}
 	}
 
 }

@@ -3,6 +3,7 @@ package com.project.main;
 import javax.security.auth.login.LoginException;
 
 import com.project.beans.*;
+import com.project.exceptions.DAOException;
 import com.project.exceptions.FacadeException;
 import com.project.facade.AdminFacade;
 import com.project.facade.CompanyFacade;
@@ -10,17 +11,27 @@ import com.project.facade.CustomerFacade;
 
 public class MyTestJDBC {
 
-	public static void main(String[] args) throws LoginException, FacadeException {
+	public static void main(String[] args) {
 
 		CouponSystem newsys = CouponSystem.getInstance();
 
 		//Admin facade 
 		
-		//AdminFacade facade = (AdminFacade) newsys.login("admin", "1234", ClientType.ADMIN);		
+/*		AdminFacade facade = null;
+		try {
+			facade = (AdminFacade) newsys.login("admin", "1234", ClientType.ADMIN);
+			//System.out.println(facade.getAllCustomers());
+			//System.out.println(facade.getCustomerById(1));
+			//facade.removeCustomer(facade.getCustomerById(1));
+			//facade.createCustomer(new Customer("Idan","123123"));
+			
+		} catch (LoginException | FacadeException | DAOException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getLocalizedMessage());
+		}	*/	
 		
 		//Customer functions
 		
-		//System.out.println(facade.getAllCustomers());
 		//System.out.println(facade.getCustomerById(1));
 		//facade.createCustomer(new Customer("Dror","123123"));
         //facade.updateCustomer(new Customer("Mikix333","9999999"));
@@ -39,8 +50,14 @@ public class MyTestJDBC {
         //Customer facade
 		
 		
-//		 CustomerFacade facade = (CustomerFacade) newsys.login("Idan","123123", ClientType.CUSTOMER);
-//		 System.out.println(facade.getAllPurchasedCoupons());
+/*		 try {
+			CustomerFacade facade = (CustomerFacade) newsys.login("Idan","123123", ClientType.CUSTOMER);
+			// System.out.println(facade.getAllPurchasedCoupons());
+     		// facade.purchaseCoupon(facade.getCoupon(4));
+		} catch (LoginException | FacadeException | DAOException e) {
+			System.out.println(e.getMessage());
+		}
+		*/
 //		 System.out.println(facade.getAllPurchasedCouponsByPrice(100));
 //		 System.out.println(facade.getAllPurchasedCouponsByType(CouponType.CLOTHING));
 //		 facade.purchaseCoupon(facade.getCoupon(4));
@@ -49,15 +66,15 @@ public class MyTestJDBC {
         //Company facade				 
 
 		
-		CompanyFacade facade = (CompanyFacade) newsys.login("Next", "123456",ClientType.COMPANY);
+/*		CompanyFacade facade = (CompanyFacade) newsys.login("Next", "123456",ClientType.COMPANY);
 		 
     	 Coupon coupon1 = new Coupon();
-		 coupon1.setTitle("Sale99");
+		 coupon1.setTitle("Sale949");
 		 coupon1.setStartDate(java.sql.Date.valueOf("2017-07-12"));
 		 coupon1.setEndDate(java.sql.Date.valueOf("2018-03-04"));
 		 coupon1.setAmount(10); coupon1.setType(CouponType.CLOTHING);
 		 coupon1.setPrice(90);
-		 facade.createCoupon(coupon1);
+		 facade.createCoupon(coupon1);*/
 		 
 
 	}

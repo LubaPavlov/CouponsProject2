@@ -69,6 +69,9 @@ public class DailyCouponExpirationTask implements Runnable {
 				catch (SQLException e){
 					
 					System.err.println("An error occured: " + e.getMessage());
+				} catch (DAOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				
 				finally {
