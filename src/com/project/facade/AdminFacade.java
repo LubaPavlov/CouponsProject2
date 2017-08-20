@@ -344,6 +344,21 @@ public class AdminFacade implements CouponClientFacade {
 			throw new FacadeException(e.getMessage());
 		}
 	}
+	
+	/**
+	 * A method to GET a Customer by Customer Name from Customer table.
+	 *
+	 * @param custName
+	 * @return the custoemr object by name
+	 * @throws FacadeException
+	 */
+	public Customer getCustomerByName(String custName) throws FacadeException {
+		try {
+			return customerDAO.getCustomerByName(custName);
+		} catch (DAOException e) {
+			throw new FacadeException(e.getMessage());
+		}
+	}
 
 	/**
 	 * A method to GET a collection of all customers.

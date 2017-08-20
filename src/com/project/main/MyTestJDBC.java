@@ -11,24 +11,18 @@ import com.project.facade.CustomerFacade;
 
 public class MyTestJDBC {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FacadeException, LoginException, DAOException {
 
 		CouponSystem newsys = CouponSystem.getInstance();
 
 		//Admin facade 
 		
-/*		AdminFacade facade = null;
-		try {
-			facade = (AdminFacade) newsys.login("admin", "1234", ClientType.ADMIN);
+	    //	AdminFacade facade = null;
+			//facade = (AdminFacade) newsys.login("admin", "1234", ClientType.ADMIN);
 			//System.out.println(facade.getAllCustomers());
 			//System.out.println(facade.getCustomerById(1));
 			//facade.removeCustomer(facade.getCustomerById(1));
-			//facade.createCustomer(new Customer("Idan","123123"));
-			
-		} catch (LoginException | FacadeException | DAOException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getLocalizedMessage());
-		}	*/	
+			//facade.createCustomer(new Customer("Idan","123123"));	
 		
 		//Customer functions
 		
@@ -42,7 +36,8 @@ public class MyTestJDBC {
 		//facade.createCompany(new Company("Steven", "54545454", "steven@gmail.com"));
 		//System.out.println(facade.getAllCompanies());
 		//System.out.println(facade.getCompanyById(11));
-		//facade.removeCompany(facade.getCompanyById(16));
+			//long compId = facade.getCompanyIdByName("newcomp1");
+		//	facade.removeCompany(facade.getCompanyById(compId));
 		//facade.updateCompany(new Company("Guess","1111111","guess@gmail.com"));
 
 		
@@ -76,6 +71,5 @@ public class MyTestJDBC {
 		 coupon1.setPrice(90);
 		 facade.createCoupon(coupon1);*/
 		 
-
 	}
-}
+	}

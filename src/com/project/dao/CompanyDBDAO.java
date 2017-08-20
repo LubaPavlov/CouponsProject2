@@ -341,7 +341,8 @@ public class CompanyDBDAO implements CompanyDAO {
 				// Execute query statement
 				ResultSet rows = stat.executeQuery();
 				// Set field
-				compId = rows.getLong("compId");
+				while (rows.next()) {
+				compId = rows.getLong("compId");}
 			}
 		} catch (SQLException e) {
 
